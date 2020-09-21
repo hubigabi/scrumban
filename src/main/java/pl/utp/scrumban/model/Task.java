@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,13 +21,22 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Size(min = 3, max = 30)
     private String name;
+
     private String description;
 
-    @Size(min = 0, max = 3)
+    @Min(0)
+    @Max(3)
     private Integer priority;
 
     private Progress progress;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToMany(
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
@@ -45,4 +57,13 @@ public class Task {
         this.users.remove(user);
         user.getTasks().remove(this);
     }
+
+    public Task(@NotNull @Size(min = 3, max = 30) String name, String description, @Size(min = 0, max = 3) Integer priority, Progress progress, Project project) {
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
+        this.progress = progress;
+        this.project = project;
+    }
+
 }

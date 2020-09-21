@@ -1,8 +1,10 @@
 package pl.utp.scrumban.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,9 +17,11 @@ import java.util.Set;
 
 
 @Data
+@EqualsAndHashCode(exclude = {"projects", "tasks"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "users")
+@JsonIgnoreProperties({"projects", "tasks"})
 public class User {
 
     @Id
@@ -44,4 +48,10 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Task> tasks = new HashSet<>();
 
+    public User(@NotNull @Email String email, @NotNull @Size(min = 3, max = 20) String name, @NotNull String password, LocalDate registrationDate) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.registrationDate = registrationDate;
+    }
 }
