@@ -1,0 +1,63 @@
+package pl.utp.scrumban.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.model.Project;
+import pl.utp.scrumban.service.ProjectService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/project")
+public class ProjectController {
+
+    private ProjectService projectService;
+
+    @Autowired
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Project>> getAllProjects() {
+        List<Project> allProjects = projectService.getAllProjects();
+
+        return new ResponseEntity<>(allProjects, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Project> getProject(@PathVariable("id") long id) {
+        Project project = projectService.getProject(id);
+
+        if (project != null) {
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Project> createProject(@RequestBody Project project){
+         project = projectService.createProject(project);
+
+        if (project != null) {
+            return new ResponseEntity<>(project, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Project> updateProject(@RequestBody Project project){
+        project = projectService.updateProject(project);
+
+        if (project != null) {
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+}
