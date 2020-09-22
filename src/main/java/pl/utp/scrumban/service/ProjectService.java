@@ -34,4 +34,11 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public List<Project> findAllByLeaderUser_Id(Long id){
+        return projectRepository.findAllByLeaderUser_Id(id);
+    }
+
+    public List<Project> findAllByUsers_Id(Long id){
+        return projectRepository.findAllByUsers_Id(id);
+    }
 }

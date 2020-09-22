@@ -3,6 +3,7 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
@@ -34,4 +35,15 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public List<Task> findAllByUsers_Id(Long id){
+        return taskRepository.findAllByUsers_Id(id);
+    }
+
+    public List<Task> findAllByProject_Id(Long id){
+        return taskRepository.findAllByProject_Id(id);
+    }
+
+    public List<Task> findAllByProject_IdAndUsers_Id(Long project_ID, Long user_ID){
+        return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
+    }
 }

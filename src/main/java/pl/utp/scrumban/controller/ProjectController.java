@@ -39,8 +39,8 @@ public class ProjectController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Project> createProject(@RequestBody Project project){
-         project = projectService.createProject(project);
+    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+        project = projectService.createProject(project);
 
         if (project != null) {
             return new ResponseEntity<>(project, HttpStatus.CREATED);
@@ -50,7 +50,7 @@ public class ProjectController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Project> updateProject(@RequestBody Project project){
+    public ResponseEntity<Project> updateProject(@RequestBody Project project) {
         project = projectService.updateProject(project);
 
         if (project != null) {
@@ -58,6 +58,20 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/allByLeaderUser/{id}")
+    public ResponseEntity<List<Project>> findAllByLeaderUser_Id(@PathVariable("id") long id) {
+        List<Project> projects = projectService.findAllByLeaderUser_Id(id);
+
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/allByUser/{id}")
+    public ResponseEntity<List<Project>> findAllByUsers_Id(@PathVariable("id") long id) {
+        List<Project> projects = projectService.findAllByUsers_Id(id);
+
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
 }
