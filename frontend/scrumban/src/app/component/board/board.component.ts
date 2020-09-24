@@ -6,7 +6,7 @@ import {User} from '../../model/user.model';
 import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
-import {Column} from '../../model/column.model';
+import {Column, COLUMNS} from '../../model/column.model';
 import {Progress} from '../../model/progress.model';
 
 @Component({
@@ -24,14 +24,7 @@ export class BoardComponent implements OnInit {
   tasks: Task[];
   user: User;
 
-  columns: Column[] = [
-    new Column(new Progress('BACKLOG', false), []),
-    new Column(new Progress('QA', true), []),
-    new Column(new Progress('DEVELOPMENT', true), []),
-    new Column(new Progress('TEST', true), []),
-    new Column(new Progress('DEPLOYMENT', true), []),
-    new Column(new Progress('DONE', false), []),
-  ];
+  columns: Column[] = COLUMNS;
 
   ngOnInit() {
 
