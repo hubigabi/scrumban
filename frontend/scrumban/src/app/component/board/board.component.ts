@@ -1,14 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {Board} from 'src/app/model/board.model';
-import {Column} from 'src/app/model/column.model';
 import {ProjectService} from '../../service/project.service';
 import {Project} from '../../model/project.model';
 import {User} from '../../model/user.model';
 import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
-import {Columm} from '../../model/columm.model';
+import {Column} from '../../model/column.model';
 import {Progress} from '../../model/progress.model';
 
 @Component({
@@ -26,40 +24,14 @@ export class BoardComponent implements OnInit {
   tasks: Task[];
   user: User;
 
-  columns: Columm[] = [
-    new Columm(new Progress('BACKLOG', false), []),
-    new Columm(new Progress('QA', true), []),
-    new Columm(new Progress('DEVELOPMENT', true), []),
-    new Columm(new Progress('TEST', true), []),
-    new Columm(new Progress('DEPLOYMENT', true), []),
-    new Columm(new Progress('DONE', false), []),
+  columns: Column[] = [
+    new Column(new Progress('BACKLOG', false), []),
+    new Column(new Progress('QA', true), []),
+    new Column(new Progress('DEVELOPMENT', true), []),
+    new Column(new Progress('TEST', true), []),
+    new Column(new Progress('DEPLOYMENT', true), []),
+    new Column(new Progress('DONE', false), []),
   ];
-
-  board: Board = new Board('Web app', [
-    new Column('Ideas', [
-      'Some random idea',
-      'This is another random idea',
-      'build an awesome application'
-    ]),
-    new Column('Research', [
-      'Lorem ipsum',
-      'foo',
-      'This was in the Research column'
-    ]),
-    new Column('Todo', [
-      'Get to work',
-      'Pick up groceries',
-      'Go home',
-      'Fall asleep'
-    ]),
-    new Column('Done', [
-      'Get up',
-      'Brush teeth',
-      'Take a shower',
-      'Check e-mail',
-      'Walk dog'
-    ])
-  ]);
 
   ngOnInit() {
 
@@ -88,7 +60,7 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<Columm>) {
+  drop(event: CdkDragDrop<Column>) {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.tasks, event.previousIndex, event.currentIndex);

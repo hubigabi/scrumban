@@ -1,3 +1,14 @@
+import {Progress} from './progress.model';
+import { Task } from './task.model';
+
 export class Column {
-    constructor(public name: string, public tasks: string[]) {}
+  progress: Progress;
+  tasks: Task[];
+
+  constructor(progress: Progress, tasks: Task[]) {
+    this.progress = progress;
+    this.tasks = tasks;
+  }
 }
+
+
