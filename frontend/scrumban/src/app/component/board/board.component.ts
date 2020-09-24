@@ -7,7 +7,7 @@ import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
-import {Progress} from '../../model/progress.model';
+import {Progress, PROGRESS_BACKLOG, PROGRESS_DONE} from '../../model/progress.model';
 
 @Component({
   selector: 'app-board',
@@ -40,7 +40,6 @@ export class BoardComponent implements OnInit {
       this.tasks = t;
 
       this.columns.forEach(column => {
-        console.log(column.progress.name);
 
         this.tasks.forEach(task => {
           if (task.progress === column.progress.name) {
@@ -49,8 +48,8 @@ export class BoardComponent implements OnInit {
         });
 
       });
-      console.log(this.columns);
     });
+
   }
 
   drop(event: CdkDragDrop<Column>) {
@@ -63,24 +62,48 @@ export class BoardComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
 
-      console.log(event.container.data.tasks[event.currentIndex].progress);
       event.container.data.tasks[event.currentIndex].progress = event.container.data.progress.name;
-      console.log(event.container.data.tasks[event.currentIndex].progress);
+      let task = this.tasks.find(value =>
+        value.id === event.container.data.tasks[event.currentIndex].id);
+      task.progress = event.container.data.progress.name;
 
-      console.log('Updated task');
       this.taskService.updateTask(event.container.data.tasks[event.currentIndex])
-        .subscribe(task => {
-            console.log(task);
-            event.container.data.tasks[event.currentIndex] = task;
+        .subscribe(value => {
+            event.container.data.tasks[event.currentIndex] = value;
+            task = value;
           }
         );
     }
-
   }
 
 
   test(task: Task) {
-    console.log(5 + 5);
     console.log(task.description);
+    this.moveTask(task.id, PROGRESS_DONE);
+  }
+
+  moveTask(taskID: number, progress: Progress) {
+    let task = this.tasks.find(value => value.id === taskID);
+
+    if (task.progress !== progress.name) {
+      const previousContainer = this.columns.find(column => column.progress.name === task.progress).tasks;
+      const currentContainer = this.columns.find(column => column.progress === progress).tasks;
+
+      const previousIndex = previousContainer.findIndex(value => value.id === task.id);
+      const currentIndex = currentContainer.length;
+
+      transferArrayItem(previousContainer,
+        currentContainer,
+        previousIndex,
+        currentIndex);
+      task.progress = progress.name;
+
+      this.taskService.updateTask(task)
+        .subscribe(value => {
+            currentContainer[currentIndex] = value;
+            task = value;
+          }
+        );
+    }
   }
 }
