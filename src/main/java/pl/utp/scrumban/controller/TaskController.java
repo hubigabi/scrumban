@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/task")
+@CrossOrigin
 public class TaskController {
 
     private TaskService taskService;
@@ -49,7 +50,7 @@ public class TaskController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<Task> updateTask(@RequestBody Task task){
         task = taskService.updateTask(task);
 
