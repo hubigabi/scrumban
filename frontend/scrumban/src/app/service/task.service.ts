@@ -10,7 +10,7 @@ import {Project} from '../model/project.model';
 })
 export class TaskService {
 
-  private TASK_URL = environment.baseUrl + '/task';
+  private TASK_URL = environment.baseUrl + '/api/task';
   private ALL_TASKS_BY_PROJECT_ID = this.TASK_URL + '/allByProject';
 
   constructor(private httpClient: HttpClient) { }

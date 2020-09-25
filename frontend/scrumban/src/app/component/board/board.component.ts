@@ -8,6 +8,11 @@ import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
 import {Progress, PROGRESS_BACKLOG, PROGRESS_DONE} from '../../model/progress.model';
+import {environment} from '../../../environments/environment';
+
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+
 
 @Component({
   selector: 'app-board',
@@ -16,15 +21,18 @@ import {Progress, PROGRESS_BACKLOG, PROGRESS_DONE} from '../../model/progress.mo
 })
 export class BoardComponent implements OnInit {
 
+  private SERVER_WEB_SOCKET = environment.baseUrl + '/task';
+  private taskStompClient;
+
+  private project: Project;
+  private tasks: Task[];
+  private user: User;
+
+  columns: Column[] = COLUMNS;
+
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService) {
   }
-
-  project: Project;
-  tasks: Task[];
-  user: User;
-
-  columns: Column[] = COLUMNS;
 
   ngOnInit() {
 
@@ -48,6 +56,7 @@ export class BoardComponent implements OnInit {
         });
 
       });
+      this.taskWebSocketConnect();
     });
 
   }
@@ -73,13 +82,16 @@ export class BoardComponent implements OnInit {
             task = value;
           }
         );
+
+      this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
     }
   }
 
 
   test(task: Task) {
     console.log(task.description);
-    this.moveTask(task.id, PROGRESS_DONE);
+    // this.moveTask(task.id, PROGRESS_DONE);
+
   }
 
   moveTask(taskID: number, progress: Progress) {
@@ -106,4 +118,32 @@ export class BoardComponent implements OnInit {
         );
     }
   }
+
+  taskWebSocketConnect() {
+    const socket = new SockJS(this.SERVER_WEB_SOCKET);
+    this.taskStompClient = Stomp.over(socket);
+
+    this.taskStompClient.connect({}, frame => {
+      console.log('Connected: ' + frame);
+
+      this.taskStompClient.subscribe('/updatedTask/' + this.project.id, task => {
+        console.log('Message from server');
+        console.log(task.id);
+      });
+    });
+
+  }
+
+  taskWebSocketSend(task: Task) {
+    console.log('Sending to server task');
+    console.log(task);
+    this.taskStompClient.send('/app/task/' + this.project.id, {}, JSON.stringify(task));
+  }
+
+  taskWebSocketDisconnect() {
+    if (this.taskStompClient != null) {
+      this.taskStompClient.disconnect();
+    }
+  }
+
 }

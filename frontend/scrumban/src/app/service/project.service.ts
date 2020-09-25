@@ -9,7 +9,7 @@ import {Project} from '../model/project.model';
 })
 export class ProjectService {
 
-  private PROJECT_URL = environment.baseUrl + '/project';
+  private PROJECT_URL = environment.baseUrl + '/api/project';
 
   constructor(private httpClient: HttpClient) { }
 
