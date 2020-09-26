@@ -20,15 +20,10 @@ public class WebSocketController {
         this.taskService = taskService;
     }
 
-
-
     @MessageMapping("/task/{project_id}")
     @SendTo("/updatedTask/{project_id}")
-    public Task updateTask(@DestinationVariable String project_id, Task task)  {
-        task = taskService.updateTask(task);
-        System.out.println(task.getDescription());
-        System.out.println(task);
-        return task;
+    public Task updateTask(@DestinationVariable String project_id, Task task) {
+        return taskService.updateTask(task);
     }
 
 }
