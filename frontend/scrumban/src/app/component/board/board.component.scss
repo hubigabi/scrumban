@@ -28,6 +28,8 @@
   min-height: 0;
 
   .board-bar {
+    display: flex;
+    flex-direction: row;
     background: rgba(gray, 0.5);
     padding: 8px 15px;
 
@@ -35,6 +37,13 @@
       font-size: 20px;
       font-weight: bold;
       color: white;
+    }
+
+    .projects {
+      font-size: 20px;
+      font-weight: bold;
+      color: black;
+      padding: 0px 50px;
     }
   }
 
