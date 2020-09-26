@@ -13,6 +13,11 @@ import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
+interface Food {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -20,10 +25,16 @@ import * as SockJS from 'sockjs-client';
 })
 export class BoardComponent implements OnInit {
 
+  foods: Food[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'}
+  ];
+
   private SERVER_WEB_SOCKET = environment.baseUrl + '/task';
   private taskStompClient;
 
-  private project: Project;
+  project: Project;
   private tasks: Task[];
   private user: User;
 

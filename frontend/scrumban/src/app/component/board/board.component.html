@@ -13,13 +13,15 @@
       <p class="board-name">{{ project?.name }}</p>
 
       <div class="projects">
-        <p>Select project</p>
-        <div class="project-select">
+          <mat-form-field appearance="fill">
+            <mat-label>Select project</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-
-
-
-        </div>
       </div>
     </div>
 
