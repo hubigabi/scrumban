@@ -7,12 +7,11 @@ import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
-import {Progress, PROGRESS_BACKLOG, PROGRESS_DONE} from '../../model/progress.model';
+import {Progress} from '../../model/progress.model';
 import {environment} from '../../../environments/environment';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-
 
 @Component({
   selector: 'app-board',
@@ -58,7 +57,6 @@ export class BoardComponent implements OnInit {
       });
       this.taskWebSocketConnect();
     });
-
   }
 
   drop(event: CdkDragDrop<Column>) {
@@ -72,16 +70,16 @@ export class BoardComponent implements OnInit {
         event.currentIndex);
 
       event.container.data.tasks[event.currentIndex].progress = event.container.data.progress.name;
-      let task = this.tasks.find(value =>
+      const task = this.tasks.find(value =>
         value.id === event.container.data.tasks[event.currentIndex].id);
       task.progress = event.container.data.progress.name;
 
-      this.taskService.updateTask(event.container.data.tasks[event.currentIndex])
-        .subscribe(value => {
-            event.container.data.tasks[event.currentIndex] = value;
-            task = value;
-          }
-        );
+      // this.taskService.updateTask(event.container.data.tasks[event.currentIndex])
+      //   .subscribe(value => {
+      //       event.container.data.tasks[event.currentIndex] = value;
+      //       task = value;
+      //     }
+      //   );
 
       this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
     }
@@ -91,7 +89,6 @@ export class BoardComponent implements OnInit {
   test(task: Task) {
     console.log(task.description);
     // this.moveTask(task.id, PROGRESS_DONE);
-
   }
 
   moveTask(taskID: number, progress: Progress) {
@@ -124,19 +121,24 @@ export class BoardComponent implements OnInit {
     this.taskStompClient = Stomp.over(socket);
 
     this.taskStompClient.connect({}, frame => {
-      console.log('Connected: ' + frame);
+      this.taskStompClient.subscribe('/updatedTask/' + this.project.id, message => {
+        const updatedTask: Task = JSON.parse(message.body);
+        const oldTask: Task = this.tasks.find(value => value.id === updatedTask.id);
 
-      this.taskStompClient.subscribe('/updatedTask/' + this.project.id, task => {
-        console.log('Message from server');
-        console.log(task.id);
+        // Changing task to updated version
+        const indexToDelete: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
+        if (indexToDelete !== -1) {
+          this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(indexToDelete, 1);
+        }
+        this.columns.find(column => column.progress.name === updatedTask.progress).tasks.push(updatedTask);
+
+        this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = updatedTask;
       });
     });
 
   }
 
   taskWebSocketSend(task: Task) {
-    console.log('Sending to server task');
-    console.log(task);
     this.taskStompClient.send('/app/task/' + this.project.id, {}, JSON.stringify(task));
   }
 

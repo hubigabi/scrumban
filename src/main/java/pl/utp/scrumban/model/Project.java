@@ -14,8 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "projects")
-public class Project
-{
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +30,8 @@ public class Project
     private User leaderUser;
 
     @ManyToMany(
-        cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "projects_users",

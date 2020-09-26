@@ -39,7 +39,8 @@ public class Task {
     private Project project;
 
     @ManyToMany(
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "tasks_users",
