@@ -9,9 +9,9 @@ import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
 import {Progress} from '../../model/progress.model';
 import {environment} from '../../../environments/environment';
-
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'app-board',
