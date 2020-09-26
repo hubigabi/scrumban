@@ -62,15 +62,15 @@ public class ProjectController {
     }
 
     @GetMapping("/allByLeaderUser/{id}")
-    public ResponseEntity<List<Project>> findAllByLeaderUser_Id(@PathVariable("id") long id) {
+    public ResponseEntity<List<Project>> findAllProjectsByLeaderUser_Id(@PathVariable("id") long id) {
         List<Project> projects = projectService.findAllByLeaderUser_Id(id);
 
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/allByUser/{id}")
-    public ResponseEntity<List<Project>> findAllByUsers_Id(@PathVariable("id") long id) {
-        List<Project> projects = projectService.findAllByUsers_Id(id);
+    public ResponseEntity<List<Project>> findAllProjectsByUser_Id(@PathVariable("id") long id) {
+        List<Project> projects = projectService.findAllByUser_Id(id);
 
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }

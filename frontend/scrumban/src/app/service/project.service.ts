@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
@@ -9,12 +9,18 @@ import {Project} from '../model/project.model';
 })
 export class ProjectService {
 
-  private PROJECT_URL = environment.baseUrl + '/api/project';
+  private readonly PROJECT_URL = environment.baseUrl + '/api/project';
+  private readonly ALL_PROJECTS_BY_USER_ID = this.PROJECT_URL + '/allByUser';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   public getProjectByID(id: number): Observable<Project> {
     return this.httpClient.get<Project>(this.PROJECT_URL + '/' + id.toString());
+  }
+
+  public getAllProjectsByUser_Id(userID: number): Observable<Project[]> {
+    return this.httpClient.get<Project[]>(this.ALL_PROJECTS_BY_USER_ID + '/' + userID.toString());
   }
 
 }

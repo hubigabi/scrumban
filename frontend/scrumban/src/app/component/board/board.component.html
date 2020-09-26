@@ -13,14 +13,14 @@
       <p class="board-name">{{ project?.name }}</p>
 
       <div class="projects">
-          <mat-form-field appearance="fill">
-            <mat-label>Select project</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let food of foods" [value]="food.value">
-                {{food.viewValue}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Select project</mat-label>
+          <mat-select (selectionChange)="changeProject($event)">
+            <mat-option *ngFor="let project of allUserProjects" [value]="project">
+              {{project.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </div>
     </div>
@@ -40,6 +40,7 @@
                (cdkDropListDropped)="drop($event)">
             <div class="task" *ngFor="let task of column.tasks" cdkDrag (click)="test(task)">
               {{ task.name + ': ' + task.description}}
+              {{ task.project.name}}
             </div>
           </div>
         </div>

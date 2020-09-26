@@ -10,12 +10,12 @@ import {Project} from '../model/project.model';
 })
 export class TaskService {
 
-  private TASK_URL = environment.baseUrl + '/api/task';
-  private ALL_TASKS_BY_PROJECT_ID = this.TASK_URL + '/allByProject';
+  private readonly TASK_URL = environment.baseUrl + '/api/task';
+  private readonly ALL_TASKS_BY_PROJECT_ID = this.TASK_URL + '/allByProject';
 
   constructor(private httpClient: HttpClient) { }
 
-  public findAllByProject_Id(id: number): Observable<Task[]> {
+  public findAllTasksByProject_Id(id: number): Observable<Task[]> {
     return this.httpClient.get<Task[]>(this.ALL_TASKS_BY_PROJECT_ID + '/' + id.toString());
   }
 

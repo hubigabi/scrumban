@@ -13,11 +13,6 @@ import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
-
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -25,15 +20,13 @@ interface Food {
 })
 export class BoardComponent implements OnInit {
 
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
-  ];
+  private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/task';
+  private readonly TASK_URL_SEND = '/app/task/';
+  private readonly TASK_URL_SUBSCRIBE = '/updatedTask/';
 
-  private SERVER_WEB_SOCKET = environment.baseUrl + '/task';
   private taskStompClient;
 
+  allUserProjects: Project[];
   project: Project;
   private tasks: Task[];
   private user: User;
@@ -46,28 +39,15 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.projectService.getProjectByID(1).subscribe(p => {
-      this.project = p;
-    });
-
-    this.userService.getUserByID(1).subscribe(u => {
+    this.userService.getUserByID(3).subscribe(u => {
       this.user = u;
-    });
 
-    this.taskService.findAllByProject_Id(1).subscribe(t => {
-      this.tasks = t;
-
-      this.columns.forEach(column => {
-
-        this.tasks.forEach(task => {
-          if (task.progress === column.progress.name) {
-            column.tasks.push(task);
-          }
-        });
-
+      this.projectService.getAllProjectsByUser_Id(this.user.id).subscribe(p => {
+        this.allUserProjects = p;
       });
-      this.taskWebSocketConnect();
+
     });
+
   }
 
   drop(event: CdkDragDrop<Column>) {
@@ -132,7 +112,7 @@ export class BoardComponent implements OnInit {
     this.taskStompClient = Stomp.over(socket);
 
     this.taskStompClient.connect({}, frame => {
-      this.taskStompClient.subscribe('/updatedTask/' + this.project.id, message => {
+      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE + this.project.id, message => {
         const updatedTask: Task = JSON.parse(message.body);
         const oldTask: Task = this.tasks.find(value => value.id === updatedTask.id);
 
@@ -150,7 +130,7 @@ export class BoardComponent implements OnInit {
   }
 
   taskWebSocketSend(task: Task) {
-    this.taskStompClient.send('/app/task/' + this.project.id, {}, JSON.stringify(task));
+    this.taskStompClient.send(this.TASK_URL_SEND + this.project.id, {}, JSON.stringify(task));
   }
 
   taskWebSocketDisconnect() {
@@ -159,4 +139,25 @@ export class BoardComponent implements OnInit {
     }
   }
 
+  changeProject($event: MatSelectChange) {
+    this.taskWebSocketDisconnect();
+
+    this.project = $event.value;
+
+    this.taskService.findAllTasksByProject_Id(this.project.id).subscribe(t => {
+      this.tasks = t;
+
+      this.columns.forEach(column => {
+        column.tasks = [];
+
+        this.tasks.forEach(task => {
+          if (task.progress === column.progress.name) {
+            column.tasks.push(task);
+          }
+        });
+
+      });
+      this.taskWebSocketConnect();
+    });
+  }
 }

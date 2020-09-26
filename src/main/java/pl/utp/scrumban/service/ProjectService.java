@@ -38,7 +38,7 @@ public class ProjectService {
         return projectRepository.findAllByLeaderUser_Id(id);
     }
 
-    public List<Project> findAllByUsers_Id(Long id){
+    public List<Project> findAllByUser_Id(Long id){
         return projectRepository.findAllByUsers_Id(id);
     }
 }
