@@ -160,4 +160,33 @@ export class BoardComponent implements OnInit {
       this.taskWebSocketConnect();
     });
   }
+
+  isTaskContainingLoggedUser(task: Task) {
+    return task.users.map(value => value.id).includes(this.user.id);
+  }
+
+  getUsersByTaskContainingLoggedUser(task: Task) {
+    // if (task.users.length === 1) {
+    //   return 'Me';
+    // } else {
+    //   return 'Me, ' + task.users
+    //     .map(value => value.name)
+    //     .filter(value => value !== this.user.name)
+    //     .join(', ');
+    // }
+
+    return this.getUsersByTaskNotContainingLoggedUser(task);
+  }
+
+
+  getUsersByTaskNotContainingLoggedUser(task: Task) {
+    if (task.users.length === 0) {
+      return '';
+    } else {
+      return task.users
+        .map(value => value.name)
+        .join(', ');
+    }
+  }
+
 }
