@@ -54,7 +54,9 @@
 
     .board-columns {
       display: flex;
+      flex-wrap: wrap;
       flex-grow: 1;
+      justify-content: space-evenly;
 
       .board-column {
         display: flex;
@@ -62,17 +64,20 @@
         flex-grow: 1;
         flex-basis: 0; // to force the columns to all be the same size, regardless of content
 
-        min-width: 100px;
-        margin: 50px;
-        padding: 25px;
+        min-width: 200px;
+        max-width: 40%;
+
+        min-height: 300px;
+        margin: 15px;
+        padding: 20px;
 
         border-radius: 4px;
 
         background: rgba(white, 0.5);
 
-        &:not(:first-child) {
-          margin-left: 0;
-        }
+        //&:not(:first-child) {
+        //  margin-left: 0;
+        //}
 
         .column-title {
           font-size: 20px;
