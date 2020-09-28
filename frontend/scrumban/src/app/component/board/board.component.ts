@@ -28,10 +28,12 @@ export class BoardComponent implements OnInit {
 
   allUserProjects: Project[];
   project: Project;
-  private tasks: Task[];
-  private user: User;
+  tasks: Task[];
+  user: User;
 
   columns: Column[] = COLUMNS;
+
+  counter = 0;
 
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService) {
@@ -161,32 +163,18 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  isTaskContainingLoggedUser(task: Task) {
-    return task.users.map(value => value.id).includes(this.user.id);
-  }
 
-  getUsersByTaskContainingLoggedUser(task: Task) {
-    // if (task.users.length === 1) {
-    //   return 'Me';
-    // } else {
-    //   return 'Me, ' + task.users
-    //     .map(value => value.name)
-    //     .filter(value => value !== this.user.name)
-    //     .join(', ');
-    // }
+  getPriorityString(task: Task) {
+    const priority = task.priority;
 
-    return this.getUsersByTaskNotContainingLoggedUser(task);
-  }
-
-
-  getUsersByTaskNotContainingLoggedUser(task: Task) {
-    if (task.users.length === 0) {
-      return '';
-    } else {
-      return task.users
-        .map(value => value.name)
-        .join(', ');
+    if (priority <= 0) {
+      return '<strong>Just aaaaa</strong>';
+    } else if (priority === 1) {
+      return '<strong>Just bbbbb</strong>';
+    } else if (priority === 2) {
+      return '<p style="color:red;">A red paragraph.</p>';
+    } else if (priority >= 3) {
+      return '<strong>Just dddddddddddddd</strong>';
     }
   }
-
 }

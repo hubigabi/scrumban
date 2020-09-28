@@ -14,12 +14,14 @@ import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
+import { TaskUsersPipe } from './pipe/task-users.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    BoardComponent
+    BoardComponent,
+    TaskUsersPipe
   ],
   imports: [
     BrowserModule,

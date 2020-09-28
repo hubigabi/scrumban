@@ -44,18 +44,16 @@
                 <mat-card-title>{{task.name}}</mat-card-title>
 
                 <mat-card-subtitle>
-                  <div *ngIf="isTaskContainingLoggedUser(task); else noContainingLoggedUser">
-                    <strong> {{getUsersByTaskContainingLoggedUser(task)}}</strong>
-                  </div>
-
-                  <ng-template #noContainingLoggedUser>
-                    {{getUsersByTaskNotContainingLoggedUser(task)}}
-                  </ng-template>
+                  {{task.users  | taskUsers}}
                 </mat-card-subtitle>
               </mat-card-header>
 
               <mat-card-content>
                 <p> {{task.description}}</p>
+
+                <p>Priority:
+                  <span [innerHTML]="getPriorityString(task)"></span>
+                </p>
               </mat-card-content>
               <mat-card-actions>
                 <button mat-button>UP</button>
