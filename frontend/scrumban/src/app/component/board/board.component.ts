@@ -163,18 +163,4 @@ export class BoardComponent implements OnInit {
     });
   }
 
-
-  getPriorityString(task: Task) {
-    const priority = task.priority;
-
-    if (priority <= 0) {
-      return '<strong>Just aaaaa</strong>';
-    } else if (priority === 1) {
-      return '<strong>Just bbbbb</strong>';
-    } else if (priority === 2) {
-      return '<p style="color:red;">A red paragraph.</p>';
-    } else if (priority >= 3) {
-      return '<strong>Just dddddddddddddd</strong>';
-    }
-  }
 }

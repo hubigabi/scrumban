@@ -51,21 +51,24 @@
               <mat-card-content>
                 <p> {{task.description}}</p>
 
-                <p>Priority:
-                  <span [innerHTML]="getPriorityString(task)"></span>
+                <p class="task-priority">
+                  <b>Priority: </b>
+                  <span [ngStyle]="{'color': task.priority > 1 ? 'red' : 'green'} ">
+                    <ng-template [ngIf]="task.priority <= 0">Low</ng-template>
+                    <ng-template [ngIf]="task.priority === 1">Medium</ng-template>
+                    <ng-template [ngIf]="task.priority === 2">High</ng-template>
+                    <ng-template [ngIf]="task.priority >= 3">Very high</ng-template>
+                  </span>
                 </p>
               </mat-card-content>
 
               <button mat-button>
-                <mat-icon>edit</mat-icon>
-                Edit
+                <mat-icon>edit</mat-icon>Edit
               </button>
 
               <button mat-button>
-                <mat-icon>event_note</mat-icon>
-                Notes
+                <mat-icon>event_note</mat-icon>Notes
               </button>
-
             </mat-card>
 
           </div>
