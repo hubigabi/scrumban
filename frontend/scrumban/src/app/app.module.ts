@@ -15,6 +15,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import { TaskUsersPipe } from './pipe/task-users.pipe';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -33,9 +34,11 @@ import { TaskUsersPipe } from './pipe/task-users.pipe';
     BrowserAnimationsModule,
     MatSelectModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -13,7 +13,7 @@ export class TaskUsersPipe implements PipeTransform {
   }
 
   getUsersByTask(users: User[]) {
-    console.log('--------------------------------------------');
+    console.log('--------------------------------------------------');
 
     if (users.length === 0) {
       return '';
