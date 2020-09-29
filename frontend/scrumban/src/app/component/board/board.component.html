@@ -41,7 +41,7 @@
                [cdkDropListData]="column"
                (cdkDropListDropped)="drop($event)">
 
-            <mat-card class="task" *ngFor="let task of column.tasks" cdkDrag (click)="test(task)">
+            <mat-card class="task" *ngFor="let task of column.tasks" cdkDrag>
               <mat-card-header>
                 <mat-card-title>{{task.name}}</mat-card-title>
 
@@ -75,11 +75,11 @@
               </button>
 
               <div *ngIf="task.users  | taskUsers : user; else loggedUserIsNotInTaskUsers">
-                <button mat-button>Dismiss</button>
+                <button mat-button (click)="dismissUserFromTask($event, task)">Dismiss</button>
               </div>
 
               <ng-template #loggedUserIsNotInTaskUsers>
-                <button mat-button>Assign</button>
+                <button mat-button (click)="assignUserToTask($event, task)">Assign</button>
               </ng-template>
 
             </mat-card>

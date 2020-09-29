@@ -78,12 +78,6 @@ export class BoardComponent implements OnInit {
     }
   }
 
-
-  test(task: Task) {
-    console.log(task.description);
-    // this.moveTask(task.id, PROGRESS_DONE);
-  }
-
   moveTask(taskID: number, progress: Progress) {
     let task = this.tasks.find(value => value.id === taskID);
 
@@ -163,4 +157,22 @@ export class BoardComponent implements OnInit {
     });
   }
 
+  assignUserToTask($event: MouseEvent, task: Task) {
+    task.users.push(this.user);
+
+    // https://stackoverflow.com/questions/39196766/angular-2-do-not-refresh-view-after-array-push-in-ngoninit-promise
+    task.users = task.users.slice();
+
+    this.taskWebSocketSend(task);
+  }
+
+  dismissUserFromTask($event: MouseEvent, task: Task) {
+    const index = task.users.findIndex(value => value.id === this.user.id);
+    if (index > -1) {
+      task.users.splice(index, 1);
+      task.users = task.users.slice();
+
+      this.taskWebSocketSend(task);
+    }
+  }
 }
