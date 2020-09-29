@@ -30,27 +30,31 @@
   .board-bar {
     display: flex;
     flex-direction: row;
-    background: rgba(gray, 0.5);
-    padding: 8px 15px;
+    justify-content: center;
+    align-items: center;
+    background: rgb(176,224,230);
 
-    .board-name {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-    }
+    margin: 0;
+    padding-top: 15px;
 
     .projects {
-      font-size: 18px;
+      font-size: 16px;
       //font-weight: bold;
       color: black;
-      padding: 0px 50px;
+      padding: 0px 30px;
     }
+
+    .button-board-bar {
+      margin: 0px 10px;
+      font-size: 16px;
+    }
+
   }
 
   .board-wrapper {
     display: flex;
     flex-grow: 1;
-    overflow-x: auto;
+    //overflow-x: auto;
 
     .board-columns {
       display: flex;
@@ -67,8 +71,8 @@
         min-width: 200px;
         max-width: 40%;
 
-        min-height: 300px;
-        margin: 15px;
+        min-height: 400px;
+        margin: 40px 15px;
         padding: 20px 15px;
 
         border-radius: 4px;
@@ -83,6 +87,7 @@
           font-size: 20px;
           font-weight: 800;
           font-family: 'Lato', sans-serif;
+          text-align: center;
           text-transform: uppercase;
           margin-bottom: 20px;
         }
@@ -132,3 +137,4 @@
 .task-priority {
   margin: 8px 0px;
 }
+

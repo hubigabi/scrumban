@@ -10,7 +10,6 @@
   <div class="board">
 
     <div class="board-bar">
-      <p class="board-name">{{ project?.name }}</p>
 
       <div class="projects">
         <mat-form-field appearance="fill">
@@ -21,8 +20,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-
       </div>
+
+      <button mat-raised-button color="primary" class="button-board-bar">New project</button>
+      <button mat-raised-button color="primary" class="button-board-bar">New task</button>
+
     </div>
 
     <div class="board-wrapper">
@@ -63,11 +65,13 @@
               </mat-card-content>
 
               <button mat-button>
-                <mat-icon>edit</mat-icon>Edit
+                <mat-icon>edit</mat-icon>
+                <!--                Edit-->
               </button>
 
               <button mat-button>
-                <mat-icon>event_note</mat-icon>Notes
+                <mat-icon>event_note</mat-icon>
+                <!--                Notes-->
               </button>
             </mat-card>
 
