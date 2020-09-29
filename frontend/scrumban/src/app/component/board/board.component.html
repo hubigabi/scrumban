@@ -73,6 +73,15 @@
                 <mat-icon>event_note</mat-icon>
                 <!--                Notes-->
               </button>
+
+              <div *ngIf="task.users  | taskUsers : user; else loggedUserIsNotInTaskUsers">
+                <button mat-button>Dismiss</button>
+              </div>
+
+              <ng-template #loggedUserIsNotInTaskUsers>
+                <button mat-button>Assign</button>
+              </ng-template>
+
             </mat-card>
 
           </div>
