@@ -14,6 +14,7 @@ import * as SockJS from 'sockjs-client';
 import {MatSelectChange} from '@angular/material/select';
 import {MatDialog} from '@angular/material/dialog';
 import {NewTaskDialogComponent} from './dialog/task-dialog/new-task-dialog.component';
+import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 
 @Component({
   selector: 'app-board',
@@ -34,8 +35,7 @@ export class BoardComponent implements OnInit {
   user: User;
 
   columns: Column[] = COLUMNS;
-
-  counter = 0;
+  allPriority: Priority[] = ALL_PRIORITY;
 
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog) {
@@ -189,7 +189,10 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      // this.animal = result;
+      if (result) {
+        console.log('Get result');
+        console.log(result);
+      }
     });
   }
 

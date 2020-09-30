@@ -1,13 +1,57 @@
-<h1 mat-dialog-title>New Task</h1>
+<div class="container">
 
-<div mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="task.name">
-  </mat-form-field>
-</div>
+  <h1 mat-dialog-title>New Task</h1>
 
-<div mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-button (click)="submit()"  cdkFocusInitial>Submit</button>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             [(ngModel)]="task.name"
+             name="taskName"
+             #taskName="ngModel"
+             required minlength="3" maxlength="20"
+      />
+    </mat-form-field>
+
+    <br>
+    <mat-form-field style="width: 250px;">
+      <mat-label>Description</mat-label>
+      <textarea matInput
+                [(ngModel)]="task.description"
+                name="taskDescription"
+                #taskDescription="ngModel"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="10"
+                cdkAutosizeMaxRows="15">
+                maxlength="900"
+      ></textarea>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field>
+      <mat-label>Priority</mat-label>
+      <mat-select (selectionChange)="changePriority($event)">
+        <mat-option *ngFor="let priority of allPriority" [value]="priority">
+          {{priority.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field>
+      <mat-label>Progress</mat-label>
+      <mat-select (selectionChange)="changeProgress($event)" [(value)]="allProgress[0]" [disabled]="true">
+        <mat-option *ngFor="let progress of allProgress" [value]="progress">
+          {{progress.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button (click)="submit()" [disabled]="!taskName.valid">Submit</button>
+  </div>
+
 </div>
