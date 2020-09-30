@@ -50,8 +50,8 @@
   </div>
 
   <div mat-dialog-actions>
-    <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-button (click)="submit()" [disabled]="!taskName.valid">Submit</button>
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!taskName.valid">Submit</button>
   </div>
 
 </div>

@@ -13,7 +13,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {MatSelectChange} from '@angular/material/select';
 import {MatDialog} from '@angular/material/dialog';
-import {NewTaskDialogComponent} from './dialog/task-dialog/new-task-dialog.component';
+import {NewTaskDialogComponent} from './dialog/new-task-dialog/new-task-dialog.component';
 import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 
 @Component({
@@ -111,20 +111,31 @@ export class BoardComponent implements OnInit {
 
     this.taskStompClient.connect({}, frame => {
       this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE + this.project.id, message => {
-        const updatedTask: Task = JSON.parse(message.body);
-        const oldTask: Task = this.tasks.find(value => value.id === updatedTask.id);
+        const newTask: Task = JSON.parse(message.body);
+        const oldTask: Task = this.tasks.find(value => value.id === newTask.id);
 
-        // Changing task to updated version
-        const indexToDelete: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
-        if (indexToDelete !== -1) {
-          this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(indexToDelete, 1);
+        if (oldTask) {
+          // Update task
+          const index: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
+          if (index !== -1) {
+
+            if (oldTask.progress === newTask.progress) {
+              this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1, newTask);
+            } else {
+              this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1);
+              this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+            }
+          }
+
+          this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = newTask;
+        } else {
+          // Insert new task
+          this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+          this.tasks.push(newTask);
         }
-        this.columns.find(column => column.progress.name === updatedTask.progress).tasks.push(updatedTask);
 
-        this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = updatedTask;
       });
     });
-
   }
 
   taskWebSocketSend(task: Task) {
@@ -178,7 +189,6 @@ export class BoardComponent implements OnInit {
     }
   }
 
-
   openTaskDialog(): void {
     const dialogRef = this.dialog.open(NewTaskDialogComponent, {
       autoFocus: true,
@@ -192,6 +202,7 @@ export class BoardComponent implements OnInit {
       if (result) {
         console.log('Get result');
         console.log(result);
+        this.taskWebSocketSend(result);
       }
     });
   }

@@ -16,10 +16,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {TaskUsersPipe} from './pipe/task-users.pipe';
 import {MatIconModule} from '@angular/material/icon';
-import {NewTaskDialogComponent} from './component/board/dialog/task-dialog/new-task-dialog.component';
+import {NewTaskDialogComponent} from './component/board/dialog/new-task-dialog/new-task-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-
 
 @NgModule({
   declarations: [
