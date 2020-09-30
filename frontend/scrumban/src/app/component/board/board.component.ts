@@ -12,6 +12,8 @@ import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {MatSelectChange} from '@angular/material/select';
+import {MatDialog} from '@angular/material/dialog';
+import {NewTaskDialogComponent} from './dialog/task-dialog/new-task-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -36,7 +38,7 @@ export class BoardComponent implements OnInit {
   counter = 0;
 
   constructor(private userService: UserService, private projectService: ProjectService,
-              private taskService: TaskService) {
+              private taskService: TaskService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -175,4 +177,20 @@ export class BoardComponent implements OnInit {
       this.taskWebSocketSend(task);
     }
   }
+
+
+  openTaskDialog(): void {
+    const dialogRef = this.dialog.open(NewTaskDialogComponent, {
+      autoFocus: true,
+      data: {
+        currentProject: this.project
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
+  }
+
 }
