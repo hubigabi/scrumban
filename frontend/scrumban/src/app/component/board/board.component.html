@@ -46,7 +46,7 @@
             <mat-card class="task" *ngFor="let task of column.tasks" cdkDrag>
               <mat-card-header>
 
-                <mat-card-title style="word-break: break-all;">{{task.name}}</mat-card-title>
+                <mat-card-title style="word-break: break-word;">{{task.name}}</mat-card-title>
 
                 <mat-card-subtitle>
                   {{task.users  | taskUsers}}
