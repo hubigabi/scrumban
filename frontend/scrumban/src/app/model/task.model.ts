@@ -7,6 +7,8 @@ export interface Task {
   description: string;
   priority: number;
   progress: string;
+  startedLocalDate: string;
+  finishedLocalDate: string;
   project: Project;
   users: User[];
 }

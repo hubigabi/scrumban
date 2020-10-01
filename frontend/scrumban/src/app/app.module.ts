@@ -18,7 +18,9 @@ import {TaskUsersPipe} from './pipe/task-users.pipe';
 import {MatIconModule} from '@angular/material/icon';
 import {NewTaskDialogComponent} from './component/board/dialog/new-task-dialog/new-task-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

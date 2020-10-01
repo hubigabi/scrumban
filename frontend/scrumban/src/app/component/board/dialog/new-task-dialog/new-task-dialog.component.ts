@@ -18,6 +18,8 @@ export class NewTaskDialogComponent implements OnInit {
   allProgress: Progress[];
   allPriority: Priority[];
 
+  todayDate: Date = new Date();
+
   constructor(public dialogRef: MatDialogRef<NewTaskDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
@@ -29,9 +31,12 @@ export class NewTaskDialogComponent implements OnInit {
       description: '',
       priority: 0,
       progress: 'BACKLOG',
+      startedLocalDate: '',
+      finishedLocalDate: '',
       project: this.data.currentProject,
       users: []
     };
+    this.task.startedLocalDate = this.todayDate.toISOString().split('T')[0];
 
     this.allProgress = ALL_PROGRESS;
     this.allPriority = ALL_PRIORITY;

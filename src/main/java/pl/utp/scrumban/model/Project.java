@@ -1,5 +1,6 @@
 package pl.utp.scrumban.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +27,13 @@ public class Project {
     private String description;
 
     private Integer numberWIP;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startedLocalDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate finishedLocalDate;
+
 
     @OneToOne
     private User leaderUser;
@@ -50,10 +59,14 @@ public class Project {
         user.getProjects().remove(this);
     }
 
-    public Project(@NotNull @Size(min = 3, max = 30) String name, String description, Integer numberWIP, User leaderUser) {
+
+    public Project(@NotNull @Size(min = 3, max = 30) String name, String description,
+                   Integer numberWIP, LocalDate startedLocalDate, LocalDate finishedLocalDate, User leaderUser) {
         this.name = name;
         this.description = description;
         this.numberWIP = numberWIP;
+        this.startedLocalDate = startedLocalDate;
+        this.finishedLocalDate = finishedLocalDate;
         this.leaderUser = leaderUser;
     }
 }
