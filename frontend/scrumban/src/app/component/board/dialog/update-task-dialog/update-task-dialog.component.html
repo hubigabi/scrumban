@@ -1,6 +1,6 @@
 <div class="container">
 
-  <h1 mat-dialog-title>New Task</h1>
+  <h1 mat-dialog-title>Update Task</h1>
 
   <div mat-dialog-content>
     <mat-form-field>
@@ -23,8 +23,8 @@
                 cdkTextareaAutosize
                 cdkAutosizeMinRows="10"
                 cdkAutosizeMaxRows="15">
-                maxlength="900"
-      ></textarea>
+                maxlength="900">
+      </textarea>
     </mat-form-field>
 
     <br>
@@ -40,7 +40,7 @@
     <br>
     <mat-form-field>
       <mat-label>Progress</mat-label>
-      <mat-select [(ngModel)]="task.progress" disabled>
+      <mat-select [(ngModel)]="task.progress">
         <mat-option *ngFor="let progress of allProgress" [value]="progress.name">
           {{progress.name}}
         </mat-option>
@@ -50,7 +50,7 @@
     <br>
     <mat-form-field>
       <mat-label>Creation date</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="todayDate" disabled>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="taskStartedDate" [disabled]="true">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

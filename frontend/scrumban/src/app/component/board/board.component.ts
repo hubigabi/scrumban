@@ -15,6 +15,7 @@ import {MatSelectChange} from '@angular/material/select';
 import {MatDialog} from '@angular/material/dialog';
 import {NewTaskDialogComponent} from './dialog/new-task-dialog/new-task-dialog.component';
 import {ALL_PRIORITY, Priority} from '../../model/priority.model';
+import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -189,11 +190,26 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  openTaskDialog(): void {
+  openNewTaskDialog(): void {
     const dialogRef = this.dialog.open(NewTaskDialogComponent, {
       autoFocus: true,
       data: {
         currentProject: this.project
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.taskWebSocketSend(result);
+      }
+    });
+  }
+
+  openUpdateTaskDialog(task: Task) {
+    const dialogRef = this.dialog.open(UpdateTaskDialogComponent, {
+      autoFocus: true,
+      data: {
+        task
       }
     });
 
@@ -206,5 +222,4 @@ export class BoardComponent implements OnInit {
       }
     });
   }
-
 }

@@ -29,7 +29,7 @@ export class NewTaskDialogComponent implements OnInit {
       id: 0,
       name: '',
       description: '',
-      priority: 0,
+      priority: 1,
       progress: 'BACKLOG',
       startedLocalDate: '',
       finishedLocalDate: '',
@@ -40,14 +40,6 @@ export class NewTaskDialogComponent implements OnInit {
 
     this.allProgress = ALL_PROGRESS;
     this.allPriority = ALL_PRIORITY;
-  }
-
-  changeProgress($event: MatSelectChange) {
-    this.task.progress = $event.value.name;
-  }
-
-  changePriority($event: MatSelectChange) {
-    this.task.priority = $event.value.value;
   }
 
   cancel() {

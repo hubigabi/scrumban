@@ -20,14 +20,16 @@ import {NewTaskDialogComponent} from './component/board/dialog/new-task-dialog/n
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule} from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
+import {UpdateTaskDialogComponent} from './component/board/dialog/update-task-dialog/update-task-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
     TaskUsersPipe,
-    NewTaskDialogComponent
+    NewTaskDialogComponent,
+    UpdateTaskDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
