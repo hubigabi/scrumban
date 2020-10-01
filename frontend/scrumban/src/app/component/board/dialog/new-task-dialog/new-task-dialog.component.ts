@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Project} from '../../../../model/project.model';
 import {Task} from 'src/app/model/task.model';
 import {ALL_PROGRESS, Progress} from '../../../../model/progress.model';
-import {MatSelectChange} from '@angular/material/select';
 import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
 
 @Component({
@@ -24,7 +23,7 @@ export class NewTaskDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.task = {
       id: 0,
       name: '',

@@ -1,28 +1,34 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Task} from '../../../../model/task.model';
 import {ALL_PROGRESS, Progress} from '../../../../model/progress.model';
 import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatSelectChange} from '@angular/material/select';
-import {Project} from '../../../../model/project.model';
+import {User} from '../../../../model/user.model';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-update-task-dialog',
   templateUrl: './update-task-dialog.component.html',
   styleUrls: ['./update-task-dialog.component.scss']
 })
-export class UpdateTaskDialogComponent implements OnInit {
+export class UpdateTaskDialogComponent implements OnInit, AfterViewInit {
+
+  @ViewChild(MatSort) sort: MatSort;
 
   task: Task;
   allProgress: Progress[];
   allPriority: Priority[];
   taskStartedDate: Date;
 
+  displayedColumns: string[] = ['index', 'name', 'email'];
+  dataSource: MatTableDataSource<User>;
+
   constructor(public dialogRef: MatDialogRef<UpdateTaskDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.task = {
       id: this.data.task.id,
       name: this.data.task.name,
@@ -39,6 +45,12 @@ export class UpdateTaskDialogComponent implements OnInit {
     this.allPriority = ALL_PRIORITY;
 
     this.taskStartedDate = this.getDateFromString(this.task.startedLocalDate);
+
+    this.dataSource = new MatTableDataSource(this.task.users);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   cancel() {
