@@ -16,6 +16,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {NewTaskDialogComponent} from './dialog/new-task-dialog/new-task-dialog.component';
 import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
+import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -149,10 +150,10 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  changeProject($event: MatSelectChange) {
+  changeProject(project: Project) {
     this.taskWebSocketDisconnect();
 
-    this.project = $event.value;
+    this.project = project;
 
     this.taskService.findAllTasksByProject_Id(this.project.id).subscribe(t => {
       this.tasks = t;
@@ -160,9 +161,9 @@ export class BoardComponent implements OnInit {
       this.columns.forEach(column => {
         column.tasks = [];
 
-        this.tasks.forEach(task => {
-          if (task.progress === column.progress.name) {
-            column.tasks.push(task);
+        this.tasks.forEach(value => {
+          if (value.progress === column.progress.name) {
+            column.tasks.push(value);
           }
         });
 
@@ -214,11 +215,28 @@ export class BoardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result) {
-        console.log('Get result');
-        console.log(result);
         this.taskWebSocketSend(result);
+      }
+    });
+  }
+
+  openNewProjectDialog(leaderUser: User) {
+    const dialogRef = this.dialog.open(NewProjectDialogComponent, {
+      autoFocus: true,
+      data: {
+        leaderUser
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.projectService.createProject(result).subscribe(value => {
+            this.allUserProjects.push(value);
+            this.changeProject(value);
+          }
+        );
       }
     });
   }

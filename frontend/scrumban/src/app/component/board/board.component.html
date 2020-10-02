@@ -14,7 +14,7 @@
       <div class="projects">
         <mat-form-field appearance="fill">
           <mat-label>Select project</mat-label>
-          <mat-select (selectionChange)="changeProject($event)">
+          <mat-select [(ngModel)]="project" (selectionChange)="changeProject($event.value)">
             <mat-option *ngFor="let project of allUserProjects" [value]="project">
               {{project.name}}
             </mat-option>
@@ -22,7 +22,9 @@
         </mat-form-field>
       </div>
 
-      <button mat-raised-button color="primary" class="button-board-bar">New project</button>
+      <button mat-raised-button color="primary" class="button-board-bar" (click)="openNewProjectDialog(user)">
+        New project
+      </button>
       <button mat-raised-button color="primary" class="button-board-bar" (click)="openNewTaskDialog()"
               [disabled]="!project">New task
       </button>

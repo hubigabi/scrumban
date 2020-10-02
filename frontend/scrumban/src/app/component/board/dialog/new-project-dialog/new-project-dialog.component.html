@@ -1,0 +1,61 @@
+<div class="container">
+
+  <h1 mat-dialog-title>New Project</h1>
+
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             [(ngModel)]="project.name"
+             name="taskName"
+             #taskName="ngModel"
+             required minlength="3" maxlength="20"
+      />
+    </mat-form-field>
+
+    <br>
+    <mat-form-field style="width: 250px;">
+      <mat-label>Description</mat-label>
+      <textarea matInput
+                [(ngModel)]="project.description"
+                name="taskDescription"
+                #taskDescription="ngModel"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="10"
+                cdkAutosizeMaxRows="15">
+                maxlength="900"
+      ></textarea>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field style="padding-bottom: 10px">
+      <mat-label>Number of WIP</mat-label>
+      <input matInput type="number" placeholder="Work in progress"
+             [(ngModel)]="project.numberWIP"
+             [formControl]="numberWIPFormControl"
+             min="{{minNumberWIP}}" max="{{maxNumberWIP}}" required>
+      <mat-error *ngIf="numberWIPFormControl.invalid">
+        Number between {{minNumberWIP}} and {{maxNumberWIP}}
+      </mat-error>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field>
+      <mat-label>Creation date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="todayDate"
+             (ngModelChange)="changeStartedLocalDate($event)" disabled>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submit()"
+            [disabled]="taskName.invalid || numberWIPFormControl.invalid">
+      Submit
+    </button>
+  </div>
+
+</div>

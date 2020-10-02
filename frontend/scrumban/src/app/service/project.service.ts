@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Project} from '../model/project.model';
+import {Task} from '../model/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class ProjectService {
 
   public getAllProjectsByUser_Id(userID: number): Observable<Project[]> {
     return this.httpClient.get<Project[]>(this.ALL_PROJECTS_BY_USER_ID + '/' + userID.toString());
+  }
+
+  public createProject(project: Project): Observable<Project> {
+    return this.httpClient.post<Project>(this.PROJECT_URL, project);
   }
 
 }
