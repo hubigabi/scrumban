@@ -45,7 +45,7 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.getUserByID(1).subscribe(u => {
+    this.userService.getUserByID(2).subscribe(u => {
       this.user = u;
 
       this.projectService.getAllProjectsByUser_Id(this.user.id).subscribe(p => {
@@ -250,10 +250,14 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((p: Project) => {
       if (p) {
-        console.log(p);
-        console.log(this.project);
-        this.projectService.updateProject(p).subscribe(value => this.project = value);
-        console.log(this.project);
+        this.projectService.updateProject(p).subscribe(updatedProject => {
+          const index = this.allUserProjects.map(value1 => value1.id).indexOf(updatedProject.id);
+          if (index !== -1) {
+            this.allUserProjects[index] = updatedProject;
+          }
+
+          this.project = updatedProject;
+        });
       }
     });
   }

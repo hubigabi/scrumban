@@ -92,20 +92,28 @@
       </button>
     </form>
 
-    <mat-list>
+    <mat-list style="padding-bottom: 30px">
       <mat-list-item *ngFor="let user of addedUsersToProject">
-        <mat-icon matListIcon (click)="deleteUserFromProject(user)">delete</mat-icon>
+
         <h3 matLine> {{user.name}} </h3>
         <p matLine>
           <span> {{user.email}} </span>
         </p>
+
+        <button mat-button (click)="deleteUserFromProject(user)">
+          <mat-icon>delete</mat-icon>
+        </button>
+
       </mat-list-item>
     </mat-list>
 
   </div>
 
   <div mat-dialog-actions>
-    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button (click)="cancel()">
+      Cancel
+    </button>
+
     <button mat-raised-button color="primary" (click)="submit()"
             [disabled]="taskName.invalid || numberWIPFormControl.invalid">
       Submit
