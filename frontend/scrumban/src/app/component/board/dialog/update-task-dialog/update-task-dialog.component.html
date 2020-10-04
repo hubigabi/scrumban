@@ -55,7 +55,9 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-
+    <br>
+    <br>
+    <mat-label>Users</mat-label>
     <table mat-table [dataSource]="this.dataSource" *ngIf="this.task.users.length > 0" matSort
            class="user-table">
 
@@ -77,7 +79,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
 
   </div>
 

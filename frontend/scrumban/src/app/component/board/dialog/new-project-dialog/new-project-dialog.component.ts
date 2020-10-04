@@ -17,7 +17,7 @@ export class NewProjectDialogComponent implements OnInit {
 
   readonly minNumberWIP = 3;
   readonly maxNumberWIP = 15;
-  numberWIPFormControl = new FormControl('', [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
+  numberWIPFormControl: FormControl;
 
   constructor(public dialogRef: MatDialogRef<NewProjectDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
@@ -35,6 +35,12 @@ export class NewProjectDialogComponent implements OnInit {
       users: [this.data.leaderUser],
     };
 
+    this.numberWIPFormControl = new FormControl(this.project.numberWIP,
+      [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
+    this.numberWIPFormControl.valueChanges.subscribe(value => {
+      this.project.numberWIP = value;
+    });
+
     this.project.startedLocalDate = this.todayDate.toISOString().split('T')[0];
   }
 
@@ -42,7 +48,6 @@ export class NewProjectDialogComponent implements OnInit {
     // https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
     this.project.startedLocalDate = new Date($event.getTime() - ($event.getTimezoneOffset() * 60000))
       .toISOString().split('T')[0];
-    console.log(this.project.startedLocalDate);
   }
 
   cancel() {

@@ -17,6 +17,7 @@ import {NewTaskDialogComponent} from './dialog/new-task-dialog/new-task-dialog.c
 import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
 import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project-dialog.component';
+import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/update-project-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -45,7 +46,7 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.getUserByID(3).subscribe(u => {
+    this.userService.getUserByID(1).subscribe(u => {
       this.user = u;
 
       this.projectService.getAllProjectsByUser_Id(this.user.id).subscribe(p => {
@@ -199,9 +200,9 @@ export class BoardComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.taskWebSocketSend(result);
+    dialogRef.afterClosed().subscribe((task: Task) => {
+      if (task) {
+        this.taskWebSocketSend(task);
       }
     });
   }
@@ -214,9 +215,9 @@ export class BoardComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.taskWebSocketSend(result);
+    dialogRef.afterClosed().subscribe((t: Task) => {
+      if (t) {
+        this.taskWebSocketSend(t);
       }
     });
   }
@@ -229,14 +230,29 @@ export class BoardComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-        this.projectService.createProject(result).subscribe(value => {
+    dialogRef.afterClosed().subscribe((project: Project) => {
+      if (project) {
+        this.projectService.createProject(project).subscribe(value => {
             this.allUserProjects.push(value);
             this.changeProject(value);
           }
         );
+      }
+    });
+  }
+
+  openUpdateProjectDialog(project: Project) {
+    const dialogRef = this.dialog.open(UpdateProjectDialogComponent, {
+      autoFocus: true,
+      data: {
+        project
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((p: Project) => {
+      if (p) {
+        console.log(p);
+        console.log(p.users);
       }
     });
   }

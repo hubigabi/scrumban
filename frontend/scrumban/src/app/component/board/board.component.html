@@ -22,6 +22,11 @@
         </mat-form-field>
       </div>
 
+      <button mat-button *ngIf="project !== undefined && user !== undefined
+      && project.leaderUser.id === user.id" (click)="openUpdateProjectDialog(project)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
       <button mat-raised-button color="primary" class="button-board-bar" (click)="openNewProjectDialog(user)">
         New project
       </button>

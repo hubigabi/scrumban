@@ -26,6 +26,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {NewProjectDialogComponent} from './component/board/dialog/new-project-dialog/new-project-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { UpdateProjectDialogComponent } from './component/board/dialog/update-project-dialog/update-project-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     TaskUsersPipe,
     NewTaskDialogComponent,
     UpdateTaskDialogComponent,
-    NewProjectDialogComponent
+    NewProjectDialogComponent,
+    UpdateProjectDialogComponent
   ],
   imports: [
     BrowserModule,
