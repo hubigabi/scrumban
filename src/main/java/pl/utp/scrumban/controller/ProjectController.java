@@ -39,7 +39,7 @@ public class ProjectController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
         project = projectService.createProject(project);
 
@@ -50,7 +50,7 @@ public class ProjectController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping()
     public ResponseEntity<Project> updateProject(@RequestBody Project project) {
         project = projectService.updateProject(project);
 

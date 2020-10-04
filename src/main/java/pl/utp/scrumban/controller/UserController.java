@@ -39,9 +39,20 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user){
-         user = userService.createUser(user);
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+        User user = userService.getUserByEmail(email);
+
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        user = userService.createUser(user);
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -50,8 +61,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
+    @PutMapping()
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         user = userService.updateUser(user);
 
         if (user != null) {

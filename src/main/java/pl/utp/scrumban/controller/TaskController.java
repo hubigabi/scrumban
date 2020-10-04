@@ -39,9 +39,9 @@ public class TaskController {
         }
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Task> createTask(@RequestBody Task task){
-         task = taskService.createTask(task);
+    @PostMapping()
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+        task = taskService.createTask(task);
 
         if (task != null) {
             return new ResponseEntity<>(task, HttpStatus.CREATED);
@@ -51,7 +51,7 @@ public class TaskController {
     }
 
     @PutMapping
-    public ResponseEntity<Task> updateTask(@RequestBody Task task){
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         task = taskService.updateTask(task);
 
         if (task != null) {
