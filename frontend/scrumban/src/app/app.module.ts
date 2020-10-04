@@ -27,6 +27,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {NewProjectDialogComponent} from './component/board/dialog/new-project-dialog/new-project-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UpdateProjectDialogComponent } from './component/board/dialog/update-project-dialog/update-project-dialog.component';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { UpdateProjectDialogComponent } from './component/board/dialog/update-pr
     MatNativeDateModule,
     MatTableModule,
     MatSortModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatListModule
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]

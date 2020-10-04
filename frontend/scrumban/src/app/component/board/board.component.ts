@@ -251,7 +251,9 @@ export class BoardComponent implements OnInit {
     dialogRef.afterClosed().subscribe((p: Project) => {
       if (p) {
         console.log(p);
-        console.log(p.users);
+        console.log(this.project);
+        this.projectService.updateProject(p).subscribe(value => this.project = value);
+        console.log(this.project);
       }
     });
   }

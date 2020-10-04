@@ -92,6 +92,16 @@
       </button>
     </form>
 
+    <mat-list>
+      <mat-list-item *ngFor="let user of addedUsersToProject">
+        <mat-icon matListIcon (click)="deleteUserFromProject(user)">delete</mat-icon>
+        <h3 matLine> {{user.name}} </h3>
+        <p matLine>
+          <span> {{user.email}} </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+
   </div>
 
   <div mat-dialog-actions>

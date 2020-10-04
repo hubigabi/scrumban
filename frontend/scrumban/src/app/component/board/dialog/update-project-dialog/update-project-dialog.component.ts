@@ -102,7 +102,6 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
           this.hintForEmailFieldValue = 'The user with this email was added by you earlier';
         } else {
           this.addedUsersToProject.push(user);
-          console.log('Added');
         }
       } else {
         this.hintForEmailFieldBoolean = true;
@@ -114,11 +113,21 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
+  deleteUserFromProject(user: User) {
+    const index: number = this.addedUsersToProject.map(value => value.id).indexOf(user.id);
+    if (index !== -1) {
+      this.addedUsersToProject.splice(index, 1);
+    }
+    this.hintForEmailFieldBoolean = false;
+    this.hintForEmailFieldValue = '';
+  }
+
   cancel() {
     this.dialogRef.close();
   }
 
   submit() {
+    this.project.users = this.project.users.concat(this.addedUsersToProject);
     this.dialogRef.close(this.project);
   }
 

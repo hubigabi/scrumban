@@ -28,4 +28,8 @@ export class ProjectService {
     return this.httpClient.post<Project>(this.PROJECT_URL, project);
   }
 
+  public updateProject(project: Project): Observable<Project> {
+    return this.httpClient.put<Project>(this.PROJECT_URL, project);
+  }
+
 }
