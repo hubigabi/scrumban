@@ -248,12 +248,11 @@ export class BoardComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((p: Project) => {
-      if (p) {
-        console.log(p);
-        console.log(this.project);
-        this.projectService.updateProject(p).subscribe(value => this.project = value);
-        console.log(this.project);
+    dialogRef.afterClosed().subscribe(data => {
+      if (data) {
+        console.log(data.project);
+        console.log(data.addedUsersToProject);
+        // this.projectService.updateProject(p).subscribe(value => this.project = value);
       }
     });
   }

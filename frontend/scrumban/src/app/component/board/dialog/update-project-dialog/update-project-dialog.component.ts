@@ -127,8 +127,12 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    this.project.users = this.project.users.concat(this.addedUsersToProject);
-    this.dialogRef.close(this.project);
+    const data = {
+      project: this.project,
+      addedUsersToProject: this.addedUsersToProject
+    };
+
+    this.dialogRef.close(data);
   }
 
 }
