@@ -8,6 +8,7 @@ import {User} from '../../../../model/user.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Project} from '../../../../model/project.model';
 import {FormControl, Validators} from '@angular/forms';
+import {UserService} from '../../../../service/user.service';
 
 @Component({
   selector: 'app-update-project-dialog',
@@ -30,8 +31,14 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['index', 'name', 'email'];
   dataSource: MatTableDataSource<User>;
 
+  emailFormControl: FormControl;
+  hintForEmailFieldBoolean = false;
+  hintForEmailFieldValue = '';
+
+  addedUsersToProject: User[] = [];
+
   constructor(public dialogRef: MatDialogRef<UpdateProjectDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+              @Inject(MAT_DIALOG_DATA) public data: DialogData, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -50,6 +57,14 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
       [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
     this.numberWIPFormControl.valueChanges.subscribe(value => {
       this.project.numberWIP = value;
+    });
+
+    this.emailFormControl = new FormControl('', [
+      Validators.required,
+      Validators.email,
+    ]);
+    this.emailFormControl.valueChanges.subscribe(value => {
+      this.hintForEmailFieldBoolean = false;
     });
 
     this.projectStartedDate = this.getDateFromString(this.project.startedLocalDate);
@@ -71,6 +86,32 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
   getDateFromString(dateString: string) {
     const from = dateString.split('-').map(value => parseInt(value, 10));
     return new Date(from[0], from[1] - 1, from[2]);
+  }
+
+  addUserToProject(userEmail: string) {
+
+    this.userService.getUserByEmail(userEmail).subscribe((user: User) => {
+
+      console.log(user);
+      if (user) {
+        if (this.project.users.map(value => value.id).indexOf(user.id) > -1) {
+          this.hintForEmailFieldBoolean = true;
+          this.hintForEmailFieldValue = 'The user with this email already is in the project';
+        } else if (this.addedUsersToProject.map(value => value.id).indexOf(user.id) > -1) {
+          this.hintForEmailFieldBoolean = true;
+          this.hintForEmailFieldValue = 'The user with this email was added by you earlier';
+        } else {
+          this.addedUsersToProject.push(user);
+          console.log('Added');
+        }
+      } else {
+        this.hintForEmailFieldBoolean = true;
+        this.hintForEmailFieldValue = 'The user with this email does not exist';
+      }
+    }, error => {
+      this.hintForEmailFieldBoolean = true;
+      this.hintForEmailFieldValue = 'The user with this email does not exist';
+    });
   }
 
   cancel() {

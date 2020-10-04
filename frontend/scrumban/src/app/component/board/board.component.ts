@@ -11,7 +11,6 @@ import {Progress} from '../../model/progress.model';
 import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import {MatSelectChange} from '@angular/material/select';
 import {MatDialog} from '@angular/material/dialog';
 import {NewTaskDialogComponent} from './dialog/new-task-dialog/new-task-dialog.component';
 import {ALL_PRIORITY, Priority} from '../../model/priority.model';
