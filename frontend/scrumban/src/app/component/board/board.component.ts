@@ -25,11 +25,15 @@ import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/updat
 })
 export class BoardComponent implements OnInit {
 
-  private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/task';
-  private readonly TASK_URL_SEND = '/app/task/';
-  private readonly TASK_URL_SUBSCRIBE = '/updatedTask/';
+  private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/scrumban';
 
   private taskStompClient;
+  private readonly TASK_URL_SEND = '/app/task/';
+  private readonly TASK_URL_SUBSCRIBE = '/updateTask/';
+
+  private projectStompClient;
+  private readonly PROJECT_URL_SEND = '/app/project/';
+  private readonly PROJECT_URL_SUBSCRIBE = '/updateProject/';
 
   allUserProjects: Project[];
   project: Project;
@@ -118,8 +122,42 @@ export class BoardComponent implements OnInit {
     }
   }
 
+  projectWebSocketConnect(projectID: number) {
+    const socket = new SockJS(this.SERVER_WEB_SOCKET);
+    this.projectStompClient = Stomp.over(socket);
+
+    this.projectStompClient.connect({}, frame => {
+      this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE + projectID, message => {
+        const updatedProject: Project = JSON.parse(message.body);
+
+        const index = this.allUserProjects.map(val => val.id).indexOf(updatedProject.id);
+        if (index !== -1) {
+          this.allUserProjects[index] = updatedProject;
+        }
+
+        this.project = updatedProject;
+      });
+    });
+  }
+
+  projectWebSocketSend(project: Project) {
+    if (this.projectStompClient != null) {
+      this.projectStompClient.send(this.PROJECT_URL_SEND + project.id, {}, JSON.stringify(project));
+    } else {
+      console.log('Cant send project');
+      console.log('Null: ' + this.projectStompClient);
+    }
+  }
+
+  projectWebSocketDisconnect() {
+    if (this.projectStompClient != null) {
+      this.projectStompClient.disconnect();
+    }
+  }
+
   changeProject(project: Project) {
     this.taskWebSocketDisconnect();
+    this.projectWebSocketDisconnect();
 
     this.projectService.getProjectByID(project.id).subscribe((p: Project) => {
       const index = this.allUserProjects.map(value1 => value1.id).indexOf(p.id);
@@ -128,6 +166,7 @@ export class BoardComponent implements OnInit {
       }
 
       this.project = p;
+      this.projectWebSocketConnect(p.id);
     });
 
     this.taskService.findAllTasksByProject_Id(project.id).subscribe(t => {
@@ -225,14 +264,7 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((p: Project) => {
       if (p) {
-        this.projectService.updateProject(p).subscribe(updatedProject => {
-          const index = this.allUserProjects.map(value1 => value1.id).indexOf(updatedProject.id);
-          if (index !== -1) {
-            this.allUserProjects[index] = updatedProject;
-          }
-
-          this.project = updatedProject;
-        });
+        this.projectWebSocketSend(p);
       }
     });
   }
