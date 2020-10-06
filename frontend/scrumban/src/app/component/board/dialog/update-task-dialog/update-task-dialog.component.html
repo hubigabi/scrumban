@@ -1,6 +1,6 @@
 <div class="container">
 
-  <h1 mat-dialog-title>Update Task</h1>
+  <h1 mat-dialog-title>Edit task</h1>
 
   <div mat-dialog-content>
     <mat-form-field>
@@ -49,36 +49,46 @@
 
     <br>
     <mat-form-field>
-      <mat-label>Creation date</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="taskStartedDate" [disabled]="true">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-label>Started date</mat-label>
+      <input matInput [matDatepicker]="pickerStartedDate" [(ngModel)]="taskStartedDate" [disabled]="true">
+      <mat-datepicker-toggle matSuffix [for]="pickerStartedDate"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStartedDate></mat-datepicker>
     </mat-form-field>
 
-    <br>
-    <br>
-    <mat-label>Users</mat-label>
-    <table mat-table [dataSource]="this.dataSource" *ngIf="this.task.users.length > 0" matSort
-           class="user-table">
+    <div *ngIf="task.finishedLocalDate">
+      <mat-form-field *ngIf="task.finishedLocalDate">
+        <mat-label>Finished date</mat-label>
+        <input matInput [matDatepicker]="pickerFinishedDate" [(ngModel)]="taskFinishedDate" [disabled]="true">
+        <mat-datepicker-toggle matSuffix [for]="pickerFinishedDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFinishedDate></mat-datepicker>
+      </mat-form-field>
+    </div>
 
-      <ng-container matColumnDef="index">
-        <mat-header-cell *matHeaderCellDef> No.</mat-header-cell>
-        <mat-cell *matCellDef="let element; let i = index;">{{i + 1}}</mat-cell>
-      </ng-container>
+    <div class="user-table" *ngIf="this.task.users.length > 0">
+      <div style="margin-bottom: 15px;">
+        <mat-label>Users</mat-label>
+      </div>
+      <table mat-table [dataSource]="this.dataSource" matSort style="width: 100%">
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
+        <ng-container matColumnDef="index">
+          <mat-header-cell *matHeaderCellDef> No.</mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index;">{{i + 1}}</mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
 
   </div>
 

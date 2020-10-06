@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Task} from '../../../../model/task.model';
-import {ALL_PROGRESS, Progress} from '../../../../model/progress.model';
+import {ALL_PROGRESS, Progress, PROGRESS_DONE} from '../../../../model/progress.model';
 import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {User} from '../../../../model/user.model';
@@ -20,6 +20,7 @@ export class UpdateTaskDialogComponent implements OnInit, AfterViewInit {
   allProgress: Progress[];
   allPriority: Priority[];
   taskStartedDate: Date;
+  taskFinishedDate: Date;
 
   displayedColumns: string[] = ['index', 'name', 'email'];
   dataSource: MatTableDataSource<User>;
@@ -45,6 +46,9 @@ export class UpdateTaskDialogComponent implements OnInit, AfterViewInit {
     this.allPriority = ALL_PRIORITY;
 
     this.taskStartedDate = this.getDateFromString(this.task.startedLocalDate);
+    if (this.task.finishedLocalDate) {
+      this.taskFinishedDate = this.getDateFromString(this.task.finishedLocalDate);
+    }
 
     this.dataSource = new MatTableDataSource(this.task.users);
   }
@@ -58,6 +62,14 @@ export class UpdateTaskDialogComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
+    if (this.task.progress === PROGRESS_DONE.name) {
+      if (!this.task.finishedLocalDate) {
+        this.task.finishedLocalDate = new Date().toISOString().split('T')[0];
+      }
+    } else {
+      this.task.finishedLocalDate = null;
+    }
+
     this.dialogRef.close(this.task);
   }
 

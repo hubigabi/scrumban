@@ -7,7 +7,7 @@ import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
-import {Progress} from '../../model/progress.model';
+import {Progress, PROGRESS_DONE} from '../../model/progress.model';
 import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -74,6 +74,18 @@ export class BoardComponent implements OnInit {
       const task = this.tasks.find(value =>
         value.id === event.container.data.tasks[event.currentIndex].id);
       task.progress = event.container.data.progress.name;
+
+      if (event.container.data.progress === PROGRESS_DONE) {
+        // Change finishedLocalDate to today date
+        const todayLocalDateString = new Date().toISOString().split('T')[0];
+
+        task.finishedLocalDate = todayLocalDateString;
+        event.container.data.tasks[event.currentIndex].finishedLocalDate = todayLocalDateString;
+      } else if (event.previousContainer.data.progress === PROGRESS_DONE) {
+        // Change finishedLocalDate to null
+        task.finishedLocalDate = null;
+        event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
+      }
 
       this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
     }
