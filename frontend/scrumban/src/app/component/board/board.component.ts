@@ -71,39 +71,7 @@ export class BoardComponent implements OnInit {
         value.id === event.container.data.tasks[event.currentIndex].id);
       task.progress = event.container.data.progress.name;
 
-      // this.taskService.updateTask(event.container.data.tasks[event.currentIndex])
-      //   .subscribe(value => {
-      //       event.container.data.tasks[event.currentIndex] = value;
-      //       task = value;
-      //     }
-      //   );
-
       this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
-    }
-  }
-
-  moveTask(taskID: number, progress: Progress) {
-    let task = this.tasks.find(value => value.id === taskID);
-
-    if (task.progress !== progress.name) {
-      const previousContainer = this.columns.find(column => column.progress.name === task.progress).tasks;
-      const currentContainer = this.columns.find(column => column.progress === progress).tasks;
-
-      const previousIndex = previousContainer.findIndex(value => value.id === task.id);
-      const currentIndex = currentContainer.length;
-
-      transferArrayItem(previousContainer,
-        currentContainer,
-        previousIndex,
-        currentIndex);
-      task.progress = progress.name;
-
-      this.taskService.updateTask(task)
-        .subscribe(value => {
-            currentContainer[currentIndex] = value;
-            task = value;
-          }
-        );
     }
   }
 
@@ -153,9 +121,16 @@ export class BoardComponent implements OnInit {
   changeProject(project: Project) {
     this.taskWebSocketDisconnect();
 
-    this.project = project;
+    this.projectService.getProjectByID(project.id).subscribe((p: Project) => {
+      const index = this.allUserProjects.map(value1 => value1.id).indexOf(p.id);
+      if (index !== -1) {
+        this.allUserProjects[index] = p;
+      }
 
-    this.taskService.findAllTasksByProject_Id(this.project.id).subscribe(t => {
+      this.project = p;
+    });
+
+    this.taskService.findAllTasksByProject_Id(project.id).subscribe(t => {
       this.tasks = t;
 
       this.columns.forEach(column => {
