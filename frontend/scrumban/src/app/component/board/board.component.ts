@@ -7,7 +7,7 @@ import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
 import {Column, COLUMNS} from '../../model/column.model';
-import {Progress, PROGRESS_DONE} from '../../model/progress.model';
+import {ALL_PROGRESS, Progress, PROGRESS_DONE} from '../../model/progress.model';
 import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -43,6 +43,10 @@ export class BoardComponent implements OnInit {
   columns: Column[] = COLUMNS;
   allPriority: Priority[] = ALL_PRIORITY;
 
+  private allProgress: Progress[] = ALL_PROGRESS;
+  private allProgressNotActive: Progress[];
+  private allProgressNotActiveStrings: string[];
+
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog) {
   }
@@ -57,7 +61,8 @@ export class BoardComponent implements OnInit {
       });
 
     });
-
+    this.allProgressNotActive = this.allProgress.filter(value => value.inProgress === false);
+    this.allProgressNotActiveStrings = this.allProgressNotActive.map(value => value.name);
   }
 
   drop(event: CdkDragDrop<Column>) {
@@ -65,29 +70,37 @@ export class BoardComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.tasks, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data.tasks,
-        event.container.data.tasks,
-        event.previousIndex,
-        event.currentIndex);
+      if (this.isTaskMoveToNotActive(event.container.data.progress)
+        || this.isTaskMoveBetweenActive(event.previousContainer.data.progress, event.container.data.progress)
+        || this.checkWIP()) {
 
-      event.container.data.tasks[event.currentIndex].progress = event.container.data.progress.name;
-      const task = this.tasks.find(value =>
-        value.id === event.container.data.tasks[event.currentIndex].id);
-      task.progress = event.container.data.progress.name;
+        transferArrayItem(event.previousContainer.data.tasks,
+          event.container.data.tasks,
+          event.previousIndex,
+          event.currentIndex);
 
-      if (event.container.data.progress === PROGRESS_DONE) {
-        // Change finishedLocalDate to today date
-        const todayLocalDateString = new Date().toISOString().split('T')[0];
+        event.container.data.tasks[event.currentIndex].progress = event.container.data.progress.name;
+        const task = this.tasks.find(value =>
+          value.id === event.container.data.tasks[event.currentIndex].id);
+        task.progress = event.container.data.progress.name;
 
-        task.finishedLocalDate = todayLocalDateString;
-        event.container.data.tasks[event.currentIndex].finishedLocalDate = todayLocalDateString;
-      } else if (event.previousContainer.data.progress === PROGRESS_DONE) {
-        // Change finishedLocalDate to null
-        task.finishedLocalDate = null;
-        event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
+        if (event.container.data.progress === PROGRESS_DONE) {
+          // Change finishedLocalDate to today date
+          const todayLocalDateString = new Date().toISOString().split('T')[0];
+
+          task.finishedLocalDate = todayLocalDateString;
+          event.container.data.tasks[event.currentIndex].finishedLocalDate = todayLocalDateString;
+        } else if (event.previousContainer.data.progress === PROGRESS_DONE) {
+          // Change finishedLocalDate to null
+          task.finishedLocalDate = null;
+          event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
+        }
+
+        this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
+      } else {
+        console.log('Cant move');
       }
 
-      this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
     }
   }
 
@@ -280,4 +293,24 @@ export class BoardComponent implements OnInit {
       }
     });
   }
+
+  isTaskMoveToNotActive(progress: Progress) {
+    return this.allProgressNotActive.indexOf(progress) > -1;
+  }
+
+  private isTaskMoveBetweenActive(progress1: Progress, progress2: Progress) {
+    return this.allProgressNotActive.indexOf(progress1) < 0
+      && this.allProgressNotActive.indexOf(progress2) < 0;
+  }
+
+  // Check if WIP of project is bigger than active tasks
+  checkWIP() {
+    const activeTasksNumber = this.tasks
+      .map(value => value.progress)
+      .filter(value => this.allProgressNotActiveStrings.indexOf(value) < 0)
+      .length;
+
+    return this.project.numberWIP > activeTasksNumber;
+  }
+
 }
