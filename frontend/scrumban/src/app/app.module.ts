@@ -29,6 +29,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {UpdateProjectDialogComponent} from './component/board/dialog/update-project-dialog/update-project-dialog.component';
 import {MatListModule} from '@angular/material/list';
 import {SimpleNotificationsModule} from 'angular2-notifications';
+import {ToasterModule} from 'angular2-toaster';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import {SimpleNotificationsModule} from 'angular2-notifications';
     MatSortModule,
     ReactiveFormsModule,
     MatListModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    ToasterModule.forRoot()
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]

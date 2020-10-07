@@ -17,7 +17,7 @@ import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
 import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project-dialog.component';
 import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/update-project-dialog.component';
-import {NotificationsService, NotificationType} from 'angular2-notifications';
+import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 
 @Component({
   selector: 'app-board',
@@ -48,9 +48,17 @@ export class BoardComponent implements OnInit {
   private allProgressNotActive: Progress[];
   private allProgressNotActiveStrings: string[];
 
+  public config: ToasterConfig = new ToasterConfig(
+    {
+      positionClass: 'toast-bottom-center',
+      animation: 'fade',
+      limit: 2
+    },
+  );
+
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog,
-              private notificationsService: NotificationsService) {
+              private toasterService: ToasterService) {
   }
 
   ngOnInit() {
@@ -100,18 +108,15 @@ export class BoardComponent implements OnInit {
 
         this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
       } else {
-
-        const context = {
-          position: ['middle', 'center'],
-          timeOut: 5000,
-          showProgressBar: true,
-          pauseOnHover: true,
-          clickToClose: true,
-          animate: 'fade'
+        const toast: Toast = {
+          type: 'error',
+          title: 'You can\'t move task',
+          body: 'Number of tasks in WIP is at maximum',
+          showCloseButton: true,
+          timeout: 5000
         };
 
-        this.notificationsService.create('You can\'t move task',
-          'Number of tasks in WIP is at maximum', NotificationType.Error, context);
+        this.toasterService.pop(toast);
       }
 
     }
