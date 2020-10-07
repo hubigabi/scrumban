@@ -17,6 +17,7 @@ import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
 import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project-dialog.component';
 import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/update-project-dialog.component';
+import {NotificationsService, NotificationType} from 'angular2-notifications';
 
 @Component({
   selector: 'app-board',
@@ -48,7 +49,8 @@ export class BoardComponent implements OnInit {
   private allProgressNotActiveStrings: string[];
 
   constructor(private userService: UserService, private projectService: ProjectService,
-              private taskService: TaskService, public dialog: MatDialog) {
+              private taskService: TaskService, public dialog: MatDialog,
+              private notificationsService: NotificationsService) {
   }
 
   ngOnInit() {
@@ -98,7 +100,18 @@ export class BoardComponent implements OnInit {
 
         this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
       } else {
-        console.log('Cant move');
+
+        const context = {
+          position: ['middle', 'center'],
+          timeOut: 5000,
+          showProgressBar: true,
+          pauseOnHover: true,
+          clickToClose: true,
+          animate: 'fade'
+        };
+
+        this.notificationsService.create('You can\'t move task',
+          'Number of tasks in WIP is at maximum', NotificationType.Error, context);
       }
 
     }
