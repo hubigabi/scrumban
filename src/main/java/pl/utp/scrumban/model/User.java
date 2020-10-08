@@ -41,10 +41,10 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate registrationDate;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "users")
     private Set<Project> projects = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "users")
     private Set<Task> tasks = new HashSet<>();
 
     public User(@NotNull @Email String email, @NotNull @Size(min = 3, max = 20) String name, @NotNull String password, LocalDate registrationDate) {
