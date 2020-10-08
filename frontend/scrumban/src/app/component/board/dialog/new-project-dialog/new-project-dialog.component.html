@@ -3,7 +3,7 @@
   <h1 mat-dialog-title>New project</h1>
 
   <div mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field class="field-block" style="width: 65%;">
       <mat-label>Name</mat-label>
       <input matInput
              [(ngModel)]="project.name"
@@ -13,8 +13,7 @@
       />
     </mat-form-field>
 
-    <br>
-    <mat-form-field style="width: 250px;">
+    <mat-form-field class="field-block" style="width: 100%;">
       <mat-label>Description</mat-label>
       <textarea matInput
                 [(ngModel)]="project.description"
@@ -27,8 +26,7 @@
       ></textarea>
     </mat-form-field>
 
-    <br>
-    <mat-form-field style="padding-bottom: 10px">
+    <mat-form-field class="field-block" style="padding-bottom: 10px">
       <mat-label>Number of WIP</mat-label>
       <input matInput type="number" placeholder="Work in progress"
              [formControl]="numberWIPFormControl"
@@ -38,8 +36,7 @@
       </mat-error>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Creation date</mat-label>
       <input matInput [matDatepicker]="picker" [(ngModel)]="todayDate"
              (ngModelChange)="changeStartedLocalDate($event)" disabled>

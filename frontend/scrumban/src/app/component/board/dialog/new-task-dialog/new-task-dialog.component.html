@@ -3,7 +3,7 @@
   <h1 mat-dialog-title>New task</h1>
 
   <div mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field class="field-block" style="width: 70%;">
       <mat-label>Name</mat-label>
       <input matInput
              [(ngModel)]="task.name"
@@ -13,8 +13,7 @@
       />
     </mat-form-field>
 
-    <br>
-    <mat-form-field style="width: 250px;">
+    <mat-form-field class="field-block" style="width: 100%;">
       <mat-label>Description</mat-label>
       <textarea matInput
                 [(ngModel)]="task.description"
@@ -27,8 +26,7 @@
       ></textarea>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Priority</mat-label>
       <mat-select [(ngModel)]="task.priority">
         <mat-option *ngFor="let priority of allPriority" [value]="priority.value">
@@ -37,8 +35,7 @@
       </mat-select>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Progress</mat-label>
       <mat-select [(ngModel)]="task.progress" disabled>
         <mat-option *ngFor="let progress of allProgress" [value]="progress.name">
@@ -47,8 +44,7 @@
       </mat-select>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Creation date</mat-label>
       <input matInput [matDatepicker]="picker" [(ngModel)]="todayDate" disabled>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

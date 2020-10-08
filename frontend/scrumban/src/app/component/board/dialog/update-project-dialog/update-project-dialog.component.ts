@@ -92,7 +92,6 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
 
     this.userService.getUserByEmail(userEmail).subscribe((user: User) => {
 
-      console.log(user);
       if (user) {
         if (this.project.users.map(value => value.id).indexOf(user.id) > -1) {
           this.hintForEmailFieldBoolean = true;
@@ -102,6 +101,7 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
           this.hintForEmailFieldValue = 'The user with this email was added by you earlier';
         } else {
           this.addedUsersToProject.push(user);
+          this.emailFormControl.setValue('');
         }
       } else {
         this.hintForEmailFieldBoolean = true;

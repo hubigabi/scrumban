@@ -3,7 +3,7 @@
   <h1 mat-dialog-title>Edit task</h1>
 
   <div mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field class="field-block" style="width: 60%;">
       <mat-label>Name</mat-label>
       <input matInput
              [(ngModel)]="task.name"
@@ -13,8 +13,7 @@
       />
     </mat-form-field>
 
-    <br>
-    <mat-form-field style="min-width: 300px; width: 100%">
+    <mat-form-field class="field-block" style="width: 100%;">
       <mat-label>Description</mat-label>
       <textarea matInput
                 [(ngModel)]="task.description"
@@ -27,8 +26,7 @@
       </textarea>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Priority</mat-label>
       <mat-select [(ngModel)]="task.priority">
         <mat-option *ngFor="let priority of allPriority" [value]="priority.value">
@@ -37,8 +35,7 @@
       </mat-select>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Progress</mat-label>
       <mat-select [(ngModel)]="task.progress">
         <mat-option *ngFor="let progress of allProgress" [value]="progress.name">
@@ -47,15 +44,14 @@
       </mat-select>
     </mat-form-field>
 
-    <br>
-    <mat-form-field>
+    <mat-form-field class="field-block">
       <mat-label>Started date</mat-label>
       <input matInput [matDatepicker]="pickerStartedDate" [(ngModel)]="taskStartedDate" [disabled]="true">
       <mat-datepicker-toggle matSuffix [for]="pickerStartedDate"></mat-datepicker-toggle>
       <mat-datepicker #pickerStartedDate></mat-datepicker>
     </mat-form-field>
 
-    <div *ngIf="task.finishedLocalDate">
+    <div *ngIf="task.finishedLocalDate" class="field-block">
       <mat-form-field *ngIf="task.finishedLocalDate">
         <mat-label>Finished date</mat-label>
         <input matInput [matDatepicker]="pickerFinishedDate" [(ngModel)]="taskFinishedDate" [disabled]="true">

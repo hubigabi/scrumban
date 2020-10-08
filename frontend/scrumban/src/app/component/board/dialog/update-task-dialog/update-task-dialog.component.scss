@@ -1,9 +1,16 @@
 .container {
+  min-width: 350px;
   padding: 30px;
 }
 
+.field-block {
+  width: 60%;
+  display: block;
+  padding-bottom: 5px
+}
+
 .user-table {
+  display: block;
   width: 400px;
-  margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
