@@ -39,7 +39,8 @@ public class Project {
     private LocalDate finishedLocalDate;
 
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "leader_user_id")
     private User leaderUser;
 
     @ManyToMany(
