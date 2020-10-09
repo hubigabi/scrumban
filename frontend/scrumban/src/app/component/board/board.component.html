@@ -77,17 +77,25 @@
                 <!--                Edit-->
               </button>
 
-              <button mat-button>
+              <button mat-button (click)="deleteTask(task)">
                 <mat-icon>event_note</mat-icon>
                 <!--                Notes-->
               </button>
 
-              <div *ngIf="task.users  | taskUsers : user; else loggedUserIsNotInTaskUsers">
+              <button mat-button *ngIf="task.users.length === 0 && user.id === project.leaderUser.id">
+                <mat-icon>delete</mat-icon>
+                <!--                Delete-->
+              </button>
+
+              <div *ngIf="task.users  | taskUsers : user; else loggedUserIsNotInTaskUsers"
+                   style="display:inline-block;">
                 <button mat-button (click)="dismissUserFromTask($event, task)">Dismiss</button>
               </div>
 
               <ng-template #loggedUserIsNotInTaskUsers>
-                <button mat-button (click)="assignUserToTask($event, task)">Assign</button>
+                <div style="display:inline-block;">
+                  <button mat-button (click)="assignUserToTask($event, task)">Assign</button>
+                </div>
               </ng-template>
 
             </mat-card>

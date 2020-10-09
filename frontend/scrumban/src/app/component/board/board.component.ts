@@ -29,12 +29,13 @@ export class BoardComponent implements OnInit {
   private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/scrumban';
 
   private taskStompClient;
-  private readonly TASK_URL_SEND = '/app/task/';
-  private readonly TASK_URL_SUBSCRIBE = '/updateTask/';
+  private readonly TASK_URL_SAVE = '/app/saveTask/';
+  private readonly TASK_URL_DELETE = '/app/deleteTask/';
+  private readonly TASK_URL_SUBSCRIBE = '/task/';
 
   private projectStompClient;
-  private readonly PROJECT_URL_SEND = '/app/project/';
-  private readonly PROJECT_URL_SUBSCRIBE = '/updateProject/';
+  private readonly PROJECT_URL_SAVE = '/app/saveProject/';
+  private readonly PROJECT_URL_SUBSCRIBE = '/project/';
 
   allUserProjects: Project[];
   project: Project;
@@ -106,7 +107,7 @@ export class BoardComponent implements OnInit {
           event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
         }
 
-        this.taskWebSocketSend(event.container.data.tasks[event.currentIndex]);
+        this.taskWebSocketSave(event.container.data.tasks[event.currentIndex]);
       } else {
         const toast: Toast = {
           type: 'error',
@@ -155,8 +156,13 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  taskWebSocketSend(task: Task) {
-    this.taskStompClient.send(this.TASK_URL_SEND + this.project.id, {}, JSON.stringify(task));
+  taskWebSocketSave(task: Task) {
+    this.taskStompClient.send(this.TASK_URL_SAVE + this.project.id, {}, JSON.stringify(task));
+  }
+
+  taskWebSocketDelete(task: Task) {
+    console.log(task);
+    this.taskStompClient.send(this.TASK_URL_DELETE + this.project.id, {}, JSON.stringify(task));
   }
 
   taskWebSocketDisconnect() {
@@ -183,9 +189,9 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  projectWebSocketSend(project: Project) {
+  projectWebSocketSave(project: Project) {
     if (this.projectStompClient != null) {
-      this.projectStompClient.send(this.PROJECT_URL_SEND + project.id, {}, JSON.stringify(project));
+      this.projectStompClient.send(this.PROJECT_URL_SAVE + project.id, {}, JSON.stringify(project));
     } else {
       console.log('Cant send project');
       console.log('Null: ' + this.projectStompClient);
@@ -235,7 +241,7 @@ export class BoardComponent implements OnInit {
     // https://stackoverflow.com/questions/39196766/angular-2-do-not-refresh-view-after-array-push-in-ngoninit-promise
     task.users = task.users.slice();
 
-    this.taskWebSocketSend(task);
+    this.taskWebSocketSave(task);
   }
 
   dismissUserFromTask($event: MouseEvent, task: Task) {
@@ -244,7 +250,7 @@ export class BoardComponent implements OnInit {
       task.users.splice(index, 1);
       task.users = task.users.slice();
 
-      this.taskWebSocketSend(task);
+      this.taskWebSocketSave(task);
     }
   }
 
@@ -258,7 +264,7 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((task: Task) => {
       if (task) {
-        this.taskWebSocketSend(task);
+        this.taskWebSocketSave(task);
       }
     });
   }
@@ -273,7 +279,7 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((t: Task) => {
       if (t) {
-        this.taskWebSocketSend(t);
+        this.taskWebSocketSave(t);
       }
     });
   }
@@ -307,7 +313,7 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((p: Project) => {
       if (p) {
-        this.projectWebSocketSend(p);
+        this.projectWebSocketSave(p);
       }
     });
   }
@@ -331,4 +337,8 @@ export class BoardComponent implements OnInit {
     return this.project.numberWIP > activeTasksNumber;
   }
 
+  deleteTask(task: Task) {
+    console.log('-------------------------------------------------------------------------------------------');
+    this.taskWebSocketDelete(task);
+  }
 }
