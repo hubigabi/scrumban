@@ -30,8 +30,9 @@ export class BoardComponent implements OnInit {
 
   private taskStompClient;
   private readonly TASK_URL_SAVE = '/app/saveTask/';
+  private readonly TASK_URL_SUBSCRIBE_SAVE = '/task/';
   private readonly TASK_URL_DELETE = '/app/deleteTask/';
-  private readonly TASK_URL_SUBSCRIBE = '/task/';
+  private readonly TASK_URL_SUBSCRIBE_DELETE = '/deletedTask/';
 
   private projectStompClient;
   private readonly PROJECT_URL_SAVE = '/app/saveProject/';
@@ -114,7 +115,7 @@ export class BoardComponent implements OnInit {
           title: 'You can\'t move task',
           body: 'Number of tasks in WIP is at maximum',
           showCloseButton: true,
-          timeout: 5000
+          timeout: 3000
         };
 
         this.toasterService.pop(toast);
@@ -128,7 +129,8 @@ export class BoardComponent implements OnInit {
     this.taskStompClient = Stomp.over(socket);
 
     this.taskStompClient.connect({}, frame => {
-      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE + this.project.id, message => {
+
+      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_SAVE + this.project.id, message => {
         const newTask: Task = JSON.parse(message.body);
         const oldTask: Task = this.tasks.find(value => value.id === newTask.id);
 
@@ -150,8 +152,38 @@ export class BoardComponent implements OnInit {
           // Insert new task
           this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
           this.tasks.push(newTask);
-        }
 
+          const toast: Toast = {
+            type: 'info',
+            showCloseButton: true,
+            timeout: 3000
+          };
+          toast.title = 'The task: "' + newTask.name + '" has been added';
+          this.toasterService.pop(toast);
+        }
+      });
+
+      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_DELETE + this.project.id, message => {
+        const task: Task = JSON.parse(message.body);
+
+        if (task) {
+          const tasksInColumn: Task[] = this.columns.find(column => column.progress.name === task.progress).tasks;
+          const indexInColumn = tasksInColumn.findIndex(value => value.id === task.id);
+          tasksInColumn.splice(indexInColumn, 1);
+
+          const index = this.tasks.findIndex(value => value.id === task.id);
+          if (index > -1) {
+            this.tasks.splice(index, 1);
+          }
+
+          const toast: Toast = {
+            type: 'info',
+            title: 'The task: "' + task.name + '" has been deleted',
+            showCloseButton: true,
+            timeout: 3000
+          };
+          this.toasterService.pop(toast);
+        }
       });
     });
   }
@@ -161,7 +193,6 @@ export class BoardComponent implements OnInit {
   }
 
   taskWebSocketDelete(task: Task) {
-    console.log(task);
     this.taskStompClient.send(this.TASK_URL_DELETE + this.project.id, {}, JSON.stringify(task));
   }
 
@@ -185,6 +216,14 @@ export class BoardComponent implements OnInit {
         }
 
         this.project = updatedProject;
+
+        const toast: Toast = {
+          type: 'info',
+          showCloseButton: true,
+          timeout: 3000
+        };
+        toast.title = 'The project: "' + updatedProject.name + '" has been edited';
+        this.toasterService.pop(toast);
       });
     });
   }
@@ -338,7 +377,6 @@ export class BoardComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-    console.log('-------------------------------------------------------------------------------------------');
     this.taskWebSocketDelete(task);
   }
 }
