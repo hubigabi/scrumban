@@ -41,8 +41,8 @@ public class InitService {
         u4 = userService.createUser(u4);
         u5 = userService.createUser(u5);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 6, LocalDate.now().minusDays(15), null, u1);
-        Project p2 = new Project("Shop", "Web application for shop", 8, LocalDate.now().minusDays(13), null, u2);
+        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, u1);
+        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, u2);
 
         p1 = projectService.createProject(p1);
         p2 = projectService.createProject(p2);
@@ -64,7 +64,7 @@ public class InitService {
         Task t13 = new Task("Database", "Aenean a tortor eget elit scelerisque aliquam.", 2, Progress.DEVELOPMENT, LocalDate.now().minusDays(9), null, p1);
         Task t14 = new Task("Login", "Sed vitae diam eleifend, vestibulum eros sed, malesuada sapien.", 1, Progress.TEST, LocalDate.now().minusDays(13), null, p1);
         Task t15 = new Task("Sign up", "Curabitur vel sollicitudin sem, ut rutrum magna.", 1, Progress.DEPLOYMENT, LocalDate.now().minusDays(8), null, p1);
-        Task t16 = new Task("Web sockets", "Nam auctor enim at erat porta, ut elementum nibh ultrices.", 2, Progress.DONE, LocalDate.now().minusDays(11), null, p1);
+        Task t16 = new Task("Web sockets", "Nam auctor enim at erat porta, ut elementum nibh ultrices.", 2, Progress.DONE, LocalDate.now().minusDays(11), LocalDate.now().minusDays(1), p1);
 
         t11 = taskService.createTask(t11);
         t12 = taskService.createTask(t12);
@@ -91,7 +91,7 @@ public class InitService {
         Task t23 = new Task("Database", "Duis diam sem, bibendum sit amet leo eu, facilisis iaculis tortor.", 2, Progress.DEVELOPMENT, LocalDate.now().minusDays(10), null, p2);
         Task t24 = new Task("Login", "Vivamus sem nisi, auctor nec finibus id, ultricies eget ligula. Donec eu tellus.", 1, Progress.TEST, LocalDate.now().minusDays(7), null, p2);
         Task t25 = new Task("Sign up", "Curabitur interdum hendrerit urna, auctor commodo mi rhoncus dictum.", 1, Progress.DEPLOYMENT, LocalDate.now().minusDays(8), null, p2);
-        Task t26 = new Task("Web sockets", "Curabitur nec leo faucibus, posuere augue at, eleifend diam. ", 3, Progress.DONE, LocalDate.now().minusDays(11), null, p2);
+        Task t26 = new Task("Web sockets", "Curabitur nec leo faucibus, posuere augue at, eleifend diam. ", 3, Progress.DONE, LocalDate.now().minusDays(10), LocalDate.now().minusDays(3), p2);
 
         t21 = taskService.createTask(t21);
         t22 = taskService.createTask(t22);
@@ -112,6 +112,6 @@ public class InitService {
         t25 = taskService.updateTask(t25);
         t26 = taskService.updateTask(t26);
 
-        log.info("Finished adding data");
+        log.info("Finished initializing data");
     }
 }

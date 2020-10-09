@@ -18,7 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/updateTask", "/updateProject");
+        registry.enableSimpleBroker("/task", "/project", "/deletedTask");
         registry.setApplicationDestinationPrefixes("/app");
     }
 }

@@ -35,15 +35,19 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> findAllByUsers_Id(Long id){
+    public List<Task> findAllByUsers_Id(Long id) {
         return taskRepository.findAllByUsers_Id(id);
     }
 
-    public List<Task> findAllByProject_Id(Long id){
+    public List<Task> findAllByProject_Id(Long id) {
         return taskRepository.findAllByProject_Id(id);
     }
 
-    public List<Task> findAllByProject_IdAndUsers_Id(Long project_ID, Long user_ID){
+    public List<Task> findAllByProject_IdAndUsers_Id(Long project_ID, Long user_ID) {
         return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
+    }
+
+    public void deleteById(Long Id) {
+        taskRepository.deleteById(Id);
     }
 }
