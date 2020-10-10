@@ -30,6 +30,7 @@ import {UpdateProjectDialogComponent} from './component/board/dialog/update-proj
 import {MatListModule} from '@angular/material/list';
 import {ToastrModule} from 'ngx-toastr';
 import {CommonModule} from '@angular/common';
+import {ConfirmDialogComponent} from './component/board/dialog/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {CommonModule} from '@angular/common';
     NewTaskDialogComponent,
     UpdateTaskDialogComponent,
     NewProjectDialogComponent,
-    UpdateProjectDialogComponent
+    UpdateProjectDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

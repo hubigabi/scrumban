@@ -19,6 +19,7 @@ import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project
 import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/update-project-dialog.component';
 import {ToastrService} from 'ngx-toastr';
 import * as $ from 'jquery';
+import {ConfirmDialogComponent} from './dialog/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -372,6 +373,19 @@ export class BoardComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-    this.taskWebSocketDelete(task);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      autoFocus: true,
+      data: {
+        title: 'Are you sure you want delete task: \n' + task.name
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((toDelete: boolean) => {
+      if (toDelete) {
+        this.taskWebSocketDelete(task);
+      }
+    });
+
   }
 }
