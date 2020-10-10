@@ -28,8 +28,8 @@ import {NewProjectDialogComponent} from './component/board/dialog/new-project-di
 import {ReactiveFormsModule} from '@angular/forms';
 import {UpdateProjectDialogComponent} from './component/board/dialog/update-project-dialog/update-project-dialog.component';
 import {MatListModule} from '@angular/material/list';
-import {SimpleNotificationsModule} from 'angular2-notifications';
-import {ToasterModule} from 'angular2-toaster';
+import {ToastrModule} from 'ngx-toastr';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -61,8 +61,8 @@ import {ToasterModule} from 'angular2-toaster';
     MatSortModule,
     ReactiveFormsModule,
     MatListModule,
-    SimpleNotificationsModule.forRoot(),
-    ToasterModule.forRoot()
+    ToastrModule.forRoot(),
+    CommonModule
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]

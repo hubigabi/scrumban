@@ -17,7 +17,8 @@ import {ALL_PRIORITY, Priority} from '../../model/priority.model';
 import {UpdateTaskDialogComponent} from './dialog/update-task-dialog/update-task-dialog.component';
 import {NewProjectDialogComponent} from './dialog/new-project-dialog/new-project-dialog.component';
 import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/update-project-dialog.component';
-import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
+import {ToastrService} from 'ngx-toastr';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-board',
@@ -50,17 +51,9 @@ export class BoardComponent implements OnInit {
   private allProgressNotActive: Progress[];
   private allProgressNotActiveStrings: string[];
 
-  public config: ToasterConfig = new ToasterConfig(
-    {
-      positionClass: 'toast-bottom-center',
-      animation: 'fade',
-      limit: 2
-    },
-  );
-
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog,
-              private toasterService: ToasterService) {
+              private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -110,15 +103,14 @@ export class BoardComponent implements OnInit {
 
         this.taskWebSocketSave(event.container.data.tasks[event.currentIndex]);
       } else {
-        const toast: Toast = {
-          type: 'error',
-          title: 'You can\'t move task',
-          body: 'Number of tasks in WIP is at maximum',
-          showCloseButton: true,
-          timeout: 3000
-        };
-
-        this.toasterService.pop(toast);
+        this.toastrService.error('Number of tasks in WIP is at maximum',
+          'You can\'t move this task',
+          {
+            timeOut: 3000,
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-bottom-center'
+          });
       }
 
     }
@@ -153,13 +145,14 @@ export class BoardComponent implements OnInit {
           this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
           this.tasks.push(newTask);
 
-          const toast: Toast = {
-            type: 'info',
-            showCloseButton: true,
-            timeout: 3000
-          };
-          toast.title = 'The task: "' + newTask.name + '" has been added';
-          this.toasterService.pop(toast);
+          this.toastrService.success('',
+            'The task: "' + newTask.name + '" has been added',
+            {
+              timeOut: 3000,
+              closeButton: true,
+              progressBar: true,
+              positionClass: 'toast-bottom-center'
+            });
         }
       });
 
@@ -176,13 +169,14 @@ export class BoardComponent implements OnInit {
             this.tasks.splice(index, 1);
           }
 
-          const toast: Toast = {
-            type: 'info',
-            title: 'The task: "' + task.name + '" has been deleted',
-            showCloseButton: true,
-            timeout: 3000
-          };
-          this.toasterService.pop(toast);
+          this.toastrService.success('',
+            'The task: "' + task.name + '" has been deleted',
+            {
+              timeOut: 3000,
+              closeButton: true,
+              progressBar: true,
+              positionClass: 'toast-bottom-center'
+            });
         }
       });
     });
@@ -217,13 +211,14 @@ export class BoardComponent implements OnInit {
 
         this.project = updatedProject;
 
-        const toast: Toast = {
-          type: 'info',
-          showCloseButton: true,
-          timeout: 3000
-        };
-        toast.title = 'The project: "' + updatedProject.name + '" has been edited';
-        this.toasterService.pop(toast);
+        this.toastrService.success('',
+          'The project: "' + updatedProject.name + '" has been edited',
+          {
+            timeOut: 3000,
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-bottom-center'
+          });
       });
     });
   }
