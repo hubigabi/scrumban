@@ -34,4 +34,8 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public List<Comment> saveAll(Iterable<Comment> comments) {
+        return commentRepository.saveAll(comments);
+    }
+
 }

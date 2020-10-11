@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +24,7 @@ public class Comment {
     private String commentText;
 
     @NotNull
-    private ZonedDateTime zonedDateTime;
+    private LocalDateTime localDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)

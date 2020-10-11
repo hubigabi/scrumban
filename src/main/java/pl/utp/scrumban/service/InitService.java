@@ -1,16 +1,22 @@
 package pl.utp.scrumban.service;
 
+import com.thedeanda.lorem.Lorem;
+import com.thedeanda.lorem.LoremIpsum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import pl.utp.scrumban.model.Progress;
-import pl.utp.scrumban.model.Project;
-import pl.utp.scrumban.model.Task;
-import pl.utp.scrumban.model.User;
+import pl.utp.scrumban.model.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @Slf4j
@@ -19,12 +25,14 @@ public class InitService {
     private UserService userService;
     private ProjectService projectService;
     private TaskService taskService;
+    private CommentService commentService;
 
     @Autowired
-    public InitService(UserService userService, ProjectService projectService, TaskService taskService) {
+    public InitService(UserService userService, ProjectService projectService, TaskService taskService, CommentService commentService) {
         this.userService = userService;
         this.projectService = projectService;
         this.taskService = taskService;
+        this.commentService = commentService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -111,6 +119,49 @@ public class InitService {
         t24 = taskService.updateTask(t24);
         t25 = taskService.updateTask(t25);
         t26 = taskService.updateTask(t26);
+
+        Lorem loremIpsum = LoremIpsum.getInstance();
+
+        final int MAX_COMMENTS_NUMBER_BY_TASK = 100;
+        final int MAX_COMMENT_LENGTH = 800;
+
+        for (Project project : projectService.getAllProjects()) {
+            ArrayList<User> usersInProject = new ArrayList<>(project.getUsers());
+
+            for (Task task : taskService.findAllByProject_Id(project.getId())) {
+                ArrayList<Comment> comments = new ArrayList<>();
+
+                int commentsNumber = ThreadLocalRandom.current().nextInt(1, MAX_COMMENTS_NUMBER_BY_TASK + 1);
+
+                LocalDateTime commentLocalDateTime = task.getStartedLocalDate().atStartOfDay().plusHours(12);
+                LocalDateTime maxLocalDateTime = LocalDateTime.now();
+
+                if (task.getFinishedLocalDate() != null) {
+                    maxLocalDateTime = task.getFinishedLocalDate().atStartOfDay();
+                }
+                long minutesIncrementMax = commentLocalDateTime.until(maxLocalDateTime, ChronoUnit.MINUTES) / commentsNumber;
+
+                for (int i = 0; i < commentsNumber; i++) {
+                    Comment comment = new Comment();
+                    comment.setTask(task);
+
+                    String commentText = loremIpsum.getParagraphs(1, 1);
+                    commentText = commentText.substring(0, Math.min(commentText.length(), MAX_COMMENT_LENGTH));
+                    comment.setCommentText(commentText);
+
+                    long minutesIncrement = ThreadLocalRandom.current().nextLong(minutesIncrementMax / 2, minutesIncrementMax);
+                    commentLocalDateTime = commentLocalDateTime.plusMinutes(minutesIncrement);
+                    comment.setLocalDateTime(commentLocalDateTime);
+
+                    int userIndex = ThreadLocalRandom.current().nextInt(0, usersInProject.size());
+                    comment.setUser(usersInProject.get(userIndex));
+
+                    comments.add(comment);
+                }
+
+                commentService.saveAll(comments);
+            }
+        }
 
         log.info("Finished initializing data");
     }
