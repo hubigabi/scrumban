@@ -77,12 +77,13 @@
                 <!--                Edit-->
               </button>
 
-              <button mat-button (click)="deleteTask(task)">
+              <button mat-button (click)="openCommentTaskDialog(task, user)">
                 <mat-icon>event_note</mat-icon>
-                <!--                Notes-->
+                <!--                Comments-->
               </button>
 
-              <button mat-button *ngIf="task.users.length === 0 && user.id === project.leaderUser.id">
+              <button mat-button *ngIf="task.users.length === 0 && user.id === project.leaderUser.id"
+                      (click)="deleteTask(task)">
                 <mat-icon>delete</mat-icon>
                 <!--                Delete-->
               </button>

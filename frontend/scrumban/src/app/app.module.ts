@@ -31,6 +31,8 @@ import {MatListModule} from '@angular/material/list';
 import {ToastrModule} from 'ngx-toastr';
 import {CommonModule} from '@angular/common';
 import {ConfirmDialogComponent} from './component/board/dialog/confirm-dialog/confirm-dialog.component';
+import {CommentDialogComponent} from './component/board/dialog/comment-dialog/comment-dialog.component';
+import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import {ConfirmDialogComponent} from './component/board/dialog/confirm-dialog/co
     UpdateTaskDialogComponent,
     NewProjectDialogComponent,
     UpdateProjectDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CommentDialogComponent,
+    CommentLocalDateTimePipe
   ],
   imports: [
     BrowserModule,

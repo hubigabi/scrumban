@@ -122,7 +122,7 @@ public class InitService {
 
         Lorem loremIpsum = LoremIpsum.getInstance();
 
-        final int MAX_COMMENTS_NUMBER_BY_TASK = 100;
+        final int MAX_COMMENTS_NUMBER_BY_TASK = 50;
         final int MAX_COMMENT_LENGTH = 800;
 
         for (Project project : projectService.getAllProjects()) {

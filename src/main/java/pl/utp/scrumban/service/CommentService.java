@@ -39,7 +39,7 @@ public class CommentService {
     }
 
     public List<Comment> findAllByTask_Id(Long id) {
-        return commentRepository.findAllByTask_Id(id);
+        return commentRepository.findAllByTask_IdOrderByLocalDateTimeDesc(id);
     }
 
 }

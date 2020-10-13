@@ -20,6 +20,7 @@ import {UpdateProjectDialogComponent} from './dialog/update-project-dialog/updat
 import {ToastrService} from 'ngx-toastr';
 import * as $ from 'jquery';
 import {ConfirmDialogComponent} from './dialog/confirm-dialog/confirm-dialog.component';
+import {CommentDialogComponent} from './dialog/comment-dialog/comment-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -387,5 +388,17 @@ export class BoardComponent implements OnInit {
       }
     });
 
+  }
+
+  openCommentTaskDialog(task: Task, user: User) {
+    const dialogRef = this.dialog.open(CommentDialogComponent, {
+      autoFocus: true,
+      width: '600px',
+      minWidth: '50%',
+      data: {
+        task,
+        user
+      }
+    });
   }
 }
