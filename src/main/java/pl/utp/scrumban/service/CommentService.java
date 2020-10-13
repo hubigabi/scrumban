@@ -38,4 +38,8 @@ public class CommentService {
         return commentRepository.saveAll(comments);
     }
 
+    public List<Comment> findAllByTask_Id(Long id) {
+        return commentRepository.findAllByTask_Id(id);
+    }
+
 }

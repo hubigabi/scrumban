@@ -53,4 +53,5 @@ public class User {
         this.password = password;
         this.registrationDate = registrationDate;
     }
+
 }

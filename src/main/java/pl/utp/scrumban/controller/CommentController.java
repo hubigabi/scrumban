@@ -61,4 +61,11 @@ public class CommentController {
         }
     }
 
+    @GetMapping("/allByTask/{id}")
+    public ResponseEntity<List<Comment>> findAllByTask_Id(@PathVariable("id") long id) {
+        List<Comment> comments = commentService.findAllByTask_Id(id);
+
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
 }

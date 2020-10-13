@@ -74,4 +74,5 @@ public class Project {
         this.finishedLocalDate = finishedLocalDate;
         this.leaderUser = leaderUser;
     }
+
 }
