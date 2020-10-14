@@ -15,15 +15,15 @@
 
     <mat-form-field class="field-block" style="width: 100%;">
       <mat-label>Description</mat-label>
-      <textarea matInput
+      <textarea style="overflow:hidden;" matInput
                 [(ngModel)]="task.description"
                 name="taskDescription"
                 #taskDescription="ngModel"
                 cdkTextareaAutosize
                 cdkAutosizeMinRows="10"
-                cdkAutosizeMaxRows="15">
-                maxlength="900"
-      ></textarea>
+                cdkAutosizeMaxRows="15"
+                maxlength="900">
+      </textarea>
     </mat-form-field>
 
     <mat-form-field class="field-block">

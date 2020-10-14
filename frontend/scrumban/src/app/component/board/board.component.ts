@@ -400,5 +400,6 @@ export class BoardComponent implements OnInit {
         user
       }
     });
+
   }
 }

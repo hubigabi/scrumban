@@ -26,8 +26,24 @@
 
   </div>
 
-  <div mat-dialog-actions>
+  <div mat-dialog-actions class="actions-container">
 
+    <mat-form-field class="field-textarea">
+      <mat-label>Your comment</mat-label>
+      <textarea matInput
+                [(ngModel)]="commentText"
+                name="commentTextArea"
+                #commentTextArea="ngModel"
+                rows="5"
+                required minlength="1" maxlength="900"
+                placeholder="Write a comment">
+        </textarea>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="clear()">Clear</button>
+    <button mat-raised-button color="primary" (click)="postComment()" [disabled]="commentTextArea.invalid">
+      Post
+    </button>
   </div>
 
 </div>

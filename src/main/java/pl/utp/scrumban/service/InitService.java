@@ -122,7 +122,8 @@ public class InitService {
 
         Lorem loremIpsum = LoremIpsum.getInstance();
 
-        final int MAX_COMMENTS_NUMBER_BY_TASK = 50;
+        final int MAX_COMMENTS_NUMBER_BY_TASK = 30;
+        final int MIN_COMMENTS_NUMBER_BY_TASK = 10;
         final int MAX_COMMENT_LENGTH = 800;
 
         for (Project project : projectService.getAllProjects()) {
@@ -131,7 +132,7 @@ public class InitService {
             for (Task task : taskService.findAllByProject_Id(project.getId())) {
                 ArrayList<Comment> comments = new ArrayList<>();
 
-                int commentsNumber = ThreadLocalRandom.current().nextInt(1, MAX_COMMENTS_NUMBER_BY_TASK + 1);
+                int commentsNumber = ThreadLocalRandom.current().nextInt(MIN_COMMENTS_NUMBER_BY_TASK, MAX_COMMENTS_NUMBER_BY_TASK + 1);
 
                 LocalDateTime commentLocalDateTime = task.getStartedLocalDate().atStartOfDay().plusHours(12);
                 LocalDateTime maxLocalDateTime = LocalDateTime.now();

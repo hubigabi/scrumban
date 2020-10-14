@@ -1,8 +1,10 @@
 .container {
-  padding: 20px 20px;
+  padding: 10px 10px;
 }
 
 .comments-container {
+  display: inline-block;
+  height: 50vh;
 }
 
 .comment {
@@ -11,6 +13,21 @@
   border-radius: 10px;
 }
 
+.comment:last-child {
+  margin-bottom: 10px;
+}
+
 .close-button {
   float: right;
+}
+
+.field-textarea {
+  width: 100%;
+}
+
+.actions-container {
+  display: inline-block;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 10px;
 }

@@ -17,6 +17,8 @@ export class CommentDialogComponent implements OnInit {
 
   allComments: Comment[];
 
+  commentText: string;
+
   constructor(public dialogRef: MatDialogRef<CommentDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData,
               private commentService: CommentService) {
   }
@@ -35,6 +37,13 @@ export class CommentDialogComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
+  postComment() {
+
+  }
+
+  clear() {
+
+  }
 }
 
 export interface DialogData {
