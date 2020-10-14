@@ -4,7 +4,6 @@ import {Task} from 'src/app/model/task.model';
 import {CommentService} from '../../../../service/comment.service';
 import {User} from '../../../../model/user.model';
 import {Comment} from '../../../../model/comment.model';
-import {Project} from '../../../../model/project.model';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {environment} from '../../../../../environments/environment';
