@@ -395,6 +395,8 @@ export class BoardComponent implements OnInit {
       autoFocus: true,
       width: '600px',
       minWidth: '50%',
+      maxHeight: '95%',
+      disableClose: true,
       data: {
         task,
         user

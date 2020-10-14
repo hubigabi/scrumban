@@ -20,7 +20,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        <p> {{comment.commentText}}</p>
+        <p class="break-word"> {{comment.commentText}}</p>
       </mat-card-content>
     </mat-card>
 
@@ -30,11 +30,14 @@
 
     <mat-form-field class="field-textarea">
       <mat-label>Your comment</mat-label>
-      <textarea matInput
+      <textarea matInput style="overflow:hidden"
+                id="commentTextArea"
                 [(ngModel)]="commentText"
                 name="commentTextArea"
                 #commentTextArea="ngModel"
-                rows="5"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="2"
+                cdkAutosizeMaxRows="4"
                 required minlength="1" maxlength="900"
                 placeholder="Write a comment">
         </textarea>

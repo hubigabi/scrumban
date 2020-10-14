@@ -1,10 +1,11 @@
 .container {
   padding: 10px 10px;
+  height: 100%;
 }
 
 .comments-container {
   display: inline-block;
-  height: 50vh;
+  max-height: calc(90vh - 280px);
 }
 
 .comment {
@@ -26,8 +27,13 @@
 }
 
 .actions-container {
+  min-height: 120px;
   display: inline-block;
   width: 100%;
   padding-top: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
+}
+
+.break-word {
+  overflow-wrap: break-word;
 }

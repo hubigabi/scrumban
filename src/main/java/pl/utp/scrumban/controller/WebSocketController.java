@@ -9,10 +9,14 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
+import pl.utp.scrumban.service.CommentService;
 import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
+
+import java.time.LocalDateTime;
 
 @RestController
 @CrossOrigin
@@ -21,16 +25,17 @@ public class WebSocketController {
 
     private TaskService taskService;
     private ProjectService projectService;
+    private CommentService commentService;
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     public WebSocketController(TaskService taskService, ProjectService projectService,
-                               SimpMessagingTemplate simpMessagingTemplate) {
+                               CommentService commentService, SimpMessagingTemplate simpMessagingTemplate) {
         this.taskService = taskService;
         this.projectService = projectService;
+        this.commentService = commentService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
-
 
     @MessageMapping("/saveTask/{project_id}")
     @SendTo("/task/{project_id}")
@@ -52,6 +57,13 @@ public class WebSocketController {
     @SendTo("/project/{project_id}")
     public Project saveProject(@DestinationVariable String project_id, Project project) {
         return projectService.updateProject(project);
+    }
+
+    @MessageMapping("/saveComment/{task_id}")
+    @SendTo("/comment/{task_id}")
+    public Comment saveComment(@DestinationVariable String task_id, Comment comment) {
+        comment.setLocalDateTime(LocalDateTime.now());
+        return commentService.createComment(comment);
     }
 
 }

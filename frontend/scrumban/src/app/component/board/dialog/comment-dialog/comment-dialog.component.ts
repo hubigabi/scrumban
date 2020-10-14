@@ -4,6 +4,11 @@ import {Task} from 'src/app/model/task.model';
 import {CommentService} from '../../../../service/comment.service';
 import {User} from '../../../../model/user.model';
 import {Comment} from '../../../../model/comment.model';
+import {Project} from '../../../../model/project.model';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import {environment} from '../../../../../environments/environment';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-comment-dialog',
@@ -19,8 +24,14 @@ export class CommentDialogComponent implements OnInit {
 
   commentText: string;
 
+  private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/scrumban';
+
+  private commentStompClient;
+  private readonly COMMENT_URL_SAVE = '/app/saveComment/';
+  private readonly COMMENT_URL_SUBSCRIBE_SAVE = '/comment/';
+
   constructor(public dialogRef: MatDialogRef<CommentDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData,
-              private commentService: CommentService) {
+              private commentService: CommentService, private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -29,21 +40,74 @@ export class CommentDialogComponent implements OnInit {
 
     this.commentService.getAllCommentsByTask_Id(this.task.id).subscribe(value => {
         this.allComments = value;
+
+        this.commentWebSocketConnect(this.task.id);
       }
     );
   }
 
   closeDialog() {
+    this.commentWebSocketDisconnect();
     this.dialogRef.close(false);
   }
 
   postComment() {
+    const comment: Comment = {
+      id: 0,
+      commentText: this.commentText,
+      localDateTime: '',
+      task: this.task,
+      user: this.user
+    };
 
+    this.commentWebSocketSave(comment);
   }
 
   clear() {
-
+    this.commentText = '';
   }
+
+  commentWebSocketConnect(taskID: number) {
+    const socket = new SockJS(this.SERVER_WEB_SOCKET);
+    this.commentStompClient = Stomp.over(socket);
+
+    this.commentStompClient.connect({}, frame => {
+      this.commentStompClient.subscribe(this.COMMENT_URL_SUBSCRIBE_SAVE + taskID, message => {
+        const comment: Comment = JSON.parse(message.body);
+
+        this.allComments.unshift(comment);
+
+        if (comment.commentText === this.commentText && comment.user.id === this.user.id) {
+          this.commentText = '';
+        }
+
+        this.toastrService.success('',
+          'A new comment was added',
+          {
+            timeOut: 3000,
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-bottom-center'
+          });
+      });
+    });
+  }
+
+  commentWebSocketSave(comment: Comment) {
+    if (this.commentStompClient != null) {
+      this.commentStompClient.send(this.COMMENT_URL_SAVE + this.task.id, {}, JSON.stringify(comment));
+    } else {
+      console.log('Cant send comment');
+      console.log('Null: ' + this.commentStompClient);
+    }
+  }
+
+  commentWebSocketDisconnect() {
+    if (this.commentStompClient != null) {
+      this.commentStompClient.disconnect();
+    }
+  }
+
 }
 
 export interface DialogData {

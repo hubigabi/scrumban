@@ -30,7 +30,7 @@ public class Comment {
     private LocalDateTime localDateTime;
 
     @JsonIgnoreProperties({"project", "users", "hibernateLazyInitializer"})
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
