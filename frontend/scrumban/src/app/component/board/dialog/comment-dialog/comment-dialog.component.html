@@ -1,5 +1,9 @@
 <div class="container">
 
+  <button mat-icon-button class="close-button" (click)="closeDialog()">
+    <mat-icon aria-label="Close comments dialog">close</mat-icon>
+  </button>
+
   <h1 mat-dialog-title>Task: {{task.name}}</h1>
   <h3 style="margin-bottom: 1em">Comments</h3>
 

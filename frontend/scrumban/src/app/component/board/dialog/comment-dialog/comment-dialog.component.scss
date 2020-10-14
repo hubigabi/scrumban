@@ -1,5 +1,5 @@
 .container {
-  padding: 20px 30px;
+  padding: 20px 20px;
 }
 
 .comments-container {
@@ -9,4 +9,8 @@
   margin-bottom: 25px;
   border: 2px solid lightgray;
   border-radius: 10px;
+}
+
+.close-button {
+  float: right;
 }

@@ -31,6 +31,10 @@ export class CommentDialogComponent implements OnInit {
     );
   }
 
+  closeDialog() {
+    this.dialogRef.close(false);
+  }
+
 }
 
 export interface DialogData {
