@@ -8,13 +8,18 @@
   display: inline-block;
   max-height: calc(90vh - 280px);
   width: 100%;
-}
 
-.comment {
-  margin-bottom: 25px;
-  border: 2px solid lightgray;
-  border-radius: 10px;
-  width: 100%;
+  .comment {
+    margin-bottom: 25px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    width: 100%;
+
+    p {
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+    }
+  }
 }
 
 .comment:last-child {
@@ -35,8 +40,4 @@
   width: 100%;
   padding-top: 15px;
   padding-bottom: 20px;
-}
-
-.break-word {
-  overflow-wrap: break-word;
 }
