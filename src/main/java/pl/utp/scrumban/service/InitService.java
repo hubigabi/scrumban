@@ -11,11 +11,9 @@ import pl.utp.scrumban.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -37,6 +35,8 @@ public class InitService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
         User u1 = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         User u2 = new User("RileyTaylor@gmail.com", "Riley Taylor", "RileyTaylor", LocalDate.now().minusDays(26));
         User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", "LaraBaxter", LocalDate.now().minusDays(15));

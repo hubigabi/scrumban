@@ -1,5 +1,6 @@
 package pl.utp.scrumban.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Comment {
     private String commentText;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS-0000")
     private LocalDateTime localDateTime;
 
     @JsonIgnoreProperties({"project", "users", "hibernateLazyInitializer"})
