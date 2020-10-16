@@ -5,9 +5,13 @@
   </button>
 
   <h1 mat-dialog-title>Task: {{task.name}}</h1>
-  <h3 style="margin-bottom: 1em" *ngIf="allComments.length > 0">Comments</h3>
+  <h3 style="margin-bottom: 1em"
+      *ngIf="allComments !== undefined && allComments.length > 0">
+    Comments
+  </h3>
 
-  <div mat-dialog-content class="comments-container" *ngIf="allComments.length > 0">
+  <div mat-dialog-content class="comments-container"
+       *ngIf="allComments !== undefined && allComments.length > 0">
 
     <mat-card class="comment" *ngFor="let comment of allComments">
       <mat-card-header>
