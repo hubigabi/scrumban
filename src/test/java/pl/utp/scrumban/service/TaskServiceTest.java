@@ -141,9 +141,9 @@ class TaskServiceTest {
         t2.addUser(user);
         List<Task> tasks = Arrays.asList(t1, t2);
 
-        Mockito.when(taskRepository.findAllByUsers_Id(userID)).thenReturn(tasks);
+        Mockito.when(taskRepository.findAllByProject_IdAndUsers_Id(projectID, userID)).thenReturn(tasks);
 
-        List<Task> actual = taskService.findAllByUsers_Id(userID);
+        List<Task> actual = taskService.findAllByProject_IdAndUsers_Id(projectID, userID);
 
         assertEquals(tasks, actual);
 
