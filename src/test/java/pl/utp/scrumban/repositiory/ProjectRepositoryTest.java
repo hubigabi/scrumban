@@ -7,9 +7,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
+
 import org.springframework.test.context.junit4.SpringRunner;
+
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.User;
 
@@ -26,18 +27,20 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureTestDatabase(replace = NONE)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProjectRepositoryTest {
 
     @Autowired
     private ProjectRepository projectRepository;
 
-    private static List<User> users;
-    private static List<Project> projects;
+    @Autowired
+    private UserRepository userRepository;
+
+    private List<User> users;
+    private List<Project> projects;
 
     @BeforeAll
-//    https://stackoverflow.com/questions/29340286/how-to-autowire-field-in-static-beforeclass
-    public static void init(@Autowired ProjectRepository projectRepository,
-                            @Autowired UserRepository userRepository) {
+    public void init() {
         users = new ArrayList<>();
         projects = new ArrayList<>();
 
@@ -56,6 +59,12 @@ class ProjectRepositoryTest {
         p1.addUser(u2);
         p2.addUser(u2);
         projects = projectRepository.saveAll(Arrays.asList(p1, p2));
+    }
+
+    @AfterAll
+    void tearDown() {
+        projectRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test

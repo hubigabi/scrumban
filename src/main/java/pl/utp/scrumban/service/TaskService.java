@@ -3,7 +3,6 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
