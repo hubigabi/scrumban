@@ -113,7 +113,11 @@ class ProjectServiceTest {
         assertEquals(projects, actual);
 
         for (Project project : actual) {
-            assertTrue(project.getUsers().stream().anyMatch(u -> u.getId().equals(userID)));
+            assertTrue(project.getUsers().stream()
+                    .anyMatch(u ->
+                            u.getId().equals(userID)
+                    )
+            );
         }
     }
 }

@@ -46,7 +46,7 @@ public class TaskService {
         return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
     }
 
-    public void deleteById(Long Id) {
-        taskRepository.deleteById(Id);
+    public void deleteById(Long id) {
+        taskRepository.deleteById(id);
     }
 }
