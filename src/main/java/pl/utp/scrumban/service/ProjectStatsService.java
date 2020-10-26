@@ -83,7 +83,7 @@ public class ProjectStatsService {
 
             double WIP = throughput * leadTime;
 
-            activeTasks = activeTasks + startedTaskCounter - finishedTaskCounter;
+            activeTasks = activeTasks + startedTaskToday - finishedTaskTodayCounter;
 
             projectStats.add(new ProjectStats(currentDate, startedTaskCounter, activeTasks, finishedTaskCounter, throughput, leadTime, WIP));
             dayCounter++;
