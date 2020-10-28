@@ -33,6 +33,7 @@ import {CommonModule} from '@angular/common';
 import {ConfirmDialogComponent} from './component/board/dialog/confirm-dialog/confirm-dialog.component';
 import {CommentDialogComponent} from './component/board/dialog/comment-dialog/comment-dialog.component';
 import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
+import { ProjectStatsDialogComponent } from './component/board/dialog/project-stats-dialog/project-stats-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
     UpdateProjectDialogComponent,
     ConfirmDialogComponent,
     CommentDialogComponent,
-    CommentLocalDateTimePipe
+    CommentLocalDateTimePipe,
+    ProjectStatsDialogComponent
   ],
   imports: [
     BrowserModule,

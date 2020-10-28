@@ -21,6 +21,7 @@ import {ToastrService} from 'ngx-toastr';
 import * as $ from 'jquery';
 import {ConfirmDialogComponent} from './dialog/confirm-dialog/confirm-dialog.component';
 import {CommentDialogComponent} from './dialog/comment-dialog/comment-dialog.component';
+import {ProjectStatsDialogComponent} from "./dialog/project-stats-dialog/project-stats-dialog.component";
 
 @Component({
   selector: 'app-board',
@@ -404,4 +405,15 @@ export class BoardComponent implements OnInit {
     });
 
   }
+
+  openProjectStatsDialog(project: Project) {
+    const dialogRef = this.dialog.open(ProjectStatsDialogComponent, {
+      autoFocus: true,
+      disableClose: true,
+      data: {
+        project
+      }
+    });
+  }
+
 }
