@@ -409,7 +409,7 @@ export class BoardComponent implements OnInit {
   openProjectStatsDialog(project: Project) {
     const dialogRef = this.dialog.open(ProjectStatsDialogComponent, {
       autoFocus: true,
-      disableClose: true,
+      disableClose: false,
       data: {
         project
       }

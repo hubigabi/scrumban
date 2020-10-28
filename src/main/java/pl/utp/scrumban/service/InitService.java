@@ -99,7 +99,7 @@ public class InitService {
         Task t23 = new Task("Database", "Duis diam sem, bibendum sit amet leo eu, facilisis iaculis tortor.", 2, Progress.DEVELOPMENT, LocalDate.now().minusDays(10), null, p2);
         Task t24 = new Task("Login", "Vivamus sem nisi, auctor nec finibus id, ultricies eget ligula. Donec eu tellus.", 1, Progress.TEST, LocalDate.now().minusDays(7), null, p2);
         Task t25 = new Task("Sign up", "Curabitur interdum hendrerit urna, auctor commodo mi rhoncus dictum.", 1, Progress.DEPLOYMENT, LocalDate.now().minusDays(8), null, p2);
-        Task t26 = new Task("Web sockets", "Curabitur nec leo faucibus, posuere augue at, eleifend diam. ", 3, Progress.DONE, LocalDate.now().minusDays(10), LocalDate.now().minusDays(3), p2);
+        Task t26 = new Task("Web sockets", "Curabitur nec leo faucibus, posuere augue at, eleifend diam. ", 3, Progress.DONE, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7), p2);
 
         t21 = taskService.createTask(t21);
         t22 = taskService.createTask(t22);

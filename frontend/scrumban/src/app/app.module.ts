@@ -33,7 +33,9 @@ import {CommonModule} from '@angular/common';
 import {ConfirmDialogComponent} from './component/board/dialog/confirm-dialog/confirm-dialog.component';
 import {CommentDialogComponent} from './component/board/dialog/comment-dialog/comment-dialog.component';
 import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
-import { ProjectStatsDialogComponent } from './component/board/dialog/project-stats-dialog/project-stats-dialog.component';
+import {ProjectStatsDialogComponent} from './component/board/dialog/project-stats-dialog/project-stats-dialog.component';
+import {MDBBootstrapModule} from 'angular-bootstrap-md';
+import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,10 @@ import { ProjectStatsDialogComponent } from './component/board/dialog/project-st
     ReactiveFormsModule,
     MatListModule,
     ToastrModule.forRoot(),
-    CommonModule
+    CommonModule,
+    MDBBootstrapModule.forRoot(),
+    ChartsModule,
+    WavesModule
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]
