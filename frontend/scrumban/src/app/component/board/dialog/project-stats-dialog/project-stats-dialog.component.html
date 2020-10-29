@@ -1,9 +1,30 @@
-<div style="display: block; width: 900px;height: 500px">
-  <canvas mdbChart
-          [chartType]="chartType"
-          [datasets]="chartDatasets"
-          [labels]="chartLabels"
-          [options]="chartOptions"
-          [legend]="true">
-  </canvas>
+<div class="container">
+
+  <button mat-icon-button class="close-button" (click)="closeDialog()">
+    <mat-icon aria-label="Close statistics dialog">close</mat-icon>
+  </button>
+
+  <h1 mat-dialog-title>Statistics: {{project.name}}</h1>
+
+  <div class="chart">
+    <canvas mdbChart id="canvas-chart"
+            [chartType]="chartType"
+            [datasets]="chartDatasets"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+            [colors]="chartColors"
+            [legend]="true">
+    </canvas>
+  </div>
+
+  <div class="buttons-container">
+    <button mat-raised-button color="primary" class="button" (click)="exportCSV()">
+      Export to CSV
+    </button>
+
+    <button mat-raised-button color="primary" class="button" (click)="exportPNG()">
+      Export to PNG
+    </button>
+  </div>
+
 </div>

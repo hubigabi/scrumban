@@ -12,7 +12,8 @@ import {ProjectStats} from '../../../../model/project-stats.model';
 })
 export class ProjectStatsDialogComponent implements OnInit {
 
-  project: Project;
+  private projectStats: ProjectStats[];
+  public project: Project;
 
   public chartType = 'line';
 
@@ -46,12 +47,48 @@ export class ProjectStatsDialogComponent implements OnInit {
         }
       }],
       yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
         afterDataLimits(scale) {
           scale.max *= 1.05;
         }
       }]
     },
   };
+
+  public chartColors: Array<any> = [
+    {
+      backgroundColor: 'rgba(102, 205, 170, 0.3)',
+      borderColor: 'rgba(102, 205, 170, 1)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(255, 140, 0, 0.3)',
+      borderColor: 'rgba(255, 140, 0, 1)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(0, 255, 0, 0.3)',
+      borderColor: 'rgba(0, 255, 0, 1)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(0, 0, 255, 0.3)',
+      borderColor: 'rgba(0, 0, 255, 1)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(30, 144, 255, 0.3)',
+      borderColor: 'rgba(30, 144, 255, 1)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(255, 20, 147, 0.3)',
+      borderColor: 'rgb(255,20,141)',
+      borderWidth: 2,
+    }
+  ];
 
   private fractionDigits = 2;
 
@@ -64,6 +101,8 @@ export class ProjectStatsDialogComponent implements OnInit {
 
     this.projectStatsService.getProjectStatsByID(this.project.id)
       .subscribe((projectStats: ProjectStats[]) => {
+        this.projectStats = projectStats;
+
         this.chartLabels = projectStats.map(value => value.localDate);
 
         this.startedTasksDataSet.data = projectStats.map(value => value.startedTasks.toFixed(this.fractionDigits));
@@ -75,6 +114,51 @@ export class ProjectStatsDialogComponent implements OnInit {
       });
   }
 
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  exportPNG() {
+    const canvas = document.getElementById('canvas-chart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const img = canvas.toDataURL('image/png');
+
+    const link = document.createElement('a');
+    link.setAttribute('href', img);
+    link.setAttribute('download', this.project.name + '-statistics.png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  exportCSV() {
+    const csvContent = 'data:text/csv;charset=utf-8,'
+      + 'Date' + ',' + this.startedTasksDataSet.label + ','
+      + this.activeTasksDataSet.label + ',' + this.finishedTasksDataSet.label + ','
+      + this.throughputDataSet.label + ',' + this.leadTimeDataSet.label + ','
+      + this.WIPDataSet.label + '\n'
+      + this.projectStats.map(e => e.localDate + ','
+        + e.startedTasks.toFixed(this.fractionDigits) + ','
+        + +e.activeTasks.toFixed(this.fractionDigits) + ','
+        + e.finishedTasks.toFixed(this.fractionDigits) + ','
+        + e.throughput.toFixed(this.fractionDigits) + ','
+        + e.leadTime.toFixed(this.fractionDigits) + ','
+        + e.wip.toFixed(this.fractionDigits))
+        .join('\n');
+
+    const encodedUri = encodeURI(csvContent);
+
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', this.project.name + '-statistics.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }
 
 export interface DialogData {

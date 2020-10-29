@@ -1,0 +1,24 @@
+.container {
+  padding: 10px 10px;
+  width: 70vw;
+  max-height: 90vh;
+  overflow-y: auto
+}
+
+.close-button {
+  float: right;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+}
+
+.buttons-container {
+  padding-top: 20px;
+}
+
+.button {
+  font-size: 14px;
+  margin: 0 10px;
+}
