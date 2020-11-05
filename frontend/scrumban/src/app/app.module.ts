@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {BoardComponent} from './component/board/board.component';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -36,6 +36,8 @@ import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
 import {ProjectStatsDialogComponent} from './component/board/dialog/project-stats-dialog/project-stats-dialog.component';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
+import {AuthInterceptor} from "./interceptor/auth-interceptor.interceptor";
+import { LoginComponent } from './component/login/login.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
     ConfirmDialogComponent,
     CommentDialogComponent,
     CommentLocalDateTimePipe,
-    ProjectStatsDialogComponent
+    ProjectStatsDialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,10 @@ import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
     ChartsModule,
     WavesModule
   ],
-  providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
