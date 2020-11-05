@@ -21,7 +21,11 @@ import {ToastrService} from 'ngx-toastr';
 import * as $ from 'jquery';
 import {ConfirmDialogComponent} from './dialog/confirm-dialog/confirm-dialog.component';
 import {CommentDialogComponent} from './dialog/comment-dialog/comment-dialog.component';
-import {ProjectStatsDialogComponent} from "./dialog/project-stats-dialog/project-stats-dialog.component";
+import {ProjectStatsDialogComponent} from './dialog/project-stats-dialog/project-stats-dialog.component';
+import {JwtService} from '../../service/jwt.service';
+import {Router} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
+import {JwtData} from '../../model/jwt-data.model';
 
 @Component({
   selector: 'app-board',
@@ -29,6 +33,8 @@ import {ProjectStatsDialogComponent} from "./dialog/project-stats-dialog/project
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+
+  private readonly COOKIE_TOKEN_NAME = 'jwt-token';
 
   private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/scrumban';
 
@@ -56,12 +62,29 @@ export class BoardComponent implements OnInit {
 
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog,
-              private toastrService: ToastrService) {
+              private toastrService: ToastrService, private cookieService: CookieService,
+              private jwtService: JwtService,
+              private router: Router) {
   }
 
   ngOnInit() {
+    const token = this.cookieService.get(this.COOKIE_TOKEN_NAME);
+    let jwtData: JwtData;
 
-    this.userService.getUserByID(2).subscribe(u => {
+    if (token !== '') {
+      try {
+        jwtData = this.jwtService.getJwtData(token);
+      } catch (error) {
+        this.cookieService.delete(this.COOKIE_TOKEN_NAME);
+        this.router.navigate(['/login']);
+        console.error(error);
+      }
+    } else {
+      this.cookieService.delete(this.COOKIE_TOKEN_NAME);
+      this.router.navigate(['/login']);
+    }
+
+    this.userService.getUserByEmail(jwtData.sub).subscribe(u => {
       this.user = u;
 
       this.projectService.getAllProjectsByUser_Id(this.user.id).subscribe(p => {
