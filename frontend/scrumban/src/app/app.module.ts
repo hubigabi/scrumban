@@ -38,6 +38,7 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
 import {AuthInterceptor} from "./interceptor/auth-interceptor.interceptor";
 import { LoginComponent } from './component/login/login.component';
+import { SignupComponent } from './component/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { LoginComponent } from './component/login/login.component';
     CommentDialogComponent,
     CommentLocalDateTimePipe,
     ProjectStatsDialogComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

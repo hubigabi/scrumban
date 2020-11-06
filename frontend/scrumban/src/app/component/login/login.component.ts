@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
               private router: Router) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.form = this.fb.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
@@ -41,5 +41,9 @@ export class LoginComponent implements OnInit {
       }
     });
 
+  }
+
+  signUp() {
+    this.router.navigate(['signup']);
   }
 }

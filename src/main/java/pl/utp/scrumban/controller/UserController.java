@@ -3,10 +3,12 @@ package pl.utp.scrumban.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -15,10 +17,12 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/all")
@@ -52,9 +56,14 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRegistrationDate(LocalDate.now());
+
         user = userService.createUser(user);
 
         if (user != null) {
+            user.setPassword(password);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -63,9 +72,13 @@ public class UserController {
 
     @PutMapping()
     public ResponseEntity<User> updateUser(@RequestBody User user) {
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+
         user = userService.updateUser(user);
 
         if (user != null) {
+            user.setPassword(password);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

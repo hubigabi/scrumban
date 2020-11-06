@@ -1,0 +1,52 @@
+<div class="container">
+
+  <mat-card>
+    <mat-card-title>Sign up</mat-card-title>
+
+    <mat-card-content>
+      <form [formGroup]="form">
+
+        <mat-form-field class="full-width-input">
+          <input matInput placeholder="Email" formControlName="email" required>
+          <mat-error>
+            Please provide a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width-input">
+          <input matInput placeholder="Name" formControlName="name"
+                 minlength="3" maxlength="20" required>
+          <mat-error>
+            Please provide a full name, min. 3
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width-input">
+          <input matInput type="password" placeholder="Password" formControlName="password"
+                 minlength="6" maxlength="20" required>
+          <mat-error>
+            Please provide a password, min. 6
+          </mat-error>
+        </mat-form-field>
+
+        <mat-error *ngIf="passwordInvalid">
+          Password should contain at least one digit, one lowercase and one uppercase
+        </mat-error>
+
+        <mat-error *ngIf="emailAlreadyUsed">
+          This email is already used.
+        </mat-error>
+
+        <mat-error *ngIf="signUpError">
+          Server could not crete account.
+        </mat-error>
+      </form>
+    </mat-card-content>
+
+    <button mat-raised-button color="primary" class="button-action"
+            [disabled]="form.invalid" (click)="signUp()">Sign up
+    </button>
+    <button mat-raised-button color="primary" class="button-action" (click)="navigateToLogin()">Login</button>
+
+  </mat-card>
+</div>
