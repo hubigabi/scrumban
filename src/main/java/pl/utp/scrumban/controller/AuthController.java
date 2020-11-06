@@ -46,11 +46,6 @@ public class AuthController {
         return jwtService.generateToken(authRequest.getEmail());
     }
 
-    @GetMapping("/isEmailUsed/{email}")
-    public boolean isEmailUsed(@PathVariable("email") String email) {
-        return userService.getUserByEmail(email) == null;
-    }
-
     @PostMapping("/signup")
     public ResponseEntity<User> signUp(@RequestBody User user) {
         String password = user.getPassword();
@@ -66,4 +61,10 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/isEmailUsed/{email}")
+    public boolean isEmailUsed(@PathVariable("email") String email) {
+        return userService.getUserByEmail(email) == null;
+    }
+
 }

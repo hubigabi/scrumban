@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+.nav {
+  display: flex;
+}
+
 .app-name {
   font-size: 28px;
   font-family: 'Lato', sans-serif;
@@ -16,6 +20,24 @@
   -webkit-text-fill-color: transparent;
 }
 
+.info-menu {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.user-name {
+  color: white;
+  font-size: 18px;
+  margin-right: 20px;
+}
+
+.menu {
+  background-color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
 .board {
   display: flex;

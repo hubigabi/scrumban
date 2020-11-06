@@ -3,7 +3,7 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {Observable} from 'rxjs';
 import {CookieService} from 'ngx-cookie-service';
 import {JwtService} from '../service/jwt.service';
-import {Router} from '@angular/router';
+import {AuthService} from '../service/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -11,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private readonly COOKIE_TOKEN_NAME = 'jwt-token';
 
   constructor(private cookieService: CookieService, private jwtService: JwtService,
-              private router: Router) {
+              private authService: AuthService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -23,16 +23,14 @@ export class AuthInterceptor implements HttpInterceptor {
         const jwtData = this.jwtService.getJwtData(token);
 
         if (this.jwtService.isTokenExpired(jwtData)) {
-          this.cookieService.delete(this.COOKIE_TOKEN_NAME);
-          this.router.navigate(['/login']);
+          this.authService.logOut();
         } else {
           req = req.clone({
             headers: req.headers.set('Authorization', `Bearer ` + token),
           });
         }
       } catch (error) {
-        this.cookieService.delete(this.COOKIE_TOKEN_NAME);
-        this.router.navigate(['/login']);
+        this.authService.logOut();
         console.error(error);
       }
     }

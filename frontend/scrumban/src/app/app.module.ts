@@ -36,9 +36,10 @@ import {CommentLocalDateTimePipe} from './pipe/comment-local-date-time.pipe';
 import {ProjectStatsDialogComponent} from './component/board/dialog/project-stats-dialog/project-stats-dialog.component';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {ChartsModule, WavesModule} from 'angular-bootstrap-md';
-import {AuthInterceptor} from "./interceptor/auth-interceptor.interceptor";
-import { LoginComponent } from './component/login/login.component';
-import { SignupComponent } from './component/signup/signup.component';
+import {AuthInterceptor} from './interceptor/auth-interceptor.interceptor';
+import {LoginComponent} from './component/login/login.component';
+import {SignupComponent} from './component/signup/signup.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { SignupComponent } from './component/signup/signup.component';
     CommonModule,
     MDBBootstrapModule.forRoot(),
     ChartsModule,
-    WavesModule
+    WavesModule,
+    MatMenuModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

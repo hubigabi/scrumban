@@ -26,6 +26,7 @@ import {JwtService} from '../../service/jwt.service';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 import {JwtData} from '../../model/jwt-data.model';
+import {AuthService} from '../../service/auth.service';
 
 @Component({
   selector: 'app-board',
@@ -63,7 +64,7 @@ export class BoardComponent implements OnInit {
   constructor(private userService: UserService, private projectService: ProjectService,
               private taskService: TaskService, public dialog: MatDialog,
               private toastrService: ToastrService, private cookieService: CookieService,
-              private jwtService: JwtService,
+              private jwtService: JwtService, private authService: AuthService,
               private router: Router) {
   }
 
@@ -75,8 +76,7 @@ export class BoardComponent implements OnInit {
       try {
         jwtData = this.jwtService.getJwtData(token);
       } catch (error) {
-        this.cookieService.delete(this.COOKIE_TOKEN_NAME);
-        this.router.navigate(['/login']);
+        this.authService.logOut();
         console.error(error);
       }
     } else {
@@ -440,4 +440,7 @@ export class BoardComponent implements OnInit {
     });
   }
 
+  logOut() {
+    this.authService.logOut();
+  }
 }
