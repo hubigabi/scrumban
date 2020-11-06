@@ -4,36 +4,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.exception.InvalidCredentialsException;
 import pl.utp.scrumban.model.AuthRequest;
-import pl.utp.scrumban.util.JwtUtil;
+import pl.utp.scrumban.service.JwtService;
 
 @RestController
+@RequestMapping("/api/auth")
 @CrossOrigin
-public class WelcomeController {
+public class AuthController {
 
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public WelcomeController(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
-        this.jwtUtil = jwtUtil;
+    public AuthController(JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/")
-    public String welcome() {
-        return "Welcome to my site!!!";
-    }
-
-    @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+    @PostMapping("/login")
+    public String login(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
         } catch (Exception ex) {
-            throw new Exception("inavalid username/password");
+            throw new InvalidCredentialsException("Invalid credential", ex);
         }
-        return jwtUtil.generateToken(authRequest.getEmail());
+        return jwtService.generateToken(authRequest.getEmail());
     }
 }

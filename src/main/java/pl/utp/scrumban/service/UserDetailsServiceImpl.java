@@ -11,19 +11,23 @@ import pl.utp.scrumban.repositiory.UserRepository;
 import java.util.ArrayList;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     // Email is username
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        try {
+            User user = userRepository.findByEmail(email);
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("User with this email does not exist", e);
+        }
     }
 }

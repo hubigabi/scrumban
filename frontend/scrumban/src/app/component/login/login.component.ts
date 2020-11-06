@@ -23,14 +23,9 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.email],
       password: ['', Validators.required]
     });
-
-    // if (await this.authService.checkAuthenticated()) {
-    //   await this.router.navigate([this.returnUrl]);
-    // }
   }
 
   login() {
-
     const email = this.form.get('email').value;
     const password = this.form.get('password').value;
     const authRequest: AuthRequest = {
@@ -38,7 +33,7 @@ export class LoginComponent implements OnInit {
       password
     };
 
-    this.authService.authenticate(authRequest).subscribe(value => {
+    this.authService.login(authRequest).subscribe(value => {
       if (value) {
         this.router.navigate(['/']);
       } else {

@@ -80,7 +80,6 @@ export class BoardComponent implements OnInit {
         console.error(error);
       }
     } else {
-      this.cookieService.delete(this.COOKIE_TOKEN_NAME);
       this.router.navigate(['/login']);
     }
 

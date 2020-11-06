@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.utp.scrumban.model.*;
 
@@ -24,24 +25,27 @@ public class InitService {
     private ProjectService projectService;
     private TaskService taskService;
     private CommentService commentService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public InitService(UserService userService, ProjectService projectService, TaskService taskService, CommentService commentService) {
+    public InitService(UserService userService, ProjectService projectService, TaskService taskService,
+                       CommentService commentService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.projectService = projectService;
         this.taskService = taskService;
         this.commentService = commentService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
-        User u1 = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
-        User u2 = new User("RileyTaylor@gmail.com", "Riley Taylor", "RileyTaylor", LocalDate.now().minusDays(26));
-        User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", "LaraBaxter", LocalDate.now().minusDays(15));
-        User u4 = new User("AlexTyson@gmail.com", "Alex Tyson", "AlexTyson", LocalDate.now().minusDays(18));
-        User u5 = new User("SamWright@gmail.com", "Sam Wright", "SamWright", LocalDate.now().minusDays(22));
+        User u1 = new User("JohnSmith@gmail.com", "John Smith", passwordEncoder.encode("JohnSmith"), LocalDate.now().minusDays(17));
+        User u2 = new User("RileyTaylor@gmail.com", "Riley Taylor", passwordEncoder.encode("RileyTaylor"), LocalDate.now().minusDays(26));
+        User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", passwordEncoder.encode("LaraBaxter"), LocalDate.now().minusDays(15));
+        User u4 = new User("AlexTyson@gmail.com", "Alex Tyson", passwordEncoder.encode("AlexTyson"), LocalDate.now().minusDays(18));
+        User u5 = new User("SamWright@gmail.com", "Sam Wright", passwordEncoder.encode("SamWright"), LocalDate.now().minusDays(22));
 
         u1 = userService.createUser(u1);
         u2 = userService.createUser(u2);
