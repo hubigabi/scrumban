@@ -3,6 +3,8 @@ package pl.utp.scrumban.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +12,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.Base64;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "qwerty123";
+    private final String SECRET_KEY;
+
+    private final int TOKEN_EXPIRATION_MINUTES = 3;
+
+    public JwtService(@Value("${jwt.secret.key}") String secretKey) {
+        this.SECRET_KEY = getBase64EncodedString(secretKey);
+    }
+
+    public String getBase64EncodedString(String token) {
+        byte[] encodedBytes = Base64.getEncoder().encode(token.getBytes());
+        return new String(encodedBytes);
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -51,7 +65,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * TOKEN_EXPIRATION_MINUTES))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -60,4 +74,5 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
 }

@@ -38,7 +38,11 @@ export class CommentDialogComponent implements OnInit {
     this.user = this.data.user;
 
     this.commentService.getAllCommentsByTask_Id(this.task.id).subscribe(value => {
-        this.allComments = value;
+
+        this.allComments = value.map(comment => {
+          comment.commentText = this.linkify(comment.commentText);
+          return comment;
+        });
 
         this.commentWebSocketConnect(this.task.id);
       }
@@ -73,10 +77,12 @@ export class CommentDialogComponent implements OnInit {
     this.commentStompClient.connect({}, frame => {
       this.commentStompClient.subscribe(this.COMMENT_URL_SUBSCRIBE_SAVE + taskID, message => {
         const comment: Comment = JSON.parse(message.body);
+        comment.commentText = this.linkify(comment.commentText);
 
         this.allComments.unshift(comment);
 
-        if (comment.commentText === this.commentText && comment.user.id === this.user.id) {
+        if (comment.commentText === this.linkify(this.commentText)
+          && comment.user.id === this.user.id) {
           this.commentText = '';
         }
 
@@ -105,6 +111,11 @@ export class CommentDialogComponent implements OnInit {
     if (this.commentStompClient != null) {
       this.commentStompClient.disconnect();
     }
+  }
+
+  linkify(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, url => '<a href="' + url + '">' + url + '</a>');
   }
 
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -17,6 +18,8 @@ import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.service.CommentService;
+import pl.utp.scrumban.service.JwtService;
+import pl.utp.scrumban.service.UserDetailsServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -32,16 +35,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CommentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class CommentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private CommentService commentService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
 
     private static final String COMMENT_API_URL = "/api/comment";
 
