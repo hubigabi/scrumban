@@ -73,6 +73,8 @@ export class CommentDialogComponent implements OnInit {
   commentWebSocketConnect(taskID: number) {
     const socket = new SockJS(this.SERVER_WEB_SOCKET);
     this.commentStompClient = Stomp.over(socket);
+    this.commentStompClient.debug = () => {
+    };
 
     this.commentStompClient.connect({}, frame => {
       this.commentStompClient.subscribe(this.COMMENT_URL_SUBSCRIBE_SAVE + taskID, message => {

@@ -153,6 +153,8 @@ export class BoardComponent implements OnInit {
   taskWebSocketConnect() {
     const socket = new SockJS(this.SERVER_WEB_SOCKET);
     this.taskStompClient = Stomp.over(socket);
+    this.taskStompClient.debug = () => {
+    };
 
     this.taskStompClient.connect({}, frame => {
 
@@ -233,6 +235,8 @@ export class BoardComponent implements OnInit {
   projectWebSocketConnect(projectID: number) {
     const socket = new SockJS(this.SERVER_WEB_SOCKET);
     this.projectStompClient = Stomp.over(socket);
+    this.projectStompClient.debug = () => {
+    };
 
     this.projectStompClient.connect({}, frame => {
       this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE + projectID, message => {
