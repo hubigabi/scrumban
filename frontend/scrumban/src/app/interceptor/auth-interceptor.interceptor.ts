@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
           this.authService.logOut();
         } else {
           req = req.clone({
-            headers: req.headers.set('Authorization', `Bearer ` + token),
+            headers: req.headers.set('Authorization', 'Bearer ' + token),
           });
         }
       } catch (error) {

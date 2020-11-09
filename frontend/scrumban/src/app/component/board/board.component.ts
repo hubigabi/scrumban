@@ -49,10 +49,10 @@ export class BoardComponent implements OnInit {
   private readonly PROJECT_URL_SAVE = '/app/saveProject/';
   private readonly PROJECT_URL_SUBSCRIBE = '/project/';
 
+  user: User;
   allUserProjects: Project[];
   project: Project;
   tasks: Task[];
-  user: User;
 
   columns: Column[] = COLUMNS;
   allPriority: Priority[] = ALL_PRIORITY;
@@ -69,6 +69,15 @@ export class BoardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.user = {} as User;
+    this.project = {} as Project;
+    this.allUserProjects = [];
+    this.tasks = [];
+    this.columns.map(column => {
+      column.tasks = [];
+      return column;
+    });
+
     const token = this.cookieService.get(this.COOKIE_TOKEN_NAME);
     let jwtData: JwtData;
 

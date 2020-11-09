@@ -42,7 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/scrumban/**").permitAll()
-                .antMatchers("/scrumban").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")

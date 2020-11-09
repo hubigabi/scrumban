@@ -38,14 +38,13 @@
           <mat-label>Select project</mat-label>
           <mat-select [(ngModel)]="project" (selectionChange)="changeProject($event.value)">
             <mat-option *ngFor="let project of allUserProjects" [value]="project">
-              {{project.name}}
+              {{project?.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <button mat-button *ngIf="project !== undefined && user !== undefined
-      && project.leaderUser.id === user.id" (click)="openUpdateProjectDialog(project)">
+      <button mat-button *ngIf=" project?.leaderUser?.id === user?.id" (click)="openUpdateProjectDialog(project)">
         <mat-icon>edit</mat-icon>
       </button>
 
@@ -67,7 +66,7 @@
         <div class="board-column" *ngFor="let column of columns">
 
           <div class="column-title">
-            {{ column.progress.name }}
+            {{ column?.progress.name }}
           </div>
 
           <div class="tasks-container"
@@ -78,21 +77,21 @@
             <mat-card class="task" *ngFor="let task of column.tasks" cdkDrag>
               <mat-card-header>
 
-                <mat-card-title style="word-break: break-word;">{{task.name}}</mat-card-title>
+                <mat-card-title style="word-break: break-word;">{{task?.name}}</mat-card-title>
 
                 <mat-card-subtitle>
-                  {{task.users  | taskUsers}}
+                  {{task?.users  | taskUsers}}
                 </mat-card-subtitle>
               </mat-card-header>
 
               <mat-card-content>
-                <p class="break-word"> {{task.description}}</p>
+                <p class="break-word"> {{task?.description}}</p>
 
                 <p class="task-priority">
                   <b>Priority: </b>
-                  <span [ngStyle]="{'color': task.priority > 1 ? 'red' : 'green'} ">
-                    <ng-template [ngIf]="task.priority >= 0 && task.priority < allPriority.length">
-                      {{allPriority[task.priority].name}}
+                  <span [ngStyle]="{'color': task?.priority > 1 ? 'red' : 'green'} ">
+                    <ng-template [ngIf]="task?.priority >= 0 && task?.priority < allPriority?.length">
+                      {{allPriority[task.priority]?.name}}
                     </ng-template>
                   </span>
                 </p>
@@ -108,13 +107,13 @@
                 <!--                Comments-->
               </button>
 
-              <button mat-button *ngIf="task.users.length === 0 && user.id === project.leaderUser.id"
+              <button mat-button *ngIf="task?.users?.length === 0 && user?.id === project?.leaderUser?.id"
                       (click)="deleteTask(task)">
                 <mat-icon>delete</mat-icon>
                 <!--                Delete-->
               </button>
 
-              <div *ngIf="task.users  | taskUsers : user; else loggedUserIsNotInTaskUsers"
+              <div *ngIf="task?.users  | taskUsers : user; else loggedUserIsNotInTaskUsers"
                    style="display:inline-block;">
                 <button mat-button (click)="dismissUserFromTask($event, task)">Dismiss</button>
               </div>
