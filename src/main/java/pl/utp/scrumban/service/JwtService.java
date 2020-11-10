@@ -19,7 +19,7 @@ public class JwtService {
 
     private final String SECRET_KEY;
 
-    private final int TOKEN_EXPIRATION_MINUTES = 3;
+    private final int TOKEN_EXPIRATION_MINUTES = 10;
 
     public JwtService(@Value("${jwt.secret.key}") String secretKey) {
         this.SECRET_KEY = getBase64EncodedString(secretKey);

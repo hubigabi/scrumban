@@ -40,6 +40,7 @@ import {AuthInterceptor} from './interceptor/auth-interceptor.interceptor';
 import {LoginComponent} from './component/login/login.component';
 import {SignupComponent} from './component/signup/signup.component';
 import {MatMenuModule} from '@angular/material/menu';
+import { UserTaskDialogComponent } from './component/board/dialog/user-task-dialog/user-task-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {MatMenuModule} from '@angular/material/menu';
     CommentLocalDateTimePipe,
     ProjectStatsDialogComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    UserTaskDialogComponent
   ],
   imports: [
     BrowserModule,

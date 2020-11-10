@@ -18,6 +18,16 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
+          <button mat-menu-item (click)="openUserTaskDialog()">
+            <mat-icon>assignment</mat-icon>
+            <span>Task</span>
+          </button>
+
+          <button mat-menu-item (click)="logOut()">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+
           <button mat-menu-item (click)="logOut()">
             <mat-icon>power_settings_new</mat-icon>
             <span>Log out</span>
@@ -136,4 +146,3 @@
   </div>
 
 </div>
-

@@ -27,6 +27,7 @@ import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 import {JwtData} from '../../model/jwt-data.model';
 import {AuthService} from '../../service/auth.service';
+import {UserTaskDialogComponent} from './dialog/user-task-dialog/user-task-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -92,7 +93,7 @@ export class BoardComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
-    this.userService.getUserByEmail(jwtData.sub).subscribe(u => {
+    this.userService.getUserByEmail(jwtData?.sub).subscribe(u => {
       this.user = u;
 
       this.projectService.getAllProjectsByUser_Id(this.user.id).subscribe(p => {
@@ -455,5 +456,19 @@ export class BoardComponent implements OnInit {
 
   logOut() {
     this.authService.logOut();
+  }
+
+  openUserTaskDialog() {
+    if (this.user?.email) {
+      const dialogRef = this.dialog.open(UserTaskDialogComponent, {
+        autoFocus: true,
+        disableClose: false,
+        maxWidth: '90%',
+        maxHeight: '90%',
+        data: {
+          user: this.user
+        }
+      });
+    }
   }
 }

@@ -65,21 +65,18 @@ public class TaskController {
     @GetMapping("/allByUser/{id}")
     public ResponseEntity<List<Task>> findAllByUsers_Id(@PathVariable("id") long id) {
         List<Task> tasks = taskService.findAllByUsers_Id(id);
-
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @GetMapping("/allByProject/{id}")
     public ResponseEntity<List<Task>> findAllByProject_Id(@PathVariable("id") long id) {
         List<Task> tasks = taskService.findAllByProject_Id(id);
-
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @GetMapping("/allByProjectAndUser/{project_ID}/{user_ID}")
     public ResponseEntity<List<Task>> findAllByProject_IdAndUsers_Id(@PathVariable("project_ID") long project_ID, @PathVariable("user_ID") long user_ID) {
         List<Task> tasks = taskService.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
-
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 }

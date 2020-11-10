@@ -1,0 +1,41 @@
+mat-card {
+  min-width: 400px;
+  width: 60vw;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+
+  text-align: center;
+  border-radius: 10px;
+  border: 2px solid lightgray;
+}
+
+.no-tasks-label {
+  padding-top: 10px;
+  padding-bottom: 0;
+  color: red;
+  font-size: 16px;
+}
+
+.task-table-container {
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+}
+
+.task-table {
+  width: 100%;
+}
+
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
