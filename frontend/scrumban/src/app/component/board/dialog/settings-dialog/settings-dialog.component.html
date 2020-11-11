@@ -1,0 +1,61 @@
+<mat-card>
+  <mat-card-title>Settings</mat-card-title>
+  <mat-card-subtitle>{{user.name}}</mat-card-subtitle>
+
+  <mat-card-content>
+
+    <mat-tab-group mat-align-tabs="center" dynamicHeight (selectedTabChange)="changeTab($event)">
+      <mat-tab label="Edit profile">
+        Content 1
+      </mat-tab>
+
+      <mat-tab label="Change password">
+        <form [formGroup]="formPassword" class="form-tab">
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="Current password" formControlName="currentPassword"
+                   required>
+            <mat-error>
+              Please provide a current password
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="New password" formControlName="newPassword1"
+                   minlength="6" maxlength="20" required>
+            <mat-error>
+              Please provide a new password, min. 6
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="Retype a new password" formControlName="newPassword2"
+                   minlength="6" maxlength="20" required>
+            <mat-error>
+              Please retype a new password
+            </mat-error>
+          </mat-form-field>
+
+          <mat-error *ngIf="newPasswordsNotValid">
+            A new password should contain at least one digit, one lowercase and one uppercase.
+          </mat-error>
+
+          <mat-error *ngIf="newPasswordsNotIdentical">
+            New passwords are not identical.
+          </mat-error>
+
+          <mat-error *ngIf="changePasswordInvalidPassword">
+            Your current password is incorrect.
+          </mat-error>
+        </form>
+
+        <button mat-raised-button color="primary" [disabled]="formPassword.invalid"
+                (click)="changePassword()">Save
+        </button>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-card-content>
+
+</mat-card>
+

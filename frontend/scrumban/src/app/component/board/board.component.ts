@@ -28,6 +28,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {JwtData} from '../../model/jwt-data.model';
 import {AuthService} from '../../service/auth.service';
 import {UserTaskDialogComponent} from './dialog/user-task-dialog/user-task-dialog.component';
+import {SettingsDialogComponent} from './dialog/settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -459,8 +460,22 @@ export class BoardComponent implements OnInit {
   }
 
   openUserTaskDialog() {
-    if (this.user?.email) {
+    if (this.user?.id) {
       const dialogRef = this.dialog.open(UserTaskDialogComponent, {
+        autoFocus: true,
+        disableClose: false,
+        maxWidth: '90%',
+        maxHeight: '90%',
+        data: {
+          user: this.user
+        }
+      });
+    }
+  }
+
+  openSettingsDialog() {
+    if (this.user?.id) {
+      const dialogRef = this.dialog.open(SettingsDialogComponent, {
         autoFocus: true,
         disableClose: false,
         maxWidth: '90%',

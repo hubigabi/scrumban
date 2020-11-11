@@ -40,7 +40,9 @@ import {AuthInterceptor} from './interceptor/auth-interceptor.interceptor';
 import {LoginComponent} from './component/login/login.component';
 import {SignupComponent} from './component/signup/signup.component';
 import {MatMenuModule} from '@angular/material/menu';
-import { UserTaskDialogComponent } from './component/board/dialog/user-task-dialog/user-task-dialog.component';
+import {UserTaskDialogComponent} from './component/board/dialog/user-task-dialog/user-task-dialog.component';
+import {SettingsDialogComponent} from './component/board/dialog/settings-dialog/settings-dialog.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { UserTaskDialogComponent } from './component/board/dialog/user-task-dial
     ProjectStatsDialogComponent,
     LoginComponent,
     SignupComponent,
-    UserTaskDialogComponent
+    UserTaskDialogComponent,
+    SettingsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +87,8 @@ import { UserTaskDialogComponent } from './component/board/dialog/user-task-dial
     MDBBootstrapModule.forRoot(),
     ChartsModule,
     WavesModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTabsModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

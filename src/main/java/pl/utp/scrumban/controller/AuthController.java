@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.exception.InvalidCredentialsException;
-import pl.utp.scrumban.model.AuthRequest;
+import pl.utp.scrumban.request.AuthRequest;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.service.JwtService;
 import pl.utp.scrumban.service.UserService;

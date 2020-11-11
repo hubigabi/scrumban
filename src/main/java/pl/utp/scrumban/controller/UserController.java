@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.model.User;
+import pl.utp.scrumban.request.PasswordChangeRequest;
 import pl.utp.scrumban.service.UserService;
 
 import java.time.LocalDate;
@@ -82,6 +83,20 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("changePassword/{id}")
+    public ResponseEntity<Boolean> changePassword(@PathVariable("id") long id,
+                                                  @RequestBody PasswordChangeRequest passwordChangeRequest) {
+        User user = userService.getUser(id);
+
+        if (passwordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+            userService.updateUser(user);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.OK);
         }
     }
 
