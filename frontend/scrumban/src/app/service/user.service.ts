@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {User} from '../model/user.model';
 import {PasswordChangeRequest} from '../model/password-change-request.model';
+import {EditProfileRequest} from '../model/edit-profile-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class UserService {
   private readonly USER_URL = environment.baseUrl + '/api/user';
   private readonly USER_BY_EMAIL = this.USER_URL + '/email';
   private readonly CHANGE_PASSWORD = this.USER_URL + '/changePassword';
+  private readonly EDIT_PROFILE = this.USER_URL + '/editProfile';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -27,6 +29,10 @@ export class UserService {
 
   public changePassword(id: number, passwordChangeRequest: PasswordChangeRequest): Observable<boolean> {
     return this.httpClient.put<boolean>(this.CHANGE_PASSWORD + '/' + id.toString(), passwordChangeRequest);
+  }
+
+  public editProfile(id: number, editProfileRequest: EditProfileRequest): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.EDIT_PROFILE + '/' + id.toString(), editProfileRequest);
   }
 
 }

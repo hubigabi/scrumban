@@ -3,6 +3,3 @@ export interface JwtData {
   exp: number;
   iat: number;
 }
-
-
-

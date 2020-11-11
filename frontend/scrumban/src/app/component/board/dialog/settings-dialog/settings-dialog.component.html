@@ -4,9 +4,52 @@
 
   <mat-card-content>
 
-    <mat-tab-group mat-align-tabs="center" dynamicHeight (selectedTabChange)="changeTab($event)">
+    <mat-tab-group mat-align-tabs="center" color="primary" dynamicHeight
+                   (selectedTabChange)="changeTab($event)">
       <mat-tab label="Edit profile">
-        Content 1
+        <form [formGroup]="formProfile" class="form-tab">
+
+          <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name"
+                   minlength="3" maxlength="25" required>
+            <mat-error>
+              Please provide a full name, min. 3
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email" required>
+            <mat-error>
+              Please provide a valid email address
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Registration date" formControlName="registration" required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="Confirm password" formControlName="confirmPassword"
+                   required>
+            <mat-error>
+              Please provide a confirm password
+            </mat-error>
+          </mat-form-field>
+
+          <mat-error *ngIf="editProfileNamesIdentical">
+            A name you want to change is identical to the previous.
+          </mat-error>
+          <mat-error *ngIf="editProfileInvalidPassword">
+            Your confirm password is incorrect.
+          </mat-error>
+          <mat-error *ngIf="serverError">
+            Server error. Try again.
+          </mat-error>
+        </form>
+
+        <button mat-raised-button color="primary" [disabled]="formProfile.invalid"
+                (click)="editProfile()">Save
+        </button>
       </mat-tab>
 
       <mat-tab label="Change password">
@@ -39,13 +82,14 @@
           <mat-error *ngIf="newPasswordsNotValid">
             A new password should contain at least one digit, one lowercase and one uppercase.
           </mat-error>
-
           <mat-error *ngIf="newPasswordsNotIdentical">
             New passwords are not identical.
           </mat-error>
-
           <mat-error *ngIf="changePasswordInvalidPassword">
             Your current password is incorrect.
+          </mat-error>
+          <mat-error *ngIf="serverError">
+            Server error. Try again.
           </mat-error>
         </form>
 

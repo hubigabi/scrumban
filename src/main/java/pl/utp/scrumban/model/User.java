@@ -31,7 +31,7 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 30)
     private String name;
 
     @NotNull
