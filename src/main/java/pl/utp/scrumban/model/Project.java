@@ -44,7 +44,6 @@ public class Project {
     private User leaderUser;
 
     @ManyToMany(
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
             fetch = FetchType.EAGER
     )
     @JoinTable(

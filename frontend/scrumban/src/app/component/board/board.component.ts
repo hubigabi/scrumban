@@ -475,6 +475,8 @@ export class BoardComponent implements OnInit {
 
   openSettingsDialog() {
     if (this.user?.id) {
+      const username = this.user.name;
+
       const dialogRef = this.dialog.open(SettingsDialogComponent, {
         autoFocus: true,
         disableClose: false,
@@ -484,6 +486,29 @@ export class BoardComponent implements OnInit {
           user: this.user
         }
       });
+
+      dialogRef.afterClosed().subscribe(() => {
+        // Change username in tasks
+        if (username !== this.user.name) {
+          this.tasks.map(task =>
+            task.users.filter(user => user.id === this.user.id)
+              .map(user => user.name = this.user.name)
+          );
+
+          this.columns.map(column =>
+            column.tasks.map(task => {
+                task.users.filter(user => user.id === this.user.id)
+                  .map(user => user.name = this.user.name);
+                task.users = task.users.slice();
+                return task;
+              }
+            )
+          );
+
+        }
+      });
+
     }
   }
+
 }
