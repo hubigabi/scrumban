@@ -265,30 +265,32 @@ export class BoardComponent implements OnInit {
       this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE_DELETE + projectID, message => {
         const id: number = JSON.parse(message.body);
 
-        this.project = {} as Project;
-        this.tasks = [];
-        this.columns.map(column => {
-          column.tasks = [];
-          return column;
-        });
-
         const index = this.allUserProjects.findIndex(project => project.id === id);
         if (index !== -1) {
           this.allUserProjects.splice(index, 1);
         }
 
-        this.dialog.closeAll();
-        this.taskWebSocketDisconnect();
-        this.projectWebSocketDisconnect();
-
-        this.toastrService.success('',
-          'The project has been deleted',
-          {
-            timeOut: 3000,
-            closeButton: true,
-            progressBar: true,
-            positionClass: 'toast-bottom-center'
+        if (this.project.id === id) {
+          this.project = {} as Project;
+          this.tasks = [];
+          this.columns.map(column => {
+            column.tasks = [];
+            return column;
           });
+
+          this.dialog.closeAll();
+          this.taskWebSocketDisconnect();
+          this.projectWebSocketDisconnect();
+
+          this.toastrService.success('',
+            'The project has been deleted',
+            {
+              timeOut: 3000,
+              closeButton: true,
+              progressBar: true,
+              positionClass: 'toast-bottom-center'
+            });
+        }
       });
 
     });
