@@ -1,14 +1,15 @@
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {Task} from '../../../../model/task.model';
-import {ALL_PROGRESS, Progress} from '../../../../model/progress.model';
-import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
 import {MatTableDataSource} from '@angular/material/table';
 import {User} from '../../../../model/user.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Project} from '../../../../model/project.model';
 import {FormControl, Validators} from '@angular/forms';
 import {UserService} from '../../../../service/user.service';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-update-project-dialog',
@@ -16,6 +17,9 @@ import {UserService} from '../../../../service/user.service';
   styleUrls: ['./update-project-dialog.component.scss']
 })
 export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
+
+  private readonly SERVER_WEB_SOCKET = environment.baseUrl + '/scrumban';
+  private readonly PROJECT_URL_DELETE = '/app/deleteProject/';
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -38,7 +42,8 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
   addedUsersToProject: User[] = [];
 
   constructor(public dialogRef: MatDialogRef<UpdateProjectDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData, private userService: UserService) {
+              @Inject(MAT_DIALOG_DATA) public data: DialogData, private userService: UserService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -131,6 +136,31 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
     this.dialogRef.close(this.project);
   }
 
+  deleteProject() {
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      autoFocus: true,
+      data: {
+        title: 'Are you sure you want delete project: \n' + this.project.name
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((toDelete: boolean) => {
+      if (toDelete) {
+        const socket = new SockJS(this.SERVER_WEB_SOCKET);
+        const projectStompClient = Stomp.over(socket);
+        projectStompClient.debug = () => {
+        };
+
+        projectStompClient.connect({}, frame => {
+          projectStompClient.send(this.PROJECT_URL_DELETE + this.project.id, {}, null);
+          projectStompClient.disconnect();
+        });
+      }
+
+    });
+
+  }
 }
 
 export interface DialogData {

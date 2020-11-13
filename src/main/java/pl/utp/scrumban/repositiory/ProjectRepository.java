@@ -12,4 +12,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByLeaderUser_Id(Long id);
 
     List<Project> findAllByUsers_Id(Long id);
+
+    void deleteById(Long Id);
 }

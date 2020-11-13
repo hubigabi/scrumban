@@ -17,6 +17,7 @@ import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -48,8 +49,8 @@ public class WebSocketController {
         try {
             taskService.deleteById(task.getId());
             simpMessagingTemplate.convertAndSend("/deletedTask/" + project_id, task);
-        } catch (EmptyResultDataAccessException ex) {
-            log.info("Task to delete doesn't exist");
+        } catch (Exception ex) {
+            log.info("Could not delete task: " + task.getName());
         }
     }
 
@@ -57,6 +58,21 @@ public class WebSocketController {
     @SendTo("/project/{project_id}")
     public Project saveProject(@DestinationVariable String project_id, Project project) {
         return projectService.updateProject(project);
+    }
+
+    @MessageMapping("/deleteProject/{project_id}")
+    public void deleteProject(@DestinationVariable String project_id) {
+        try {
+            List<Task> projectTasks = taskService.findAllByProject_Id(Long.valueOf(project_id));
+            projectTasks.forEach(task ->
+                    taskService.deleteById(task.getId())
+            );
+
+            projectService.deleteById(Long.valueOf(project_id));
+            simpMessagingTemplate.convertAndSend("/deletedProject/" + project_id, new Object());
+        } catch (Exception ex) {
+            log.info("Could not delete project: " + project_id);
+        }
     }
 
     @MessageMapping("/saveComment/{task_id}")

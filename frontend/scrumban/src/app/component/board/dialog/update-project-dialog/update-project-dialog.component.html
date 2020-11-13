@@ -90,7 +90,7 @@
       </button>
     </form>
 
-    <mat-list style="padding-bottom: 30px">
+    <mat-list>
       <mat-list-item *ngFor="let user of addedUsersToProject">
 
         <h3 matLine> {{user.name}} </h3>
@@ -104,6 +104,10 @@
 
       </mat-list-item>
     </mat-list>
+
+    <button class="delete-project-button" mat-raised-button color="warn" (click)="deleteProject()">
+      Delete project
+    </button>
 
   </div>
 

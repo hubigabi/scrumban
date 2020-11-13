@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.repositiory.ProjectRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -41,4 +43,16 @@ public class ProjectService {
     public List<Project> findAllByUser_Id(Long id) {
         return projectRepository.findAllByUsers_Id(id);
     }
+
+    public void deleteById(Long id) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            project.setUsers(new HashSet<>());
+            projectRepository.save(project);
+            projectRepository.deleteById(id);
+        }
+    }
+
 }
