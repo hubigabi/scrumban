@@ -50,6 +50,7 @@ export class BoardComponent implements OnInit {
   private projectStompClient;
   private readonly PROJECT_URL_SAVE = '/app/saveProject/';
   private readonly PROJECT_URL_SUBSCRIBE = '/project/';
+  private readonly PROJECT_URL_SUBSCRIBE_DELETE = '/deletedProject/';
 
   user: User;
   allUserProjects: Project[];
@@ -260,6 +261,36 @@ export class BoardComponent implements OnInit {
             positionClass: 'toast-bottom-center'
           });
       });
+
+      this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE_DELETE + projectID, message => {
+        const id: number = JSON.parse(message.body);
+
+        this.project = {} as Project;
+        this.tasks = [];
+        this.columns.map(column => {
+          column.tasks = [];
+          return column;
+        });
+
+        const index = this.allUserProjects.findIndex(project => project.id === id);
+        if (index !== -1) {
+          this.allUserProjects.splice(index, 1);
+        }
+
+        this.dialog.closeAll();
+        this.taskWebSocketDisconnect();
+        this.projectWebSocketDisconnect();
+
+        this.toastrService.success('',
+          'The project has been deleted',
+          {
+            timeOut: 3000,
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-bottom-center'
+          });
+      });
+
     });
   }
 
@@ -278,19 +309,36 @@ export class BoardComponent implements OnInit {
     }
   }
 
+
   changeProject(project: Project) {
     this.taskWebSocketDisconnect();
     this.projectWebSocketDisconnect();
 
     this.projectService.getProjectByID(project.id).subscribe((p: Project) => {
-      const index = this.allUserProjects.map(value1 => value1.id).indexOf(p.id);
-      if (index !== -1) {
-        this.allUserProjects[index] = p;
-      }
+        const index = this.allUserProjects.map(value1 => value1.id).indexOf(p.id);
+        if (index !== -1) {
+          this.allUserProjects[index] = p;
+        }
+        this.project = p;
+        this.projectWebSocketConnect(p.id);
+      }, err => {
+        this.project = {} as Project;
 
-      this.project = p;
-      this.projectWebSocketConnect(p.id);
-    });
+        const index = this.allUserProjects.findIndex(value => value.id === project.id);
+        if (index !== -1) {
+          this.allUserProjects.splice(index, 1);
+        }
+
+        this.toastrService.error('',
+          'Could not load a project',
+          {
+            timeOut: 3000,
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-bottom-center'
+          });
+      }
+    );
 
     this.taskService.findAllTasksByProject_Id(project.id).subscribe(t => {
       this.tasks = t;

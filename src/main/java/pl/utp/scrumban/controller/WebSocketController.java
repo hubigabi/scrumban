@@ -2,7 +2,6 @@ package pl.utp.scrumban.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -69,7 +68,7 @@ public class WebSocketController {
             );
 
             projectService.deleteById(Long.valueOf(project_id));
-            simpMessagingTemplate.convertAndSend("/deletedProject/" + project_id, new Object());
+            simpMessagingTemplate.convertAndSend("/deletedProject/" + project_id, Long.valueOf(project_id));
         } catch (Exception ex) {
             log.info("Could not delete project: " + project_id);
         }

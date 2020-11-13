@@ -155,6 +155,7 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
         projectStompClient.connect({}, frame => {
           projectStompClient.send(this.PROJECT_URL_DELETE + this.project.id, {}, null);
           projectStompClient.disconnect();
+          this.dialogRef.close();
         });
       }
 
