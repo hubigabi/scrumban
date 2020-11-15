@@ -25,10 +25,9 @@ public class Task {
     private Long id;
 
     @NotNull
-    @Size(min = 3, max = 30)
+    @Size(min = 3)
     private String name;
 
-    @Size(max = 1000)
     private String description;
 
     @Min(0)
@@ -65,7 +64,7 @@ public class Task {
         user.getTasks().remove(this);
     }
 
-    public Task(@NotNull @Size(min = 3, max = 30) String name, @Size(max = 1000) String description,
+    public Task(@NotNull @Size(min = 3) String name, String description,
                 @Min(0) @Max(3) Integer priority, Progress progress, LocalDate startedLocalDate,
                 LocalDate finishedLocalDate, Project project) {
         this.name = name;
@@ -76,4 +75,6 @@ public class Task {
         this.finishedLocalDate = finishedLocalDate;
         this.project = project;
     }
+
+
 }

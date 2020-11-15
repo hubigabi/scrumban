@@ -46,6 +46,10 @@ public class TaskService {
         return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
     }
 
+    public List<Task> saveAll(Iterable<Task> tasks) {
+        return taskRepository.saveAll(tasks);
+    }
+
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }
