@@ -28,7 +28,7 @@ export class NewProjectDialogComponent implements OnInit {
       id: 0,
       name: '',
       description: '',
-      numberWIP: 10,
+      numberWIP: 5,
       startedLocalDate: '',
       finishedLocalDate: '',
       leaderUser: this.data.leaderUser,

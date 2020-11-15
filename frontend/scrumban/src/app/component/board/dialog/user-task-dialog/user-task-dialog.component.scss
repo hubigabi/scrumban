@@ -1,6 +1,5 @@
 mat-card {
   min-width: 400px;
-  width: 60vw;
   max-width: 90vw;
   max-height: 85vh;
   overflow-y: auto;
@@ -30,6 +29,10 @@ mat-card {
 ::ng-deep .mat-sort-header-container {
   display: flex;
   justify-content: center;
+}
+
+.mat-cell {
+  padding: 10px 12px 0;
 }
 
 .hidden {
