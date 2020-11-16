@@ -161,7 +161,8 @@ public class InitService {
 
                 Task task = new Task(taskName, taskDescription, priority, progress, startedLocalDateTask, null, project);
                 if (task.getProgress() == Progress.DONE) {
-                    task.setFinishedLocalDate(task.getStartedLocalDate().plusDays(5));
+                    int days = ThreadLocalRandom.current().nextInt(4, 7);
+                    task.setFinishedLocalDate(task.getStartedLocalDate().plusDays(days));
                 }
 
                 Collections.shuffle(usersInProject);
