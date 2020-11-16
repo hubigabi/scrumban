@@ -116,8 +116,12 @@ export class CommentDialogComponent implements OnInit {
   }
 
   linkify(text) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.replace(urlRegex, url => '<a href="' + url + '">' + url + '</a>');
+    if (text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, url => '<a href="' + url + '">' + url + '</a>');
+    } else {
+      return text;
+    }
   }
 
 }
