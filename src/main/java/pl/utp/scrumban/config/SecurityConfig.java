@@ -36,14 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtFilter = jwtFilter;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/scrumban/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/user/**").authenticated()
+                .antMatchers("/api/project/**").authenticated()
+                .antMatchers("/api/stats/project/**").authenticated()
+                .antMatchers("/api/task/**").authenticated()
+                .antMatchers("/api/comment/**").authenticated()
                 .and().logout().logoutUrl("/logout")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)).permitAll()
                 .and().exceptionHandling()

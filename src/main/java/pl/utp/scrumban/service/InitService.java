@@ -153,7 +153,7 @@ public class InitService {
             ArrayList<Task> tasksInProject = new ArrayList<>();
 
             for (int j = 0; j < taskNumber; j++) {
-                String taskName = capitalizeFirstLetter(loremIpsum.getWords(1, 4));
+                String taskName = capitalizeFirstLetter(loremIpsum.getWords(2));
                 String taskDescription = capitalizeFirstLetter(loremIpsum.getWords(8, 12)) + ".";
                 int priority = ThreadLocalRandom.current().nextInt(MIN_PRIORITY, MAX_PRIORITY + 1);
                 Progress progress = Progress.values()[ThreadLocalRandom.current().nextInt(Progress.values().length)];
