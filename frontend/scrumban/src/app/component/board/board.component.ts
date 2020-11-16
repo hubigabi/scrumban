@@ -160,64 +160,65 @@ export class BoardComponent implements OnInit {
     };
 
     this.taskStompClient.connect({}, frame => {
+      if (this.taskStompClient.connected) {
+        this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_SAVE + this.project.id, message => {
+          const newTask: Task = JSON.parse(message.body);
+          const oldTask: Task = this.tasks.find(value => value.id === newTask.id);
 
-      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_SAVE + this.project.id, message => {
-        const newTask: Task = JSON.parse(message.body);
-        const oldTask: Task = this.tasks.find(value => value.id === newTask.id);
+          if (oldTask) {
+            // Update task
+            const index: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
+            if (index !== -1) {
 
-        if (oldTask) {
-          // Update task
-          const index: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
-          if (index !== -1) {
-
-            if (oldTask.progress === newTask.progress) {
-              this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1, newTask);
-            } else {
-              this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1);
-              this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+              if (oldTask.progress === newTask.progress) {
+                this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1, newTask);
+              } else {
+                this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1);
+                this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+              }
             }
+
+            this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = newTask;
+          } else {
+            // Insert new task
+            this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+            this.tasks.push(newTask);
+
+            this.toastrService.success('',
+              'The task: "' + newTask.name + '" has been added',
+              {
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-bottom-center'
+              });
           }
+        });
 
-          this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = newTask;
-        } else {
-          // Insert new task
-          this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
-          this.tasks.push(newTask);
+        this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_DELETE + this.project.id, message => {
+          const task: Task = JSON.parse(message.body);
 
-          this.toastrService.success('',
-            'The task: "' + newTask.name + '" has been added',
-            {
-              timeOut: 3000,
-              closeButton: true,
-              progressBar: true,
-              positionClass: 'toast-bottom-center'
-            });
-        }
-      });
+          if (task) {
+            const tasksInColumn: Task[] = this.columns.find(column => column.progress.name === task.progress).tasks;
+            const indexInColumn = tasksInColumn.findIndex(value => value.id === task.id);
+            tasksInColumn.splice(indexInColumn, 1);
 
-      this.taskStompClient.subscribe(this.TASK_URL_SUBSCRIBE_DELETE + this.project.id, message => {
-        const task: Task = JSON.parse(message.body);
+            const index = this.tasks.findIndex(value => value.id === task.id);
+            if (index > -1) {
+              this.tasks.splice(index, 1);
+            }
 
-        if (task) {
-          const tasksInColumn: Task[] = this.columns.find(column => column.progress.name === task.progress).tasks;
-          const indexInColumn = tasksInColumn.findIndex(value => value.id === task.id);
-          tasksInColumn.splice(indexInColumn, 1);
-
-          const index = this.tasks.findIndex(value => value.id === task.id);
-          if (index > -1) {
-            this.tasks.splice(index, 1);
+            this.toastrService.success('',
+              'The task: "' + task.name + '" has been deleted',
+              {
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-bottom-center'
+              });
           }
-
-          this.toastrService.success('',
-            'The task: "' + task.name + '" has been deleted',
-            {
-              timeOut: 3000,
-              closeButton: true,
-              progressBar: true,
-              positionClass: 'toast-bottom-center'
-            });
-        }
-      });
+        });
+      }
     });
   }
 
@@ -230,7 +231,7 @@ export class BoardComponent implements OnInit {
   }
 
   taskWebSocketDisconnect() {
-    if (this.taskStompClient != null) {
+    if (this.taskStompClient != null && this.taskStompClient.connected) {
       this.taskStompClient.disconnect();
     }
   }
@@ -242,57 +243,59 @@ export class BoardComponent implements OnInit {
     };
 
     this.projectStompClient.connect({}, frame => {
-      this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE + projectID, message => {
-        const updatedProject: Project = JSON.parse(message.body);
+      if (this.projectStompClient.connected) {
+        this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE + projectID, message => {
+          const updatedProject: Project = JSON.parse(message.body);
 
-        const index = this.allUserProjects.map(val => val.id).indexOf(updatedProject.id);
-        if (index !== -1) {
-          this.allUserProjects[index] = updatedProject;
-        }
+          const index = this.allUserProjects.map(val => val.id).indexOf(updatedProject.id);
+          if (index !== -1) {
+            this.allUserProjects[index] = updatedProject;
+          }
 
-        this.project = updatedProject;
-
-        this.toastrService.success('',
-          'The project: "' + updatedProject.name + '" has been edited',
-          {
-            timeOut: 3000,
-            closeButton: true,
-            progressBar: true,
-            positionClass: 'toast-bottom-center'
-          });
-      });
-
-      this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE_DELETE + projectID, message => {
-        const id: number = JSON.parse(message.body);
-
-        const index = this.allUserProjects.findIndex(project => project.id === id);
-        if (index !== -1) {
-          this.allUserProjects.splice(index, 1);
-        }
-
-        if (this.project.id === id) {
-          this.project = {} as Project;
-          this.tasks = [];
-          this.columns.map(column => {
-            column.tasks = [];
-            return column;
-          });
-
-          this.dialog.closeAll();
-          this.taskWebSocketDisconnect();
-          this.projectWebSocketDisconnect();
+          this.project = updatedProject;
 
           this.toastrService.success('',
-            'The project has been deleted',
+            'The project: "' + updatedProject.name + '" has been edited',
             {
               timeOut: 3000,
               closeButton: true,
               progressBar: true,
               positionClass: 'toast-bottom-center'
             });
-        }
-      });
+        });
 
+        this.projectStompClient.subscribe(this.PROJECT_URL_SUBSCRIBE_DELETE + projectID, message => {
+          const id: number = JSON.parse(message.body);
+
+          const index = this.allUserProjects.findIndex(project => project.id === id);
+          if (index !== -1) {
+            this.allUserProjects.splice(index, 1);
+          }
+
+          if (this.project.id === id) {
+            this.project = {} as Project;
+            this.tasks = [];
+            this.columns.map(column => {
+              column.tasks = [];
+              return column;
+            });
+
+            this.dialog.closeAll();
+            this.taskWebSocketDisconnect();
+            this.projectWebSocketDisconnect();
+
+            this.toastrService.success('',
+              'The project has been deleted',
+              {
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-bottom-center'
+              });
+          }
+        });
+
+      }
     });
   }
 
@@ -306,7 +309,7 @@ export class BoardComponent implements OnInit {
   }
 
   projectWebSocketDisconnect() {
-    if (this.projectStompClient != null) {
+    if (this.projectStompClient != null && this.taskStompClient.connected) {
       this.projectStompClient.disconnect();
     }
   }
