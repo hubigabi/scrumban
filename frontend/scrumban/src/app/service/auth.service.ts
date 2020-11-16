@@ -16,7 +16,7 @@ export class AuthService {
   private readonly LOG_OUT_URL = environment.baseUrl + '/logout';
   private readonly LOGIN_URL = this.AUTH_URL + '/login';
   private readonly SIGN_UP_URL = this.AUTH_URL + '/signup';
-  private readonly EMAIL_USED_URL = this.AUTH_URL + '/isEmailUsed';
+  private readonly EMAIL_FREE_URL = this.AUTH_URL + '/isEmailFree';
 
   private readonly COOKIE_TOKEN_NAME = 'jwt-token';
 
@@ -41,8 +41,8 @@ export class AuthService {
     return subject.asObservable();
   }
 
-  public isEmailUsed(email: string): Observable<boolean> {
-    return this.httpClient.get<boolean>(this.EMAIL_USED_URL + '/' + email);
+  public isEmailFree(email: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(this.EMAIL_FREE_URL + '/' + email);
   }
 
   public signUp(user: User): Observable<User> {

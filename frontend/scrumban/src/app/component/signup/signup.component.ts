@@ -39,7 +39,7 @@ export class SignupComponent implements OnInit {
     const name = this.form.get('name').value;
 
     if (this.validatePassword(password)) {
-      this.authService.isEmailUsed(email)
+      this.authService.isEmailFree(email)
         .subscribe(res1 => {
             if (res1) {
 

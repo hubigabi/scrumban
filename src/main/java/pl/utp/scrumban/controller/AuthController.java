@@ -62,8 +62,8 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/isEmailUsed/{email}")
-    public boolean isEmailUsed(@PathVariable("email") String email) {
+    @GetMapping("/isEmailFree/{email}")
+    public boolean isEmailFree(@PathVariable("email") String email) {
         return userService.getUserByEmail(email) == null;
     }
 
