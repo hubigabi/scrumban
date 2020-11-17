@@ -15,6 +15,7 @@ export class AuthService {
   private readonly AUTH_URL = environment.baseUrl + '/api/auth';
   private readonly LOG_OUT_URL = environment.baseUrl + '/logout';
   private readonly LOGIN_URL = this.AUTH_URL + '/login';
+  private readonly LOGIN_GOOGLE_URL = this.AUTH_URL + '/loginGoogle';
   private readonly SIGN_UP_URL = this.AUTH_URL + '/signup';
   private readonly EMAIL_FREE_URL = this.AUTH_URL + '/isEmailFree';
 
@@ -29,6 +30,23 @@ export class AuthService {
     const subject = new Subject<boolean>();
 
     this.httpClient.post<string>(this.LOGIN_URL, authRequest, {responseType: 'text' as 'json'})
+      .subscribe(res => {
+          this.cookieService.set('jwt-token', res);
+          subject.next(true);
+        },
+        err => {
+          subject.next(false);
+        }
+      );
+
+    return subject.asObservable();
+  }
+
+  public loginWithGoogle(idToken: string): Observable<boolean> {
+    this.cookieService.delete('jwt-token');
+    const subject = new Subject<boolean>();
+
+    this.httpClient.post<string>(this.LOGIN_GOOGLE_URL, idToken, {responseType: 'text' as 'json'})
       .subscribe(res => {
           this.cookieService.set('jwt-token', res);
           subject.next(true);

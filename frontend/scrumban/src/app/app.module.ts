@@ -43,6 +43,11 @@ import {MatMenuModule} from '@angular/material/menu';
 import {UserTaskDialogComponent} from './component/board/dialog/user-task-dialog/user-task-dialog.component';
 import {SettingsDialogComponent} from './component/board/dialog/settings-dialog/settings-dialog.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import {SocialLoginModule, SocialAuthServiceConfig} from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -88,11 +93,30 @@ import {MatTabsModule} from '@angular/material/tabs';
     ChartsModule,
     WavesModule,
     MatMenuModule,
-    MatTabsModule
+    MatTabsModule,
+    SocialLoginModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '214019591884-7l85mlkhn2o4ggar56rao6eessoodts7.apps.googleusercontent.com'
+            )
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('clientId')
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })
