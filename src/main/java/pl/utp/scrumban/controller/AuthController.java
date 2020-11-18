@@ -1,5 +1,6 @@
 package pl.utp.scrumban.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import pl.utp.scrumban.exception.InvalidCredentialsException;
 import pl.utp.scrumban.request.AuthRequest;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.service.JwtService;
+import pl.utp.scrumban.service.OAuthService;
 import pl.utp.scrumban.service.UserService;
 
 import java.time.LocalDate;
@@ -23,14 +25,16 @@ public class AuthController {
     private JwtService jwtService;
     private AuthenticationManager authenticationManager;
     private UserService userService;
+    private OAuthService oauthService;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthController(JwtService jwtService, AuthenticationManager authenticationManager,
-                          UserService userService, PasswordEncoder passwordEncoder) {
+                          UserService userService, OAuthService oauthService, PasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.oauthService = oauthService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -65,6 +69,16 @@ public class AuthController {
     @GetMapping("/isEmailFree/{email}")
     public boolean isEmailFree(@PathVariable("email") String email) {
         return userService.getUserByEmail(email) == null;
+    }
+
+    @PostMapping("/loginGoogle")
+    public String loginWithGoogle(@RequestBody String idToken) throws Exception {
+        return oauthService.loginWithGoogle(idToken);
+    }
+
+    @PostMapping("/loginFacebook")
+    public String loginWithFacebook(@RequestBody String authToken) throws Exception {
+        return oauthService.loginWithFacebook(authToken);
     }
 
 }

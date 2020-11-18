@@ -95,6 +95,9 @@ export class BoardComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
+    this.projectWebSocketDisconnect();
+    this.taskWebSocketDisconnect();
+
     this.userService.getUserByEmail(jwtData?.sub).subscribe(u => {
       this.user = u;
 

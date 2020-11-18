@@ -30,9 +30,15 @@
             [disabled]="form.invalid" (click)="login()">Login
     </button>
 
-    <button mat-raised-button color="primary" class="button-action"
-            (click)="loginWithGoogle()">Login with Google
-    </button>
+    <div class="social-login-container">
+      <button mat-raised-button color="primary" class="social-login-button"
+              (click)="loginWithGoogle()">Google
+      </button>
+
+      <button mat-raised-button color="primary" class="social-login-button"
+              (click)="loginWithFB()">Facebook
+      </button>
+    </div>
 
     <button mat-raised-button color="primary" class="button-action" (click)="signUp()">Sign up</button>
 

@@ -34,7 +34,6 @@ public class User {
     @Size(min = 3, max = 30)
     private String name;
 
-    @NotNull
     private String password;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -46,7 +45,8 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Task> tasks = new HashSet<>();
 
-    public User(@NotNull @Email String email, @NotNull @Size(min = 3, max = 20) String name, @NotNull String password, LocalDate registrationDate) {
+    public User(@NotNull @Email String email, @NotNull @Size(min = 3, max = 30) String name,
+                String password, LocalDate registrationDate) {
         this.email = email;
         this.name = name;
         this.password = password;
