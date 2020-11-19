@@ -1,4 +1,4 @@
-package pl.utp.scrumban.request;
+package pl.utp.scrumban.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

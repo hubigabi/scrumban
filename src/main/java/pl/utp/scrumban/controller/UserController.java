@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.model.User;
-import pl.utp.scrumban.request.EditProfileRequest;
-import pl.utp.scrumban.request.PasswordChangeRequest;
+import pl.utp.scrumban.dto.request.EditProfileRequest;
+import pl.utp.scrumban.dto.request.PasswordChangeRequest;
 import pl.utp.scrumban.service.UserService;
 
 import java.time.LocalDate;
