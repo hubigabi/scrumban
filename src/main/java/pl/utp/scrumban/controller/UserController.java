@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.request.EditProfileRequest;
@@ -89,7 +90,7 @@ public class UserController {
 
     @PutMapping("changePassword/{id}")
     public ResponseEntity<Boolean> changePassword(@PathVariable("id") long id,
-                                                  @RequestBody PasswordChangeRequest passwordChangeRequest) {
+                                                  @RequestBody @Validated PasswordChangeRequest passwordChangeRequest) {
         User user = userService.getUser(id);
 
         if (passwordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getPassword())) {
@@ -103,7 +104,7 @@ public class UserController {
 
     @PutMapping("editProfile/{id}")
     public ResponseEntity<Boolean> editProfile(@PathVariable("id") long id,
-                                               @RequestBody EditProfileRequest editProfileRequest) {
+                                               @RequestBody @Validated EditProfileRequest editProfileRequest) {
         User user = userService.getUser(id);
 
         if (passwordEncoder.matches(editProfileRequest.getConfirmPassword(), user.getPassword())) {
