@@ -80,7 +80,7 @@ export class SignupComponent implements OnInit {
 
     this.authService.login(authRequest).subscribe(value => {
       if (value) {
-        this.router.navigate(['/']);
+        document.location.href = '/';
       }
     });
   }

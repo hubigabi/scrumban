@@ -468,7 +468,6 @@ export class BoardComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       autoFocus: true,
       data: {
@@ -512,6 +511,8 @@ export class BoardComponent implements OnInit {
   }
 
   logOut() {
+    this.projectWebSocketDisconnect();
+    this.taskWebSocketDisconnect();
     this.authService.logOut();
   }
 

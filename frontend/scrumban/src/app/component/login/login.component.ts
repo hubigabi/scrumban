@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(authRequest).subscribe(value => {
       if (value) {
-        this.router.navigate(['/']);
+        document.location.href = '/';
       } else {
         this.loginInvalid = true;
       }
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
         if (user.idToken) {
           this.authService.loginWithGoogle(user.idToken).subscribe(value => {
             if (value) {
-              this.router.navigate(['/']);
+              document.location.href = '/';
             } else {
               this.displayErrorNotification('Could not login with Google.');
             }
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
         if (user.authToken) {
           this.authService.loginWithFacebook(user.authToken).subscribe(value => {
             if (value) {
-              this.router.navigate(['/']);
+              document.location.href = '/';
             } else {
               this.displayErrorNotification('Could not login with Facebook.');
             }
