@@ -312,7 +312,7 @@ export class BoardComponent implements OnInit {
   }
 
   projectWebSocketDisconnect() {
-    if (this.projectStompClient != null && this.taskStompClient.connected) {
+    if (this.projectStompClient != null && this.projectStompClient.connected) {
       this.projectStompClient.disconnect();
     }
   }
