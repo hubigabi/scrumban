@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import {SocialAuthService} from 'angularx-social-login';
 import {FacebookLoginProvider, GoogleLoginProvider} from 'angularx-social-login';
 import {ToastrService} from 'ngx-toastr';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -18,10 +20,18 @@ export class LoginComponent implements OnInit {
   loginInvalid = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
-              private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
+              private socialAuthService: SocialAuthService, private toastrService: ToastrService,
+              private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
+    this.matIconRegistry.addSvgIcon('google',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icon/google.svg')
+    );
+    this.matIconRegistry.addSvgIcon('facebook',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icon/facebook.svg')
+    );
+
     this.form = this.fb.group({
       email: ['', Validators.email],
       password: ['', Validators.required]

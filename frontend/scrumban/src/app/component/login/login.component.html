@@ -31,12 +31,16 @@
     </button>
 
     <div class="social-login-container">
-      <button mat-raised-button color="primary" class="social-login-button"
-              (click)="loginWithGoogle()">Google
+      <button mat-raised-button class="social-login-button"
+              (click)="loginWithGoogle()">
+        <mat-icon svgIcon="google"></mat-icon>
+        Google
       </button>
 
-      <button mat-raised-button color="primary" class="social-login-button"
-              (click)="loginWithFB()">Facebook
+      <button mat-raised-button class="social-login-button"
+              (click)="loginWithFB()">
+        <mat-icon svgIcon="facebook"></mat-icon>
+        Facebook
       </button>
     </div>
 
