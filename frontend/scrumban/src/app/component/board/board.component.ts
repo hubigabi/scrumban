@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ProjectService} from '../../service/project.service';
 import {Project} from '../../model/project.model';
@@ -35,7 +35,7 @@ import {SettingsDialogComponent} from './dialog/settings-dialog/settings-dialog.
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
   private readonly COOKIE_TOKEN_NAME = 'jwt-token';
 
@@ -108,6 +108,12 @@ export class BoardComponent implements OnInit {
     });
     this.allProgressNotActive = this.allProgress.filter(value => value.inProgress === false);
     this.allProgressNotActiveStrings = this.allProgressNotActive.map(value => value.name);
+  }
+
+  @HostListener('window:beforeunload')
+  ngOnDestroy() {
+    this.projectWebSocketDisconnect();
+    this.taskWebSocketDisconnect();
   }
 
   drop(event: CdkDragDrop<Column>) {
