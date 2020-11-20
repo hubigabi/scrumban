@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/stats/project/**").authenticated()
                 .antMatchers("/api/task/**").authenticated()
                 .antMatchers("/api/comment/**").authenticated()
+                .antMatchers("/scrumban/**").authenticated()
                 .and().logout().logoutUrl("/logout")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)).permitAll()
                 .and().exceptionHandling()

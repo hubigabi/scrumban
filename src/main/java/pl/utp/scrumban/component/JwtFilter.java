@@ -15,9 +15,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    private final String TOKEN_NAME_COOKIE = "jwt-token=";
 
     private JwtService jwtService;
     private UserDetailsServiceImpl userDetailsServiceImpl;
@@ -40,6 +43,20 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
             userName = jwtService.extractUsername(token);
+        } else {
+            String cookieHeader = httpServletRequest.getHeader("cookie");
+            if (cookieHeader != null && cookieHeader.contains(TOKEN_NAME_COOKIE)) {
+                String[] pairs = cookieHeader.split("; ");
+                String t = Stream.of(pairs)
+                        .filter(s -> s.startsWith(TOKEN_NAME_COOKIE))
+                        .map(s -> s.substring(TOKEN_NAME_COOKIE.length()))
+                        .findFirst().orElse(null);
+
+                if (t != null && t.length() > 0) {
+                    token = t;
+                    userName = jwtService.extractUsername(token);
+                }
+            }
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
