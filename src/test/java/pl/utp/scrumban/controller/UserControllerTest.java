@@ -115,11 +115,16 @@ class UserControllerTest {
     @Test
     void updateUser() throws Exception {
         User user = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
+        user.setId(1L);
 
-        Mockito.when(userService.updateUser(any(User.class))).thenReturn(user);
+        User userUpdated = new User("JohnSmithUpdated@gmail.com", "John SmithUpdated", "JohnSmithUpdated", LocalDate.now().minusDays(15));
+        userUpdated.setId(1L);
+
+        Mockito.when(userService.getUser(any(Long.class))).thenReturn(user);
+        Mockito.when(userService.updateUser(any(User.class))).thenReturn(userUpdated);
 
         ResultActions resultActions = mockMvc.perform(put(USER_API_URL)
-                .content(objectMapper.writeValueAsString(user))
+                .content(objectMapper.writeValueAsString(userUpdated))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -130,7 +135,6 @@ class UserControllerTest {
         resultActions
                 .andExpect(jsonPath("$.email", is(user.getEmail())))
                 .andExpect(jsonPath("$.name", is(user.getName())))
-                .andExpect(jsonPath("$.password", is(user.getPassword())))
                 .andExpect(jsonPath("$.registrationDate", is(user.getRegistrationDate().toString())));
 
     }
@@ -143,7 +147,6 @@ class UserControllerTest {
             resultActions
                     .andExpect(jsonPath("$" + jsonIndexPath + ".email", is(user.getEmail())))
                     .andExpect(jsonPath("$" + jsonIndexPath + ".name", is(user.getName())))
-                    .andExpect(jsonPath("$" + jsonIndexPath + ".password", is(user.getPassword())))
                     .andExpect(jsonPath("$" + jsonIndexPath + ".registrationDate", is(user.getRegistrationDate().toString())));
         }
     }
