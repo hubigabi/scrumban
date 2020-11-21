@@ -8,6 +8,3 @@ export interface ProjectStats {
   leadTime: number;
   wip: number;
 }
-
-
-

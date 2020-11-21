@@ -27,5 +27,3 @@ export const COLUMNS: Column[] = [
   new Column(PROGRESS_DEPLOYMENT, []),
   new Column(PROGRESS_DONE, [])
 ];
-
-

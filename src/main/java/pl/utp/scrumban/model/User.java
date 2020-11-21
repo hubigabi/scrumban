@@ -1,6 +1,7 @@
 package pl.utp.scrumban.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -34,15 +35,18 @@ public class User {
     @Size(min = 3, max = 30)
     private String name;
 
+    @JsonIgnore
     private String password;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate registrationDate;
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private Set<Project> projects = new HashSet<>();
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private Set<Task> tasks = new HashSet<>();
 
     public User(@NotNull @Email String email, @NotNull @Size(min = 3, max = 30) String name,

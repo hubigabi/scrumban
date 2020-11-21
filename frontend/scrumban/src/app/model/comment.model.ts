@@ -8,5 +8,3 @@ export interface Comment {
   task: Task;
   user: User;
 }
-
-

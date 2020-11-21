@@ -12,6 +12,3 @@ export interface Task {
   project: Project;
   users: User[];
 }
-
-
-

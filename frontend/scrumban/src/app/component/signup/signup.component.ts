@@ -4,6 +4,7 @@ import {AuthService} from '../../service/auth.service';
 import {Router} from '@angular/router';
 import {AuthRequest} from '../../model/auth-request.model';
 import {User} from '../../model/user.model';
+import {SignUpRequest} from '../../model/sign-up-request.model';
 
 @Component({
   selector: 'app-signup',
@@ -43,17 +44,19 @@ export class SignupComponent implements OnInit {
         .subscribe(res1 => {
             if (res1) {
 
-              const user: User = {
-                id: 0,
+              const signUpRequest: SignUpRequest = {
                 email,
                 name,
                 password,
-                registrationDate: '',
               };
 
-              this.authService.signUp(user)
-                .subscribe(u => {
-                    this.login(u);
+              this.authService.signUp(signUpRequest)
+                .subscribe(value => {
+                    if (value) {
+                      this.login(signUpRequest);
+                    } else {
+                      this.signUpError = true;
+                    }
                   },
                   err => {
                     this.signUpError = true;
@@ -72,10 +75,10 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  login(user: User) {
+  login(signUpRequest: SignUpRequest) {
     const authRequest: AuthRequest = {
-      email: user.email,
-      password: user.password
+      email: signUpRequest.email,
+      password: signUpRequest.password
     };
 
     this.authService.login(authRequest).subscribe(value => {

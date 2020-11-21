@@ -6,6 +6,7 @@ import {AuthRequest} from '../model/auth-request.model';
 import {CookieService} from 'ngx-cookie-service';
 import {User} from '../model/user.model';
 import {Router} from '@angular/router';
+import {SignUpRequest} from '../model/sign-up-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,8 +82,8 @@ export class AuthService {
     return this.httpClient.get<boolean>(this.EMAIL_FREE_URL + '/' + email);
   }
 
-  public signUp(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.SIGN_UP_URL, user);
+  public signUp(signUpRequest: SignUpRequest): Observable<boolean> {
+    return this.httpClient.post<boolean>(this.SIGN_UP_URL, signUpRequest);
   }
 
   public logOut() {

@@ -10,6 +10,3 @@ export interface Project {
   leaderUser: User;
   users: User[];
 }
-
-
-

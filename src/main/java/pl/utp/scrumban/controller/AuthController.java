@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.dto.request.SignUpRequest;
 import pl.utp.scrumban.exception.InvalidCredentialsException;
 import pl.utp.scrumban.dto.request.AuthRequest;
 import pl.utp.scrumban.model.User;
@@ -51,16 +52,17 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp(@RequestBody User user) {
-        String password = user.getPassword();
-        user.setPassword(passwordEncoder.encode(password));
+    public ResponseEntity<Boolean> signUp(@RequestBody @Validated SignUpRequest signUpRequest) {
+        User user = new User();
+        user.setEmail(signUpRequest.getEmail());
+        user.setName(signUpRequest.getName());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRegistrationDate(LocalDate.now());
 
         user = userService.createUser(user);
 
         if (user != null) {
-            user.setPassword(password);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

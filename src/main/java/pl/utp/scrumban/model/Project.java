@@ -37,7 +37,6 @@ public class Project {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishedLocalDate;
 
-
     @ManyToOne
     @JoinColumn(name = "leader_user_id")
     private User leaderUser;

@@ -59,14 +59,11 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        String password = user.getPassword();
-        user.setPassword(passwordEncoder.encode(password));
         user.setRegistrationDate(LocalDate.now());
 
         user = userService.createUser(user);
 
         if (user != null) {
-            user.setPassword(password);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -75,14 +72,15 @@ public class UserController {
 
     @PutMapping()
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        String password = user.getPassword();
-        user.setPassword(passwordEncoder.encode(password));
+        User userToUpdate = userService.getUser(user.getId());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setName(user.getName());
+        userToUpdate.setRegistrationDate(user.getRegistrationDate());
 
-        user = userService.updateUser(user);
+        userToUpdate = userService.updateUser(userToUpdate);
 
-        if (user != null) {
-            user.setPassword(password);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (userToUpdate != null) {
+            return new ResponseEntity<>(userToUpdate, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
