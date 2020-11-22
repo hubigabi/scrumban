@@ -41,7 +41,7 @@ public class InitService {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
         User u1 = new User("JohnSmith@gmail.com", "John Smith", passwordEncoder.encode("JohnSmith"), LocalDate.now().minusDays(17));
-        User u2 = new User("RileyTaylor@gmail.com", "Riley Taylor", passwordEncoder.encode("RileyTaylor"), LocalDate.now().minusDays(26));
+        User u2 = new User("hubigabi19@gmail.com", "Hubert Gabryszewski", passwordEncoder.encode("hubigabi19"), LocalDate.now().minusDays(26));
         User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", passwordEncoder.encode("LaraBaxter"), LocalDate.now().minusDays(15));
         User u4 = new User("AlexTyson@gmail.com", "Alex Tyson", passwordEncoder.encode("AlexTyson"), LocalDate.now().minusDays(18));
         User u5 = new User("SamWright@gmail.com", "Sam Wright", passwordEncoder.encode("SamWright"), LocalDate.now().minusDays(22));

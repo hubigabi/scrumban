@@ -1,6 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
 import {JwtService} from '../service/jwt.service';
 import {AuthService} from '../service/auth.service';
@@ -35,7 +41,14 @@ export class AuthInterceptor implements HttpInterceptor {
       }
     }
 
-    return next.handle(req);
+    return next.handle(req)
+      .pipe(catchError(response => {
+          if (response.status === 403) {
+            this.authService.logOut();
+          }
+          return throwError(response);
+        })
+      );
   }
 
 }

@@ -3,7 +3,6 @@ package pl.utp.scrumban.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class JwtService {
 
     private final String SECRET_KEY;
 
-    private final int TOKEN_EXPIRATION_MINUTES = 10;
+    private final int TOKEN_EXPIRATION_MINUTES = 1;
 
     public JwtService(@Value("${jwt.secret.key}") String secretKey) {
         this.SECRET_KEY = getBase64EncodedString(secretKey);

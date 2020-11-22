@@ -1,5 +1,6 @@
 package pl.utp.scrumban.component;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 @Component
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final String TOKEN_NAME_COOKIE = "jwt-token=";
@@ -42,7 +44,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
-            userName = jwtService.extractUsername(token);
+            try {
+                userName = jwtService.extractUsername(token);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("Could not extract username from token");
+            }
         } else {
             String cookieHeader = httpServletRequest.getHeader("cookie");
             if (cookieHeader != null && cookieHeader.contains(TOKEN_NAME_COOKIE)) {
@@ -54,22 +61,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 if (t != null && t.length() > 0) {
                     token = t;
-                    userName = jwtService.extractUsername(token);
+                    try {
+                        userName = jwtService.extractUsername(token);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error("Could not extract username from token");
+                    }
                 }
             }
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userName);
 
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userName);
+                if (jwtService.validateToken(token, userDetails)) {
 
-            if (jwtService.validateToken(token, userDetails)) {
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("Could not authenticate a user: " + userName);
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
