@@ -53,13 +53,6 @@ public class ProjectStatsService {
                     .count();
             startedTaskCounter += startedTaskToday;
 
-            double throughput;
-            if (dayCounter != 0) {
-                throughput = startedTaskCounter / dayCounter;
-            } else {
-                throughput = 0;
-            }
-
             List<Task> finishedTaskToday = tasks.stream()
                     .filter(task -> task.getFinishedLocalDate() != null && task.getFinishedLocalDate().equals(currentDate)
                             && task.getProgress().equals(Progress.DONE)
@@ -73,6 +66,13 @@ public class ProjectStatsService {
                     .sum();
 
             finishedTaskDayCounter += finishedTaskTodayDayCounter;
+
+            double throughput;
+            if (dayCounter != 0) {
+                throughput = finishedTaskCounter / dayCounter;
+            } else {
+                throughput = 0;
+            }
 
             double leadTime;
             if (finishedTaskCounter != 0) {
