@@ -4,3 +4,13 @@
 @import '../node_modules/bulma/bulma.sass';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~ngx-toastr/toastr';
+
+/* GLOBAL STYLES */
+html, body {
+  height: 100%;
+}
+
+html {
+  background-color: #2a93be;
+  overflow-y: auto !important;
+}
