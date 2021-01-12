@@ -1,0 +1,20 @@
+version: '3'                     
+services:                             
+  app:  
+    container_name: app                        
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_DB=scrumban
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    restart: always
+    ports:
+      - "5432:5432"
