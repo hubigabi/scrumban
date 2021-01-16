@@ -31,10 +31,10 @@ public class Comment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS-0000")
     private LocalDateTime localDateTime;
 
-    @JsonIgnoreProperties({"project", "users", "hibernateLazyInitializer"})
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "task_id", nullable = false)
+    @JsonIgnoreProperties({"project", "users", "hibernateLazyInitializer"})
     private Task task;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer"})

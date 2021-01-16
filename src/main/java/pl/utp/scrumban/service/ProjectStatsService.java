@@ -2,7 +2,6 @@ package pl.utp.scrumban.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.utp.scrumban.model.Progress;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.ProjectStats;
 import pl.utp.scrumban.model.Task;
@@ -17,11 +16,13 @@ import java.util.stream.Collectors;
 public class ProjectStatsService {
 
     private ProjectService projectService;
+    private ColumnService columnService;
     private TaskService taskService;
 
     @Autowired
-    public ProjectStatsService(ProjectService projectService, TaskService taskService) {
+    public ProjectStatsService(ProjectService projectService, ColumnService columnService, TaskService taskService) {
         this.projectService = projectService;
+        this.columnService = columnService;
         this.taskService = taskService;
     }
 
@@ -38,6 +39,8 @@ public class ProjectStatsService {
 
 //        if (finishedProject.isBefore(startedProject))
 //            finishedProject = startedProject;
+        final Integer MAX_COLUMN_NUMBER_ORDER = columnService.getMaxColumnNumberOrder(projectID);
+
         double activeTasks = 0;
 
         double dayCounter = 0;
@@ -55,7 +58,7 @@ public class ProjectStatsService {
 
             List<Task> finishedTaskToday = tasks.stream()
                     .filter(task -> task.getFinishedLocalDate() != null && task.getFinishedLocalDate().equals(currentDate)
-                            && task.getProgress().equals(Progress.DONE)
+                            && task.getColumn().getNumberOrder().equals(MAX_COLUMN_NUMBER_ORDER)
                     )
                     .collect(Collectors.toList());
             int finishedTaskTodayCounter = finishedTaskToday.size();

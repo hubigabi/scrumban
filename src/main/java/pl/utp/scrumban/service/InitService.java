@@ -22,18 +22,23 @@ public class InitService {
 
     private UserService userService;
     private ProjectService projectService;
+    private ColumnService columnService;
     private TaskService taskService;
     private CommentService commentService;
     private PasswordEncoder passwordEncoder;
 
+    private Lorem loremIpsum;
+
     @Autowired
-    public InitService(UserService userService, ProjectService projectService, TaskService taskService,
-                       CommentService commentService, PasswordEncoder passwordEncoder) {
+    public InitService(UserService userService, ProjectService projectService, ColumnService columnService,
+                       TaskService taskService, CommentService commentService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.projectService = projectService;
+        this.columnService = columnService;
         this.taskService = taskService;
         this.commentService = commentService;
         this.passwordEncoder = passwordEncoder;
+        loremIpsum = LoremIpsum.getInstance();
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -67,12 +72,17 @@ public class InitService {
         p1 = projectService.createProject(p1);
         p2 = projectService.createProject(p2);
 
-        Task t11 = new Task("Backend", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 3, Progress.BACKLOG, LocalDate.now().minusDays(14), null, p1);
-        Task t12 = new Task("Frontend", "Ut ac quam a tellus dictum pretium eget ac neque.", 2, Progress.QA, LocalDate.now().minusDays(7), null, p1);
-        Task t13 = new Task("Database", "Aenean a tortor eget elit scelerisque aliquam.", 2, Progress.DEVELOPMENT, LocalDate.now().minusDays(9), null, p1);
-        Task t14 = new Task("Login", "Sed vitae diam eleifend, vestibulum eros sed, malesuada sapien.", 1, Progress.TEST, LocalDate.now().minusDays(13), null, p1);
-        Task t15 = new Task("Sign up", "Curabitur vel sollicitudin sem, ut rutrum magna.", 1, Progress.DEPLOYMENT, LocalDate.now().minusDays(8), null, p1);
-        Task t16 = new Task("Web sockets", "Nam auctor enim at erat porta, ut elementum nibh ultrices.", 2, Progress.DONE, LocalDate.now().minusDays(11), LocalDate.now().minusDays(6), p1);
+        List<Column> columns1 = Column.getDefaultColumns(p1, 3);
+        List<Column> columns2 = Column.getDefaultColumns(p2, 5);
+        columnService.saveAll(columns1);
+        columnService.saveAll(columns2);
+
+        Task t11 = new Task("Backend", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 3, LocalDate.now().minusDays(14), null, columns1.get(0), p1);
+        Task t12 = new Task("Frontend", "Ut ac quam a tellus dictum pretium eget ac neque.", 2, LocalDate.now().minusDays(7), null, columns1.get(1), p1);
+        Task t13 = new Task("Database", "Aenean a tortor eget elit scelerisque aliquam.", 2, LocalDate.now().minusDays(9), null, columns1.get(2), p1);
+        Task t14 = new Task("Login", "Sed vitae diam eleifend, vestibulum eros sed, malesuada sapien.", 1, LocalDate.now().minusDays(13), null, columns1.get(3), p1);
+        Task t15 = new Task("Sign up", "Curabitur vel sollicitudin sem, ut rutrum magna.", 1, LocalDate.now().minusDays(8), null, columns1.get(4), p1);
+        Task t16 = new Task("WebSocket", "Nam auctor enim at erat porta, ut elementum nibh ultrices.", 2, LocalDate.now().minusDays(11), LocalDate.now().minusDays(6), columns1.get(5), p1);
 
         t12.addUser(u1);
         t12.addUser(u3);
@@ -88,12 +98,12 @@ public class InitService {
         t15 = taskService.createTask(t15);
         t16 = taskService.createTask(t16);
 
-        Task t21 = new Task("Backend", "Aenean at augue euismod, ultrices mi vitae, ultrices nisi.", 3, Progress.BACKLOG, LocalDate.now().minusDays(12), null, p2);
-        Task t22 = new Task("Frontend", "Aliquam sit amet neque non lorem imperdiet maximus a convallis mi.", 3, Progress.BACKLOG, LocalDate.now().minusDays(12), null, p2);
-        Task t23 = new Task("Database", "Duis diam sem, bibendum sit amet leo eu, facilisis iaculis tortor.", 2, Progress.DEVELOPMENT, LocalDate.now().minusDays(10), null, p2);
-        Task t24 = new Task("Login", "Vivamus sem nisi, auctor nec finibus id, ultricies eget ligula. Donec eu tellus.", 1, Progress.TEST, LocalDate.now().minusDays(7), null, p2);
-        Task t25 = new Task("Sign up", "Curabitur interdum hendrerit urna, auctor commodo mi rhoncus dictum.", 1, Progress.DEPLOYMENT, LocalDate.now().minusDays(8), null, p2);
-        Task t26 = new Task("Web sockets", "Curabitur nec leo faucibus, posuere augue at, eleifend diam.", 3, Progress.DONE, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7), p2);
+        Task t21 = new Task("Backend", "Aenean at augue euismod, ultrices mi vitae, ultrices nisi.", 3, LocalDate.now().minusDays(12), null, columns2.get(0), p2);
+        Task t22 = new Task("Frontend", "Aliquam sit amet neque non lorem imperdiet maximus a convallis mi.", 3, LocalDate.now().minusDays(12), null, columns2.get(0), p2);
+        Task t23 = new Task("Database", "Duis diam sem, bibendum sit amet leo eu, facilisis iaculis tortor.", 2, LocalDate.now().minusDays(10), null, columns2.get(2), p2);
+        Task t24 = new Task("Login", "Vivamus sem nisi, auctor nec finibus id, ultricies eget ligula. Donec eu tellus.", 1, LocalDate.now().minusDays(7), null, columns2.get(3), p2);
+        Task t25 = new Task("Sign up", "Curabitur interdum hendrerit urna, auctor commodo mi rhoncus dictum.", 1, LocalDate.now().minusDays(8), null, columns2.get(2), p2);
+        Task t26 = new Task("WebSocket", "Curabitur nec leo faucibus, posuere augue at, eleifend diam.", 3, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7), columns2.get(5), p2);
 
         t23.addUser(u2);
         t23.addUser(u3);
@@ -113,8 +123,8 @@ public class InitService {
         List<User> allUsers = userService.getAllUsers();
         final int PROJECT_NUMBER = 4;
 
-        final int MIN_WIN = 3;
-        final int MAX_WIN = 6;
+        final int MIN_WIP = 3;
+        final int MAX_WIP = 6;
 
         final int MIN_DAYS_PROJECT = 12;
         final int MAX_DAYS_PROJECT = 15;
@@ -133,21 +143,26 @@ public class InitService {
         final int MIN_DAYS_TASK = 0;
         final int MAX_DAYS_TASK = 6;
 
-        Lorem loremIpsum = LoremIpsum.getInstance();
-
         for (int i = 0; i < PROJECT_NUMBER; i++) {
             Collections.shuffle(allUsers);
             ArrayList<User> usersInProject = new ArrayList<>(allUsers.subList(0, USERS_IN_PROJECT_NUMBER));
 
             String projectName = capitalizeFirstLetter(loremIpsum.getWords(2));
             String projectDescription = capitalizeFirstLetter(loremIpsum.getWords(10, 15)) + ".";
-            int wip = ThreadLocalRandom.current().nextInt(MIN_WIN, MAX_WIN + 1);
+            int wip = ThreadLocalRandom.current().nextInt(MIN_WIP, MAX_WIP + 1);
             LocalDate startedLocalDateProject = LocalDate.now().minusDays(ThreadLocalRandom.current().nextInt(MIN_DAYS_PROJECT, MAX_DAYS_PROJECT + 1));
 
             Project project = new Project(projectName, projectDescription, wip, startedLocalDateProject, null, usersInProject.get(0));
             project.setUsers(new HashSet<>(usersInProject));
 
             project = projectService.createProject(project);
+
+            createColumnsInProject(project);
+
+            List<Column> columnsInProject = columnService.findAllByProject_Id(project.getId());
+            Integer maxColumnNumberOrder = columnsInProject.stream()
+                    .mapToInt(Column::getNumberOrder)
+                    .max().orElse(0);
 
             int taskNumber = ThreadLocalRandom.current().nextInt(MIN_TASK_NUMBER, MAX_TASK_NUMBER + 1);
             ArrayList<Task> tasksInProject = new ArrayList<>();
@@ -156,11 +171,11 @@ public class InitService {
                 String taskName = capitalizeFirstLetter(loremIpsum.getWords(2));
                 String taskDescription = capitalizeFirstLetter(loremIpsum.getWords(8, 12)) + ".";
                 int priority = ThreadLocalRandom.current().nextInt(MIN_PRIORITY, MAX_PRIORITY + 1);
-                Progress progress = Progress.values()[ThreadLocalRandom.current().nextInt(Progress.values().length)];
                 LocalDate startedLocalDateTask = project.getStartedLocalDate().plusDays(ThreadLocalRandom.current().nextInt(MIN_DAYS_TASK, MAX_DAYS_TASK + 1));
+                Column column = columnsInProject.get(ThreadLocalRandom.current().nextInt(columnsInProject.size()));
 
-                Task task = new Task(taskName, taskDescription, priority, progress, startedLocalDateTask, null, project);
-                if (task.getProgress() == Progress.DONE) {
+                Task task = new Task(taskName, taskDescription, priority, startedLocalDateTask, null, column, project);
+                if (task.getColumn().getNumberOrder().equals(maxColumnNumberOrder)) {
                     int days = ThreadLocalRandom.current().nextInt(4, 7);
                     task.setFinishedLocalDate(task.getStartedLocalDate().plusDays(days));
                 }
@@ -218,6 +233,31 @@ public class InitService {
         }
 
         log.info("Finished initializing data");
+    }
+
+    private void createColumnsInProject(Project project) {
+        final int MIN_COLUMNS_NUMBER = 4;
+        final int MAX_COLUMNS_NUMBER = 8;
+        int columnsNumber = ThreadLocalRandom.current().nextInt(MIN_COLUMNS_NUMBER, MAX_COLUMNS_NUMBER + 1);
+
+        List<Column> columns = new ArrayList<>();
+        columns.add(new Column("Backlog", "Column for Backlog", false, 0, 0, project));
+
+        final int MIN_WIP = 3;
+        final int MAX_WIP = 5;
+
+        for (int i = 1; i < columnsNumber - 1; i++) {
+            String name = capitalizeFirstLetter(loremIpsum.getTitle(1));
+            String description = capitalizeFirstLetter(loremIpsum.getWords(8, 12)) + ".";
+            Boolean isWIP = true;
+            Integer numberWIP = ThreadLocalRandom.current().nextInt(MIN_WIP, MAX_WIP + 1);
+            Integer numberOrder = i;
+
+            columns.add(new Column(name, description, isWIP, numberWIP, numberOrder, project));
+        }
+
+        columns.add(new Column("Done", "Column for Done", false, 0, columnsNumber - 1, project));
+        columnService.saveAll(columns);
     }
 
     public String capitalizeFirstLetter(String s) {
