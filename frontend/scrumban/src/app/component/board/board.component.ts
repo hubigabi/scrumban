@@ -275,10 +275,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (this.project.id === id) {
             this.project = {} as Project;
             this.tasks = [];
-            this.columns.map(column => {
-              column.tasks = [];
-              return column;
-            });
+            this.columns = DEFAULT_COLUMNS;
 
             this.dialog.closeAll();
             this.taskWebSocketDisconnect();
