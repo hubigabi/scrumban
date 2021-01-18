@@ -112,7 +112,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.tasks, event.previousIndex, event.currentIndex);
     } else {
-      if (true) {
+      if (!event.container.data.isWIP
+        || event.container.data.numberWIP > event.container.data.tasks.length) {
 
         transferArrayItem(event.previousContainer.data.tasks,
           event.container.data.tasks,
@@ -124,13 +125,14 @@ export class BoardComponent implements OnInit, OnDestroy {
           value.id === event.container.data.tasks[event.currentIndex].id);
         task.column.id = event.container.data.id;
 
-        if (false) {
+        const maxNumberOrderFromColumns = this.getMaxNumberOrderFromColumns();
+        if (event.container.data.numberOrder === maxNumberOrderFromColumns) {
           // Change finishedLocalDate to today date
           const todayLocalDateString = new Date().toISOString().split('T')[0];
 
           task.finishedLocalDate = todayLocalDateString;
           event.container.data.tasks[event.currentIndex].finishedLocalDate = todayLocalDateString;
-        } else if (false) {
+        } else if (event.previousContainer.data.numberOrder === maxNumberOrderFromColumns) {
           // Change finishedLocalDate to null
           task.finishedLocalDate = null;
           event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
@@ -139,7 +141,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.taskWebSocketSave(event.container.data.tasks[event.currentIndex]);
       } else {
         this.toastrService.error('Number of tasks in WIP is at maximum',
-          'You can\'t move this task',
+          'You can\'t move task to this column',
           {
             timeOut: 3000,
             closeButton: true,
@@ -451,7 +453,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-
   deleteTask(task: Task) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       autoFocus: true,
@@ -560,6 +561,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       );
     } else {
       return {} as Column;
+    }
+  }
+
+  getMaxNumberOrderFromColumns(): number {
+    if (this.columns.length > 0) {
+      return Math.max.apply(Math, this.columns.map(c => c.numberOrder));
+    } else {
+      return -1;
     }
   }
 
