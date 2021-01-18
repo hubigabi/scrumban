@@ -6,7 +6,7 @@ import {User} from '../../model/user.model';
 import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
-import {Column} from '../../model/column.model';
+import {Column, DEFAULT_COLUMNS} from '../../model/column.model';
 import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -71,7 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.project = {} as Project;
     this.allUserProjects = [];
     this.tasks = [];
-    this.columns = [];
+    this.columns = DEFAULT_COLUMNS;
 
     const token = this.cookieService.get(this.COOKIE_TOKEN_NAME);
     let jwtData: JwtData;
