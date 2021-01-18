@@ -8,9 +8,11 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
+import pl.utp.scrumban.service.ColumnService;
 import pl.utp.scrumban.service.CommentService;
 import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
@@ -24,14 +26,16 @@ import java.util.List;
 public class WebSocketController {
 
     private TaskService taskService;
+    private ColumnService columnService;
     private ProjectService projectService;
     private CommentService commentService;
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    public WebSocketController(TaskService taskService, ProjectService projectService,
+    public WebSocketController(TaskService taskService, ColumnService columnService, ProjectService projectService,
                                CommentService commentService, SimpMessagingTemplate simpMessagingTemplate) {
         this.taskService = taskService;
+        this.columnService = columnService;
         this.projectService = projectService;
         this.commentService = commentService;
         this.simpMessagingTemplate = simpMessagingTemplate;
@@ -65,6 +69,10 @@ public class WebSocketController {
             List<Task> projectTasks = taskService.findAllByProject_Id(Long.valueOf(project_id));
             projectTasks.forEach(task ->
                     taskService.deleteById(task.getId())
+            );
+            List<Column> projectColumns = columnService.findAllByProject_Id(Long.valueOf(project_id));
+            projectColumns.forEach(column ->
+                    columnService.deleteById(column.getId())
             );
 
             projectService.deleteById(Long.valueOf(project_id));
