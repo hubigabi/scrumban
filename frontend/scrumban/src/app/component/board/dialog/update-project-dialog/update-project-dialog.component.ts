@@ -25,11 +25,6 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
 
   project: Project;
   projectStartedDate: Date;
-
-  readonly minNumberWIP = 3;
-  readonly maxNumberWIP = 15;
-  numberWIPFormControl: FormControl;
-
   startedProjectDate: Date;
 
   displayedColumns: string[] = ['index', 'name', 'email'];
@@ -51,18 +46,11 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
       id: this.data.project.id,
       name: this.data.project.name,
       description: this.data.project.description,
-      numberWIP: this.data.project.numberWIP,
       startedLocalDate: this.data.project.startedLocalDate,
       finishedLocalDate: this.data.project.finishedLocalDate,
       leaderUser: this.data.project.leaderUser,
       users: this.data.project.users
     };
-
-    this.numberWIPFormControl = new FormControl(this.project.numberWIP,
-      [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
-    this.numberWIPFormControl.valueChanges.subscribe(value => {
-      this.project.numberWIP = value;
-    });
 
     this.emailFormControl = new FormControl('', [
       Validators.required,

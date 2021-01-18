@@ -31,7 +31,7 @@ class ProjectServiceTest {
     @Test
     void getProject() {
         Long userID = 1L;
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
         project.setId(userID);
 
         Mockito.when(projectRepository.findById(userID)).thenReturn(Optional.of(project));
@@ -42,8 +42,8 @@ class ProjectServiceTest {
 
     @Test
     void getAllProjects() {
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, new User());
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, new User());
         List<Project> projects = Arrays.asList(p1, p2);
 
         Mockito.when(projectRepository.findAll(Sort.by(Sort.Order.desc("id")))).thenReturn(projects);
@@ -55,7 +55,7 @@ class ProjectServiceTest {
 
     @Test
     void createProject() {
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
 
         Mockito.when(projectRepository.save(any(Project.class))).thenReturn(project);
         Project actual = projectService.createProject(project);
@@ -65,7 +65,7 @@ class ProjectServiceTest {
 
     @Test
     void updateProject() {
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
 
         Mockito.when(projectRepository.save(any(Project.class))).thenReturn(project);
         Project actual = projectService.updateProject(project);
@@ -79,8 +79,8 @@ class ProjectServiceTest {
         User leaderUser = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         leaderUser.setId(leaderUserID);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, leaderUser);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, leaderUser);
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, leaderUser);
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, leaderUser);
         List<Project> projects = Arrays.asList(p1, p2);
 
         Mockito.when(projectRepository.findAllByLeaderUser_Id(leaderUserID)).thenReturn(projects);
@@ -100,9 +100,9 @@ class ProjectServiceTest {
         User user = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         user.setId(userID);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
         p1.addUser(user);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, new User());
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, new User());
         p2.addUser(user);
         List<Project> projects = Arrays.asList(p1, p2);
 

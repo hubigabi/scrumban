@@ -21,8 +21,8 @@ export class UserTaskDialogComponent implements OnInit {
   taskRows: TaskRow[];
   allPriority: Priority[] = ALL_PRIORITY;
 
-  displayedColumns: string[] = ['index', 'name', 'progress', 'priority',
-    'startedLocalDate', 'finishedLocalDate', 'users', 'project'];
+  displayedColumns: string[] = ['index', 'name', 'priority', 'startedLocalDate',
+    'finishedLocalDate', 'users', 'columnName', 'project'];
   dataSource: MatTableDataSource<TaskRow>;
 
   constructor(public dialogRef: MatDialogRef<UserTaskDialogComponent>,
@@ -43,7 +43,7 @@ export class UserTaskDialogComponent implements OnInit {
           taskRow.name = task.name || '-';
           taskRow.description = task.description || '-';
           taskRow.priority = this.getPriorityString(task.priority) || '-';
-          taskRow.progress = this.getProgressString(task.progress) || '-';
+          taskRow.columnName = task.column.name || '-';
           taskRow.startedLocalDate = task.startedLocalDate || '-';
           taskRow.finishedLocalDate = task.finishedLocalDate || '-';
           taskRow.project = task.project.name || '-';
@@ -59,14 +59,6 @@ export class UserTaskDialogComponent implements OnInit {
 
   getPriorityString(n: number): string {
     return this.allPriority.find(value => value.value === n).name;
-  }
-
-  getProgressString(s: string): string {
-    if (s === 'QA') {
-      return s;
-    } else {
-      return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-    }
   }
 
   getUsersString(users: User[]): string {
@@ -85,9 +77,9 @@ export interface TaskRow {
   name: string;
   description: string;
   priority: string;
-  progress: string;
   startedLocalDate: string;
   finishedLocalDate: string;
+  columnName: string;
   project: string;
   users: string;
 }

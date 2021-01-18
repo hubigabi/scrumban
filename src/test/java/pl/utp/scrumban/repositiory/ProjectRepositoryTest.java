@@ -51,8 +51,8 @@ class ProjectRepositoryTest {
         u2 = userRepository.save(u2);
         users = userRepository.saveAll(Arrays.asList(u1, u2));
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, u1);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, u2);
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, u1);
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, u2);
         projectRepository.saveAll(Arrays.asList(p1, p2));
 
         p1.addUser(u1);
@@ -88,7 +88,7 @@ class ProjectRepositoryTest {
     void save() {
         Integer expectedSize = projectRepository.findAll().size() + 1;
 
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, users.get(0));
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, users.get(0));
         projectRepository.save(project);
         Integer actualSize = projectRepository.findAll().size();
 

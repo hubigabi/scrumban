@@ -26,16 +26,6 @@
       </textarea>
     </mat-form-field>
 
-    <mat-form-field class="field-block" style="padding-bottom: 10px">
-      <mat-label>Number of WIP</mat-label>
-      <input matInput type="number" placeholder="Work in progress"
-             [formControl]="numberWIPFormControl"
-             min="{{minNumberWIP}}" max="{{maxNumberWIP}}" required>
-      <mat-error *ngIf="numberWIPFormControl.invalid">
-        Number between {{minNumberWIP}} and {{maxNumberWIP}}
-      </mat-error>
-    </mat-form-field>
-
     <mat-form-field class="field-block">
       <mat-label>Creation date</mat-label>
       <input matInput [matDatepicker]="picker" [(ngModel)]="todayDate"
@@ -49,7 +39,7 @@
   <div mat-dialog-actions>
     <button mat-raised-button (click)="cancel()">Cancel</button>
     <button mat-raised-button color="primary" (click)="submit()"
-            [disabled]="taskName.invalid || numberWIPFormControl.invalid">
+            [disabled]="taskName.invalid">
       Submit
     </button>
   </div>

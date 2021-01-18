@@ -57,8 +57,8 @@ public class InitService {
         u4 = userService.createUser(u4);
         u5 = userService.createUser(u5);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, u1);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, u2);
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, u1);
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, u2);
 
         p1.addUser(u1);
         p1.addUser(u3);
@@ -72,8 +72,8 @@ public class InitService {
         p1 = projectService.createProject(p1);
         p2 = projectService.createProject(p2);
 
-        List<Column> columns1 = Column.getDefaultColumns(p1, 3);
-        List<Column> columns2 = Column.getDefaultColumns(p2, 5);
+        List<Column> columns1 = Column.getDefaultColumns(p1);
+        List<Column> columns2 = Column.getDefaultColumns(p2);
         columnService.saveAll(columns1);
         columnService.saveAll(columns2);
 
@@ -123,9 +123,6 @@ public class InitService {
         List<User> allUsers = userService.getAllUsers();
         final int PROJECT_NUMBER = 4;
 
-        final int MIN_WIP = 3;
-        final int MAX_WIP = 6;
-
         final int MIN_DAYS_PROJECT = 12;
         final int MAX_DAYS_PROJECT = 15;
 
@@ -149,10 +146,9 @@ public class InitService {
 
             String projectName = capitalizeFirstLetter(loremIpsum.getWords(2));
             String projectDescription = capitalizeFirstLetter(loremIpsum.getWords(10, 15)) + ".";
-            int wip = ThreadLocalRandom.current().nextInt(MIN_WIP, MAX_WIP + 1);
             LocalDate startedLocalDateProject = LocalDate.now().minusDays(ThreadLocalRandom.current().nextInt(MIN_DAYS_PROJECT, MAX_DAYS_PROJECT + 1));
 
-            Project project = new Project(projectName, projectDescription, wip, startedLocalDateProject, null, usersInProject.get(0));
+            Project project = new Project(projectName, projectDescription, startedLocalDateProject, null, usersInProject.get(0));
             project.setUsers(new HashSet<>(usersInProject));
 
             project = projectService.createProject(project);

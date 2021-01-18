@@ -55,7 +55,7 @@ class ProjectControllerTest {
     @Test
     void getProject() throws Exception {
         long projectID = 1L;
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
         project.setId(projectID);
 
         Mockito.when(projectService.getProject(projectID)).thenReturn(project);
@@ -70,8 +70,8 @@ class ProjectControllerTest {
 
     @Test
     void getAllProjects() throws Exception {
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, new User());
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, new User());
         List<Project> projects = Arrays.asList(p1, p2);
 
         Mockito.when(projectService.getAllProjects()).thenReturn(projects);
@@ -86,7 +86,7 @@ class ProjectControllerTest {
 
     @Test
     void createProject() throws Exception {
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
 
         Mockito.when(projectService.createProject(any(Project.class))).thenReturn(project);
 
@@ -100,7 +100,7 @@ class ProjectControllerTest {
 
     @Test
     void updateProject() throws Exception {
-        Project project = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
 
         Mockito.when(projectService.updateProject(any(Project.class))).thenReturn(project);
 
@@ -118,8 +118,8 @@ class ProjectControllerTest {
         User leaderUser = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         leaderUser.setId(leaderUserID);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, leaderUser);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, leaderUser);
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, leaderUser);
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, leaderUser);
         List<Project> projects = Arrays.asList(p1, p2);
 
         Mockito.when(projectService.findAllByLeaderUser_Id(leaderUserID)).thenReturn(projects);
@@ -139,9 +139,9 @@ class ProjectControllerTest {
         User user = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         user.setId(userID);
 
-        Project p1 = new Project("Hotel", "Web application for hotel", 4, LocalDate.now().minusDays(15), null, new User());
+        Project p1 = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
         p1.addUser(user);
-        Project p2 = new Project("Shop", "Web application for shop", 5, LocalDate.now().minusDays(13), null, new User());
+        Project p2 = new Project("Shop", "Web application for shop", LocalDate.now().minusDays(13), null, new User());
         p2.addUser(user);
         List<Project> projects = Arrays.asList(p1, p2);
 
@@ -159,7 +159,6 @@ class ProjectControllerTest {
         resultActions
                 .andExpect(jsonPath("$.name", is(project.getName())))
                 .andExpect(jsonPath("$.description", is(project.getDescription())))
-                .andExpect(jsonPath("$.numberWIP", is(project.getNumberWIP())))
                 .andExpect(jsonPath("$.startedLocalDate", is(project.getStartedLocalDate().toString())));
 
     }
@@ -172,7 +171,6 @@ class ProjectControllerTest {
             resultActions
                     .andExpect(jsonPath("$" + jsonIndexPath + ".name", is(project.getName())))
                     .andExpect(jsonPath("$" + jsonIndexPath + ".description", is(project.getDescription())))
-                    .andExpect(jsonPath("$" + jsonIndexPath + ".numberWIP", is(project.getNumberWIP())))
                     .andExpect(jsonPath("$" + jsonIndexPath + ".startedLocalDate", is(project.getStartedLocalDate().toString())));
         }
     }

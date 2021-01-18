@@ -34,7 +34,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "task_id", nullable = false)
-    @JsonIgnoreProperties({"project", "users", "hibernateLazyInitializer"})
+    @JsonIgnoreProperties({"project", "users", "column", "hibernateLazyInitializer"})
     private Task task;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer"})

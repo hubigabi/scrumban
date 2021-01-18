@@ -2,8 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Project} from '../../../../model/project.model';
 import {Task} from 'src/app/model/task.model';
-import {ALL_PROGRESS, Progress} from '../../../../model/progress.model';
 import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
+import {Column} from '../../../../model/column.model';
 
 @Component({
   selector: 'app-new-task-dialog',
@@ -14,7 +14,6 @@ import {ALL_PRIORITY, Priority} from '../../../../model/priority.model';
 export class NewTaskDialogComponent implements OnInit {
 
   task: Task;
-  allProgress: Progress[];
   allPriority: Priority[];
 
   todayDate: Date = new Date();
@@ -29,15 +28,14 @@ export class NewTaskDialogComponent implements OnInit {
       name: '',
       description: '',
       priority: 1,
-      progress: 'BACKLOG',
       startedLocalDate: '',
       finishedLocalDate: '',
+      column: this.data.firstColumn,
       project: this.data.currentProject,
       users: []
     };
     this.task.startedLocalDate = this.todayDate.toISOString().split('T')[0];
 
-    this.allProgress = ALL_PROGRESS;
     this.allPriority = ALL_PRIORITY;
   }
 
@@ -53,4 +51,5 @@ export class NewTaskDialogComponent implements OnInit {
 
 export interface DialogData {
   currentProject: Project;
+  firstColumn: Column;
 }

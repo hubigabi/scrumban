@@ -40,8 +40,8 @@ public class ProjectController {
     }
 
     @PostMapping()
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        project = projectService.createProject(project);
+    public ResponseEntity<Project> createDefaultProject(@RequestBody Project project) {
+        project = projectService.createDefaultProject(project);
 
         if (project != null) {
             return new ResponseEntity<>(project, HttpStatus.CREATED);

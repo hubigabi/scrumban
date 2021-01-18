@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -27,9 +25,6 @@ public class Project {
     @Size(min = 3)
     private String name;
     private String description;
-
-    @Min(0)
-    private Integer numberWIP;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startedLocalDate;
@@ -63,10 +58,9 @@ public class Project {
 
 
     public Project(@NotNull @Size(min = 3) String name, String description,
-                   Integer numberWIP, LocalDate startedLocalDate, LocalDate finishedLocalDate, User leaderUser) {
+                   LocalDate startedLocalDate, LocalDate finishedLocalDate, User leaderUser) {
         this.name = name;
         this.description = description;
-        this.numberWIP = numberWIP;
         this.startedLocalDate = startedLocalDate;
         this.finishedLocalDate = finishedLocalDate;
         this.leaderUser = leaderUser;

@@ -6,8 +6,7 @@ import {User} from '../../model/user.model';
 import {Task} from '../../model/task.model';
 import {UserService} from '../../service/user.service';
 import {TaskService} from '../../service/task.service';
-import {Column, COLUMNS} from '../../model/column.model';
-import {ALL_PROGRESS, Progress, PROGRESS_DONE} from '../../model/progress.model';
+import {Column} from '../../model/column.model';
 import {environment} from '../../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -29,6 +28,7 @@ import {JwtData} from '../../model/jwt-data.model';
 import {AuthService} from '../../service/auth.service';
 import {UserTaskDialogComponent} from './dialog/user-task-dialog/user-task-dialog.component';
 import {SettingsDialogComponent} from './dialog/settings-dialog/settings-dialog.component';
+import {ColumnService} from '../../service/column.service';
 
 @Component({
   selector: 'app-board',
@@ -56,19 +56,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   allUserProjects: Project[];
   project: Project;
   tasks: Task[];
-
-  columns: Column[] = COLUMNS;
+  columns: Column[];
   allPriority: Priority[] = ALL_PRIORITY;
 
-  private allProgress: Progress[] = ALL_PROGRESS;
-  private allProgressNotActive: Progress[];
-  private allProgressNotActiveStrings: string[];
-
   constructor(private userService: UserService, private projectService: ProjectService,
-              private taskService: TaskService, public dialog: MatDialog,
-              private toastrService: ToastrService, private cookieService: CookieService,
-              private jwtService: JwtService, private authService: AuthService,
-              private router: Router) {
+              private columnService: ColumnService, private taskService: TaskService,
+              public dialog: MatDialog, private toastrService: ToastrService,
+              private cookieService: CookieService, private jwtService: JwtService,
+              private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
@@ -76,10 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.project = {} as Project;
     this.allUserProjects = [];
     this.tasks = [];
-    this.columns.map(column => {
-      column.tasks = [];
-      return column;
-    });
+    this.columns = [];
 
     const token = this.cookieService.get(this.COOKIE_TOKEN_NAME);
     let jwtData: JwtData;
@@ -106,8 +98,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
 
     });
-    this.allProgressNotActive = this.allProgress.filter(value => value.inProgress === false);
-    this.allProgressNotActiveStrings = this.allProgressNotActive.map(value => value.name);
+
   }
 
   @HostListener('window:beforeunload')
@@ -121,27 +112,25 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.tasks, event.previousIndex, event.currentIndex);
     } else {
-      if (this.isTaskMoveToNotActive(event.container.data.progress)
-        || this.isTaskMoveBetweenActive(event.previousContainer.data.progress, event.container.data.progress)
-        || this.checkWIP()) {
+      if (true) {
 
         transferArrayItem(event.previousContainer.data.tasks,
           event.container.data.tasks,
           event.previousIndex,
           event.currentIndex);
 
-        event.container.data.tasks[event.currentIndex].progress = event.container.data.progress.name;
+        event.container.data.tasks[event.currentIndex].column.id = event.container.data.id;
         const task = this.tasks.find(value =>
           value.id === event.container.data.tasks[event.currentIndex].id);
-        task.progress = event.container.data.progress.name;
+        task.column.id = event.container.data.id;
 
-        if (event.container.data.progress === PROGRESS_DONE) {
+        if (false) {
           // Change finishedLocalDate to today date
           const todayLocalDateString = new Date().toISOString().split('T')[0];
 
           task.finishedLocalDate = todayLocalDateString;
           event.container.data.tasks[event.currentIndex].finishedLocalDate = todayLocalDateString;
-        } else if (event.previousContainer.data.progress === PROGRESS_DONE) {
+        } else if (false) {
           // Change finishedLocalDate to null
           task.finishedLocalDate = null;
           event.container.data.tasks[event.currentIndex].finishedLocalDate = null;
@@ -176,21 +165,21 @@ export class BoardComponent implements OnInit, OnDestroy {
 
           if (oldTask) {
             // Update task
-            const index: number = this.columns.find(column => column.progress.name === oldTask.progress).tasks.indexOf(oldTask);
+            const index: number = this.columns.find(column => column.id === oldTask.column.id).tasks.indexOf(oldTask);
             if (index !== -1) {
 
-              if (oldTask.progress === newTask.progress) {
-                this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1, newTask);
+              if (oldTask.column.id === newTask.column.id) {
+                this.columns.find(column => column.id === oldTask.column.id).tasks.splice(index, 1, newTask);
               } else {
-                this.columns.find(column => column.progress.name === oldTask.progress).tasks.splice(index, 1);
-                this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+                this.columns.find(column => column.id === oldTask.column.id).tasks.splice(index, 1);
+                this.columns.find(column => column.id === newTask.column.id).tasks.push(newTask);
               }
             }
 
             this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = newTask;
           } else {
             // Insert new task
-            this.columns.find(column => column.progress.name === newTask.progress).tasks.push(newTask);
+            this.columns.find(column => column.id === newTask.column.id).tasks.push(newTask);
             this.tasks.push(newTask);
 
             this.toastrService.success('',
@@ -208,7 +197,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           const task: Task = JSON.parse(message.body);
 
           if (task) {
-            const tasksInColumn: Task[] = this.columns.find(column => column.progress.name === task.progress).tasks;
+            const tasksInColumn: Task[] = this.columns.find(column => column.id === task.column.id).tasks;
             const indexInColumn = tasksInColumn.findIndex(value => value.id === task.id);
             tasksInColumn.splice(indexInColumn, 1);
 
@@ -354,21 +343,26 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.taskService.findAllTasksByProject_Id(project.id).subscribe(t => {
-      this.tasks = t;
+    this.columnService.findAllColumnsByProject_Id(project.id).subscribe(c => {
+      this.columns = c;
 
-      this.columns.forEach(column => {
-        column.tasks = [];
+      this.taskService.findAllTasksByProject_Id(project.id).subscribe(t => {
+        this.tasks = t;
 
-        this.tasks.forEach(value => {
-          if (value.progress === column.progress.name) {
-            column.tasks.push(value);
-          }
+        this.columns.forEach(column => {
+          column.tasks = [];
+
+          this.tasks.forEach(value => {
+            if (value.column.id === column.id) {
+              column.tasks.push(value);
+            }
+          });
+
         });
-
+        this.taskWebSocketConnect();
       });
-      this.taskWebSocketConnect();
     });
+
   }
 
   assignUserToTask($event: MouseEvent, task: Task) {
@@ -391,9 +385,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   openNewTaskDialog(): void {
+    const column = this.getFirstColumn();
+
     const dialogRef = this.dialog.open(NewTaskDialogComponent, {
       autoFocus: true,
       data: {
+        firstColumn: column,
         currentProject: this.project
       }
     });
@@ -454,24 +451,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  isTaskMoveToNotActive(progress: Progress) {
-    return this.allProgressNotActive.indexOf(progress) > -1;
-  }
-
-  private isTaskMoveBetweenActive(progress1: Progress, progress2: Progress) {
-    return this.allProgressNotActive.indexOf(progress1) < 0
-      && this.allProgressNotActive.indexOf(progress2) < 0;
-  }
-
-  // Check if WIP of project is bigger than active tasks
-  checkWIP() {
-    const activeTasksNumber = this.tasks
-      .map(value => value.progress)
-      .filter(value => this.allProgressNotActiveStrings.indexOf(value) < 0)
-      .length;
-
-    return this.project.numberWIP > activeTasksNumber;
-  }
 
   deleteTask(task: Task) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -571,6 +550,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       });
 
+    }
+  }
+
+  getFirstColumn(): Column {
+    if (this.columns.length > 0) {
+      return this.columns.reduce((prev, current) => (
+        prev.numberOrder < current.numberOrder) ? prev : current
+      );
+    } else {
+      return {} as Column;
     }
   }
 

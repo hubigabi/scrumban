@@ -35,7 +35,7 @@ public class ColumnService {
     }
 
     public List<Column> findAllByProject_Id(Long id) {
-        return columnRepository.findAllByProject_Id(id);
+        return columnRepository.findAllByProject_IdOrderByNumberOrderAsc(id);
     }
 
     public List<Column> saveAll(Iterable<Column> columns) {
@@ -47,9 +47,9 @@ public class ColumnService {
     }
 
     public Integer getMaxColumnNumberOrder(Long projectID) {
-        return columnRepository.findAllByProject_Id(projectID)
+        return columnRepository.findAllByProject_IdOrderByNumberOrderDesc(projectID)
                 .stream()
                 .mapToInt(Column::getNumberOrder)
-                .max().orElse(0);
+                .findFirst().orElse(0);
     }
 }

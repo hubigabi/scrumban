@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface ColumnRepository extends JpaRepository<Column, Long> {
 
-    List<Column> findAllByProject_Id(Long id);
+    List<Column> findAllByProject_IdOrderByNumberOrderAsc(Long id);
+
+    List<Column> findAllByProject_IdOrderByNumberOrderDesc(Long id);
 
     void deleteById(Long Id);
 

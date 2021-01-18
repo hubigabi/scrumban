@@ -3,7 +3,9 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Project;
+import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.ProjectRepository;
 
 import java.util.HashSet;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class ProjectService {
 
     private ProjectRepository projectRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository) {
         this.projectRepository = projectRepository;
+        this.columnRepository = columnRepository;
     }
 
     public List<Project> getAllProjects() {
@@ -30,6 +34,14 @@ public class ProjectService {
 
     public Project createProject(Project project) {
         return projectRepository.save(project);
+    }
+
+    public Project createDefaultProject(Project project) {
+        project = projectRepository.save(project);
+        List<Column> columns = Column.getDefaultColumns(project);
+        columnRepository.saveAll(columns);
+
+        return project;
     }
 
     public Project updateProject(Project project) {

@@ -1,5 +1,7 @@
 package pl.utp.scrumban.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,7 @@ public class Column {
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
     private Project project;
 
     public Column(@NotNull @Size(min = 1) String name, String description, Boolean isWIP,
@@ -50,12 +53,12 @@ public class Column {
         this.project = project;
     }
 
-    public static List<Column> getDefaultColumns(Project project, Integer numberWIP) {
+    public static List<Column> getDefaultColumns(Project project) {
         Column c1 = new Column("Backlog", "Column for Backlog", false, 0, 0, project);
-        Column c2 = new Column("QA", "Column for QA", true, numberWIP, 1, project);
-        Column c3 = new Column("Development", "Column for Development", true, numberWIP, 2, project);
-        Column c4 = new Column("Test", "Column for Test", true, numberWIP, 3, project);
-        Column c5 = new Column("Deployment", "Column for Deployment", true, numberWIP, 4, project);
+        Column c2 = new Column("QA", "Column for QA", true, 3, 1, project);
+        Column c3 = new Column("Development", "Column for Development", true, 3, 2, project);
+        Column c4 = new Column("Test", "Column for Test", true, 3, 3, project);
+        Column c5 = new Column("Deployment", "Column for Deployment", true, 3, 4, project);
         Column c6 = new Column("Done", "Column for Done", false, 0, 5, project);
 
         List<Column> columns = new ArrayList<>(Arrays.asList(c1, c2, c3, c4, c5, c6));

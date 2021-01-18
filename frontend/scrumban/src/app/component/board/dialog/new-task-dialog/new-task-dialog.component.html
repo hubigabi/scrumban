@@ -36,10 +36,10 @@
     </mat-form-field>
 
     <mat-form-field class="field-block">
-      <mat-label>Progress</mat-label>
-      <mat-select [(ngModel)]="task.progress" disabled>
-        <mat-option *ngFor="let progress of allProgress" [value]="progress.name">
-          {{progress.name}}
+      <mat-label>Column</mat-label>
+      <mat-select [(ngModel)]="task.column" disabled>
+        <mat-option [value]="task.column">
+          {{task.column.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

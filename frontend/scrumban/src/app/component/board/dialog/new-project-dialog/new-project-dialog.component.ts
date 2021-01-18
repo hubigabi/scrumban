@@ -12,12 +12,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class NewProjectDialogComponent implements OnInit {
 
   project: Project;
-
   todayDate: Date = new Date();
-
-  readonly minNumberWIP = 3;
-  readonly maxNumberWIP = 15;
-  numberWIPFormControl: FormControl;
 
   constructor(public dialogRef: MatDialogRef<NewProjectDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
@@ -28,18 +23,11 @@ export class NewProjectDialogComponent implements OnInit {
       id: 0,
       name: '',
       description: '',
-      numberWIP: 5,
       startedLocalDate: '',
       finishedLocalDate: '',
       leaderUser: this.data.leaderUser,
       users: [this.data.leaderUser],
     };
-
-    this.numberWIPFormControl = new FormControl(this.project.numberWIP,
-      [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
-    this.numberWIPFormControl.valueChanges.subscribe(value => {
-      this.project.numberWIP = value;
-    });
 
     this.project.startedLocalDate = this.todayDate.toISOString().split('T')[0];
   }
