@@ -62,13 +62,14 @@
         <mat-icon>bar_chart</mat-icon>
       </button>
 
+      <button mat-raised-button color="primary" class="button-board-bar" *ngIf="project?.id && columns?.length > 0"
+              (click)="openNewTaskDialog()">
+        New task
+      </button>
+
       <button mat-raised-button color="primary" class="button-board-bar" (click)="openNewProjectDialog(user)">
         New project
       </button>
-      <button mat-raised-button color="primary" class="button-board-bar" (click)="openNewTaskDialog()"
-              [disabled]="!project?.id">New task
-      </button>
-
     </div>
 
     <div class="board-wrapper">
