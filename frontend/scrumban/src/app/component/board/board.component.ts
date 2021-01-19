@@ -53,6 +53,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   private readonly PROJECT_URL_SUBSCRIBE = '/project/';
   private readonly PROJECT_URL_SUBSCRIBE_DELETE = '/deletedProject/';
 
+  private columnStompClient;
+  private readonly COLUMN_URL_SAVE = '/app/saveColumn/';
+  private readonly COLUMN_URL_SUBSCRIBE_SAVE = '/column/';
+  private readonly COLUMN_URL_DELETE = '/app/deleteColumn/';
+  private readonly COLUMN_URL_SUBSCRIBE_DELETE = '/deletedColumn/';
+
   user: User;
   allUserProjects: Project[];
   project: Project;
@@ -89,6 +95,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
 
     this.projectWebSocketDisconnect();
+    this.columnWebSocketDisconnect();
     this.taskWebSocketDisconnect();
 
     this.userService.getUserByEmail(jwtData?.sub).subscribe(u => {
@@ -105,6 +112,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')
   ngOnDestroy() {
     this.projectWebSocketDisconnect();
+    this.columnWebSocketDisconnect();
     this.taskWebSocketDisconnect();
   }
 
@@ -280,6 +288,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
             this.dialog.closeAll();
             this.taskWebSocketDisconnect();
+            this.columnWebSocketDisconnect();
             this.projectWebSocketDisconnect();
 
             this.toastrService.success('',
@@ -312,9 +321,70 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  columnWebSocketConnect() {
+    const socket = new SockJS(this.SERVER_WEB_SOCKET);
+    this.columnStompClient = Stomp.over(socket);
+    this.columnStompClient.debug = () => {
+    };
+
+    this.columnStompClient.connect({}, frame => {
+      if (this.columnStompClient.connected) {
+        this.columnStompClient.subscribe(this.COLUMN_URL_SUBSCRIBE_SAVE + this.project.id, message => {
+          const updatedColumn: Column = JSON.parse(message.body);
+          this.changeProject(this.project);
+
+          this.toastrService.success('',
+            'The column: "' + updatedColumn.name + '" has been edited',
+            {
+              timeOut: 3000,
+              closeButton: true,
+              progressBar: true,
+              positionClass: 'toast-bottom-center'
+            });
+        });
+
+        this.columnStompClient.subscribe(this.COLUMN_URL_SUBSCRIBE_DELETE + this.project.id, message => {
+          this.changeProject(this.project);
+          const column: Column = JSON.parse(message.body);
+
+          if (column) {
+            this.toastrService.success('',
+              'The column: "' + column.name + '" has been deleted',
+              {
+                timeOut: 3000,
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-bottom-center'
+              });
+          }
+        });
+      }
+    });
+  }
+
+  columnWebSocketSave(column: Column) {
+    if (this.columnStompClient != null) {
+      this.columnStompClient.send(this.COLUMN_URL_SAVE + this.project.id, {}, JSON.stringify(column));
+    } else {
+      console.log('Cant send column');
+      console.log('Null: ' + this.columnStompClient);
+    }
+  }
+
+  columnWebSocketDelete(column: Column) {
+    this.columnStompClient.send(this.COLUMN_URL_DELETE + this.project.id, {}, JSON.stringify(column));
+  }
+
+  columnWebSocketDisconnect() {
+    if (this.columnStompClient != null && this.columnStompClient.connected) {
+      this.columnStompClient.disconnect();
+    }
+  }
+
 
   changeProject(project: Project) {
     this.taskWebSocketDisconnect();
+    this.columnWebSocketDisconnect();
     this.projectWebSocketDisconnect();
 
     this.projectService.getProjectByID(project.id).subscribe((p: Project) => {
@@ -359,6 +429,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           });
 
         });
+        this.columnWebSocketConnect();
         this.taskWebSocketConnect();
       });
     });
@@ -496,6 +567,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   logOut() {
     this.projectWebSocketDisconnect();
+    this.columnWebSocketDisconnect();
     this.taskWebSocketDisconnect();
     this.authService.logOut();
   }
@@ -565,8 +637,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((column: Column) => {
       if (column) {
-        console.log(column);
-        // this.taskWebSocketSave(task);
+        this.columnWebSocketSave(column);
       }
     });
   }
