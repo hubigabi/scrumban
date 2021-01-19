@@ -1,0 +1,22 @@
+.container {
+  width: 350px;
+  padding: 30px;
+}
+
+.field-block {
+  width: 60%;
+  display: block;
+  padding-bottom: 10px
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 80vw;
+  }
+}
+
+.wip-container {
+  width: 100%;
+  display: block;
+  padding-bottom: 10px
+}

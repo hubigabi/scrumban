@@ -29,6 +29,7 @@ import {AuthService} from '../../service/auth.service';
 import {UserTaskDialogComponent} from './dialog/user-task-dialog/user-task-dialog.component';
 import {SettingsDialogComponent} from './dialog/settings-dialog/settings-dialog.component';
 import {ColumnService} from '../../service/column.service';
+import {NewColumnDialogComponent} from './dialog/new-column-dialog/new-column-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -549,6 +550,25 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
 
     }
+  }
+
+  openNewColumnDialog(): void {
+    const dialogRef = this.dialog.open(NewColumnDialogComponent, {
+      autoFocus: true,
+      maxWidth: '90%',
+      maxHeight: '90%',
+      data: {
+        currentColumnNumber: this.columns.length,
+        currentProject: this.project
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((column: Column) => {
+      if (column) {
+        console.log(column);
+        // this.taskWebSocketSave(task);
+      }
+    });
   }
 
   getFirstColumn(): Column {

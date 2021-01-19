@@ -1,0 +1,66 @@
+<div class="container">
+
+  <h1 mat-dialog-title>New column</h1>
+
+  <div mat-dialog-content>
+    <mat-form-field class="field-block">
+      <mat-label>Name</mat-label>
+      <input matInput
+             [(ngModel)]="column.name"
+             name="columnName"
+             #columnName="ngModel"
+             required minlength="2" maxlength="25"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="field-block" style="width: 100%;">
+      <mat-label>Description</mat-label>
+      <textarea style="overflow:hidden;" matInput
+                [(ngModel)]="column.description"
+                name="columnDescription"
+                #columnDescription="ngModel"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="10"
+                cdkAutosizeMaxRows="15"
+                maxlength="900">
+      </textarea>
+    </mat-form-field>
+
+    <div class="wip-container">
+      <mat-form-field style="width: 50%; margin-right: 20px;">
+        <mat-label>Number of WIP</mat-label>
+        <input matInput type="number" placeholder="Work in progress"
+               [formControl]="numberWIPFormControl"
+               min="{{minNumberWIP}}" max="{{maxNumberWIP}}" required>
+        <mat-error *ngIf="numberWIPFormControl.invalid">
+          Number between {{minNumberWIP}} and {{maxNumberWIP}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-checkbox color="primary" style="width: 40%" [(ngModel)]="column.isWIP"
+                    (ngModelChange)="changeIsWIP($event)">
+        Limit WIP
+      </mat-checkbox>
+    </div>
+
+    <mat-form-field class="field-block" style="width: 50%">
+      <mat-label>Column order</mat-label>
+      <input matInput type="number" placeholder="Order"
+             [formControl]=" columnOrderFormControl"
+             min="{{minColumnOrder}}" max="{{maxColumnOrder}}" required>
+      <mat-error *ngIf="columnOrderFormControl.invalid">
+        Number between {{minColumnOrder}} and {{maxColumnOrder}}
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submit()"
+            [disabled]="columnName.invalid || numberWIPFormControl.invalid || columnOrderFormControl.invalid">
+      Submit
+    </button>
+  </div>
+
+</div>

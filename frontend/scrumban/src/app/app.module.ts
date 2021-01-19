@@ -48,6 +48,8 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider
 } from 'angularx-social-login';
+import {NewColumnDialogComponent} from './component/board/dialog/new-column-dialog/new-column-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ import {
     LoginComponent,
     SignupComponent,
     UserTaskDialogComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    NewColumnDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +97,8 @@ import {
     WavesModule,
     MatMenuModule,
     MatTabsModule,
-    SocialLoginModule
+    SocialLoginModule,
+    MatCheckboxModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
