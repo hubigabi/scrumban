@@ -108,8 +108,14 @@
           font-family: 'Lato', sans-serif;
           text-align: center;
           text-transform: uppercase;
-          margin-bottom: 20px;
           word-break: break-word;
+        }
+
+        .column-actions-container {
+          display: block;
+          margin-right: auto;
+          margin-left: auto;
+          margin-bottom: 12px;
         }
       }
     }

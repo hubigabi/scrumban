@@ -85,15 +85,17 @@
             {{ column?.name }}
           </div>
 
-          <button mat-button *ngIf="project?.id" (click)="editColumn(column)">
-            <mat-icon>edit</mat-icon>
-            <!--            Edit-->
-          </button>
+          <div class="column-actions-container">
+            <button mat-button *ngIf="project?.id" (click)="editColumn(column)">
+              <mat-icon>edit</mat-icon>
+              <!--            Edit-->
+            </button>
 
-          <button mat-button *ngIf="project?.id" (click)="deleteColumn(column)">
-            <mat-icon>delete</mat-icon>
-            <!--            Delete-->
-          </button>
+            <button mat-button *ngIf="project?.id" (click)="deleteColumn(column)">
+              <mat-icon>delete</mat-icon>
+              <!--            Delete-->
+            </button>
+          </div>
 
           <div class="tasks-container"
                cdkDropList
