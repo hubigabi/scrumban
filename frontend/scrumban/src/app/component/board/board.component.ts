@@ -660,4 +660,48 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteColumn(column: Column) {
+    if (column.tasks.length === 0) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        autoFocus: true,
+        data: {
+          title: 'Are you sure you want delete a column: \n' + column.name
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((toDelete: boolean) => {
+        if (toDelete) {
+          this.columnWebSocketDelete(column);
+        }
+      });
+    } else {
+      this.toastrService.error('Move all tasks to other columns',
+        'Could not delete a selected column',
+        {
+          timeOut: 3000,
+          closeButton: true,
+          progressBar: true,
+          positionClass: 'toast-bottom-center'
+        });
+    }
+  }
+
+  editColumn(column: Column) {
+    const dialogRef = this.dialog.open(NewColumnDialogComponent, {
+      autoFocus: true,
+      maxWidth: '90%',
+      maxHeight: '90%',
+      data: {
+        column,
+        currentColumnNumber: this.columns.length,
+        currentProject: this.project
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((c: Column) => {
+      if (c) {
+        this.columnWebSocketSave(c);
+      }
+    });
+  }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.repositiory.ColumnRepository;
+import pl.utp.scrumban.repositiory.TaskRepository;
 
 import java.util.List;
 
@@ -12,10 +13,12 @@ import java.util.List;
 public class ColumnService {
 
     private ColumnRepository columnRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    public ColumnService(ColumnRepository columnRepository) {
+    public ColumnService(ColumnRepository columnRepository, TaskRepository taskRepository) {
         this.columnRepository = columnRepository;
+        this.taskRepository = taskRepository;
     }
 
     public List<Column> getAllColumns() {
@@ -42,8 +45,13 @@ public class ColumnService {
         return columnRepository.saveAll(columns);
     }
 
-    public void deleteById(Long id) {
-        columnRepository.deleteById(id);
+    public Boolean deleteById(Long id) {
+        long taskNumberByColumn = taskRepository.countByColumn_Id(id);
+        if (taskNumberByColumn == 0) {
+            columnRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     public Integer getMaxColumnNumberOrder(Long projectID) {

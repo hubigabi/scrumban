@@ -11,6 +11,7 @@ import {Column} from '../../../../model/column.model';
 })
 export class NewColumnDialogComponent implements OnInit {
 
+  title = 'New column';
   column: Column;
 
   readonly minNumberWIP = 0;
@@ -28,15 +29,28 @@ export class NewColumnDialogComponent implements OnInit {
   ngOnInit() {
     this.maxColumnOrder = this.data.currentColumnNumber + 1;
 
-    this.column = {
-      id: 0,
-      name: '',
-      description: '',
-      numberOrder: this.maxColumnOrder,
-      isWIP: true,
-      numberWIP: 0,
-      tasks: [],
-    };
+    if (this.data.column) {
+      this.title = 'Edit column';
+      this.column = {
+        id: this.data.column?.id,
+        name: this.data.column?.name,
+        description: this.data.column?.description,
+        numberOrder: this.data.column?.numberOrder + 1,
+        isWIP: this.data.column?.isWIP,
+        numberWIP: this.data.column?.numberWIP,
+        tasks: [],
+      };
+    } else {
+      this.column = {
+        id: 0,
+        name: '',
+        description: '',
+        numberOrder: this.maxColumnOrder,
+        isWIP: true,
+        numberWIP: 0,
+        tasks: [],
+      };
+    }
 
     this.numberWIPFormControl = new FormControl(this.column.numberWIP,
       [Validators.min(this.minNumberWIP), Validators.max(this.maxNumberWIP)]);
@@ -72,6 +86,7 @@ export class NewColumnDialogComponent implements OnInit {
 }
 
 export interface DialogData {
+  column: Column;
   currentColumnNumber: number;
   currentProject: Project;
 }

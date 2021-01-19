@@ -100,8 +100,9 @@ public class WebSocketController {
     public void deleteColumn(@DestinationVariable Long project_id, Column column) {
         try {
             column.setProject(projectService.getProject(project_id));
-            columnService.deleteById(column.getId());
-            simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, column);
+            if (columnService.deleteById(column.getId())) {
+                simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, column);
+            }
         } catch (Exception ex) {
             log.info("Could not delete column: " + column.getName());
         }
