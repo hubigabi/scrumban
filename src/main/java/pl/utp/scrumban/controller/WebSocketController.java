@@ -93,18 +93,24 @@ public class WebSocketController {
     @SendTo("/column/{project_id}")
     public Column saveColumn(@DestinationVariable Long project_id, Column column) {
         column.setProject(projectService.getProject(project_id));
-        return columnService.updateColumn(column);
+
+        if (columnService.existsById(column.getId())) {
+            return columnService.updateColumnModifyingOthers(column);
+        } else {
+            return columnService.createColumnModifyingOthers(column);
+        }
     }
 
     @MessageMapping("/deleteColumn/{project_id}")
     public void deleteColumn(@DestinationVariable Long project_id, Column column) {
         try {
             column.setProject(projectService.getProject(project_id));
-            if (columnService.deleteById(column.getId())) {
+            if (columnService.deleteColumnModifyingOthers(column)) {
                 simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, column);
             }
         } catch (Exception ex) {
-            log.info("Could not delete column: " + column.getName());
+            ex.printStackTrace();
+            log.error("Could not delete column: " + column.getName());
         }
     }
 

@@ -3,11 +3,15 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Service
 public class ColumnService {
@@ -45,11 +49,58 @@ public class ColumnService {
         return columnRepository.saveAll(columns);
     }
 
-    public Boolean deleteById(Long id) {
-        long taskNumberByColumn = taskRepository.countByColumn_Id(id);
-        if (taskNumberByColumn == 0) {
-            columnRepository.deleteById(id);
-            return true;
+    public void deleteById(Long id) {
+        taskRepository.deleteById(id);
+    }
+
+    public boolean existsById(Long id) {
+        return taskRepository.existsById(id);
+    }
+
+    @Transactional
+    public Column createColumnModifyingOthers(Column column) {
+        column = columnRepository.save(column);
+        columnRepository.updateOrdersAfterCreatingColumn(column.getProject().getId(), column.getNumberOrder(), column.getId());
+        checkColumnsOrderInProject(column.getProject().getId());
+        return column;
+    }
+
+    @Transactional
+    public Column updateColumnModifyingOthers(Column newColumn) {
+        Optional<Column> oldColumn = columnRepository.findById(newColumn.getId());
+
+        if (oldColumn.isPresent()) {
+            int oldColumnOrder = oldColumn.get().getNumberOrder();
+
+            newColumn = columnRepository.save(newColumn);
+            int newColumnOrder = newColumn.getNumberOrder();
+            if (newColumnOrder > oldColumnOrder) {
+                columnRepository.updateOrdersAfterUpdatingColumnIfNewOrderIsGreater(newColumn.getProject().getId(),
+                        newColumnOrder, oldColumnOrder, newColumn.getId());
+                checkColumnsOrderInProject(newColumn.getProject().getId());
+            } else if (newColumnOrder < oldColumnOrder) {
+                columnRepository.updateOrdersAfterUpdatingColumnIfNewOrderIsLess(newColumn.getProject().getId(),
+                        newColumnOrder, oldColumnOrder, newColumn.getId());
+                checkColumnsOrderInProject(newColumn.getProject().getId());
+            }
+
+            return newColumn;
+        } else {
+            return createColumnModifyingOthers(newColumn);
+        }
+    }
+
+    @Transactional
+    public Boolean deleteColumnModifyingOthers(Column column) {
+        if (columnRepository.existsById(column.getId())) {
+
+            long taskNumberByColumn = taskRepository.countByColumn_Id(column.getId());
+            if (taskNumberByColumn == 0) {
+                columnRepository.deleteById(column.getId());
+                columnRepository.updateOrdersAfterDeletingColumn(column.getProject().getId(), column.getNumberOrder());
+                checkColumnsOrderInProject(column.getProject().getId());
+                return true;
+            }
         }
         return false;
     }
@@ -59,5 +110,21 @@ public class ColumnService {
                 .stream()
                 .mapToInt(Column::getNumberOrder)
                 .findFirst().orElse(0);
+    }
+
+    public void checkColumnsOrderInProject(Long projectID) {
+        List<Column> columns = findAllByProject_Id(projectID);
+        if (columns.size() > 0) {
+            System.out.println(Arrays.toString(columns.stream().map(Column::getNumberOrder).toArray()));
+
+            boolean isColumnsOrdered = IntStream.range(0, columns.size())
+                    .allMatch(value -> value == columns.get(value).getNumberOrder());
+
+            System.out.println(isColumnsOrdered);
+
+            if (!isColumnsOrdered) {
+
+            }
+        }
     }
 }

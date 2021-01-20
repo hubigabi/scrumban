@@ -36,6 +36,7 @@ public class Column {
     private Integer numberWIP;
 
     @Min(0)
+    @NotNull
     private Integer numberOrder;
 
     @ManyToOne
