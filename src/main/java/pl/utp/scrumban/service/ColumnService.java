@@ -8,6 +8,7 @@ import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -107,7 +108,7 @@ public class ColumnService {
 
     @Transactional
     public Column saveColumnNoChangeInOrder(Column column) {
-        columnRepository.saveColumnNoChangeInOrder(column.getId(), column.getName(),
+        columnRepository.updateColumnNoChangeInOrder(column.getId(), column.getName(),
                 column.getDescription(), column.getIsWIP(), column.getNumberWIP());
         return columnRepository.findById(column.getId()).orElse(null);
     }
@@ -120,19 +121,20 @@ public class ColumnService {
     }
 
     public void checkColumnsOrderInProject(Long projectID) {
-        List<Column> columns = findAllByProject_Id(projectID);
-        if (columns.size() > 0) {
-            System.out.println(Arrays.toString(columns.stream().map(Column::getNumberOrder).toArray()));
+        List<Column> columns = columnRepository.findAllByProject_IdOrderByNumberOrderAsc(projectID);
+        List<Column> columnsToUpdate = new ArrayList<>();
 
-            boolean isColumnsOrdered = IntStream.range(0, columns.size())
-                    .allMatch(value -> value == columns.get(value).getNumberOrder());
-
-            System.out.println(isColumnsOrdered);
-
-            if (!isColumnsOrdered) {
-
+        for (int i = 0; i < columns.size(); i++) {
+            Column column = columns.get(i);
+            if (column.getNumberOrder() != i) {
+                column.setNumberOrder(i);
+                columnsToUpdate.add(column);
             }
         }
+
+        columnsToUpdate.forEach(column ->
+                columnRepository.updateColumnOnlyOrder(column.getId(), column.getNumberOrder())
+        );
     }
 
 }

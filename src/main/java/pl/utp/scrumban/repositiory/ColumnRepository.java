@@ -40,6 +40,10 @@ public interface ColumnRepository extends JpaRepository<Column, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE columns c SET c.name = :name, c.description = :description,  c.isWIP = :isWIP, c.numberWIP = :numberWIP WHERE c.id = :id")
-    int saveColumnNoChangeInOrder(@Param("id") Long id, @Param("name") String name, @Param("description") String description,
-                                  @Param("isWIP") Boolean isWIP, @Param("numberWIP") Integer numberWIP);
+    int updateColumnNoChangeInOrder(@Param("id") Long id, @Param("name") String name, @Param("description") String description,
+                                    @Param("isWIP") Boolean isWIP, @Param("numberWIP") Integer numberWIP);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE columns c SET c.numberOrder = :numberOrder WHERE c.id = :id")
+    int updateColumnOnlyOrder(@Param("id") Long id, @Param("numberOrder") int numberOrder);
 }
