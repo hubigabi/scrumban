@@ -88,7 +88,7 @@ class ProjectControllerTest {
     void createProject() throws Exception {
         Project project = new Project("Hotel", "Web application for hotel", LocalDate.now().minusDays(15), null, new User());
 
-        Mockito.when(projectService.createProject(any(Project.class))).thenReturn(project);
+        Mockito.when(projectService.createDefaultProject(any(Project.class))).thenReturn(project);
 
         ResultActions resultActions = mockMvc.perform(post(PROJECT_API_URL)
                 .content(objectMapper.writeValueAsString(project))
