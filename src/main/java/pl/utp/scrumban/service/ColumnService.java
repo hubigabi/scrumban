@@ -9,10 +9,8 @@ import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
 public class ColumnService {
@@ -51,11 +49,11 @@ public class ColumnService {
     }
 
     public void deleteById(Long id) {
-        taskRepository.deleteById(id);
+        columnRepository.deleteById(id);
     }
 
     public boolean existsById(Long id) {
-        return taskRepository.existsById(id);
+        return columnRepository.existsById(id);
     }
 
     @Transactional
