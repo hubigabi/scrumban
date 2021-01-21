@@ -105,6 +105,13 @@ public class ColumnService {
         return false;
     }
 
+    @Transactional
+    public Column saveColumnNoChangeInOrder(Column column) {
+        columnRepository.saveColumnNoChangeInOrder(column.getId(), column.getName(),
+                column.getDescription(), column.getIsWIP(), column.getNumberWIP());
+        return columnRepository.findById(column.getId()).orElse(null);
+    }
+
     public Integer getMaxColumnNumberOrder(Long projectID) {
         return columnRepository.findAllByProject_IdOrderByNumberOrderDesc(projectID)
                 .stream()
@@ -127,4 +134,5 @@ public class ColumnService {
             }
         }
     }
+
 }

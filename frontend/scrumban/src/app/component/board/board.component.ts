@@ -58,6 +58,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   private readonly COLUMN_URL_SUBSCRIBE_SAVE = '/column/';
   private readonly COLUMN_URL_DELETE = '/app/deleteColumn/';
   private readonly COLUMN_URL_SUBSCRIBE_DELETE = '/deletedColumn/';
+  private readonly COLUMN_URL_SAVE_NO_CHANGE_IN_ORDER = '/app/saveColumnNoChangeInOrder/';
+  private readonly COLUMN_URL_SUBSCRIBE_SAVE_NO_CHANGE_IN_ORDER = '/columnNoChangeInOrder/';
 
   user: User;
   allUserProjects: Project[];
@@ -343,6 +345,24 @@ export class BoardComponent implements OnInit, OnDestroy {
             });
         });
 
+        this.columnStompClient.subscribe(this.COLUMN_URL_SUBSCRIBE_SAVE_NO_CHANGE_IN_ORDER + this.project.id, message => {
+          const updatedColumn: Column = JSON.parse(message.body);
+          const column: Column = this.columns.find(c => c.id === updatedColumn.id);
+          column.name = updatedColumn.name;
+          column.description = updatedColumn.description;
+          column.isWIP = updatedColumn.isWIP;
+          column.numberWIP = updatedColumn.numberWIP;
+
+          this.toastrService.success('',
+            'The column: "' + updatedColumn.name + '" has been edited',
+            {
+              timeOut: 3000,
+              closeButton: true,
+              progressBar: true,
+              positionClass: 'toast-bottom-center'
+            });
+        });
+
         this.columnStompClient.subscribe(this.COLUMN_URL_SUBSCRIBE_DELETE + this.project.id, message => {
           this.changeProject(this.project);
           const column: Column = JSON.parse(message.body);
@@ -372,7 +392,21 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   columnWebSocketDelete(column: Column) {
-    this.columnStompClient.send(this.COLUMN_URL_DELETE + this.project.id, {}, JSON.stringify(column));
+    if (this.columnStompClient != null) {
+      this.columnStompClient.send(this.COLUMN_URL_DELETE + this.project.id, {}, JSON.stringify(column));
+    } else {
+      console.log('Cant send column');
+      console.log('Null: ' + this.columnStompClient);
+    }
+  }
+
+  columnWebSocketSaveNoChangeInOrder(column: Column) {
+    if (this.columnStompClient != null) {
+      this.columnStompClient.send(this.COLUMN_URL_SAVE_NO_CHANGE_IN_ORDER + this.project.id, {}, JSON.stringify(column));
+    } else {
+      console.log('Cant send column');
+      console.log('Null: ' + this.columnStompClient);
+    }
   }
 
   columnWebSocketDisconnect() {
@@ -687,6 +721,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   editColumn(column: Column) {
+    const oldOrderColumn = column.numberOrder;
     const dialogRef = this.dialog.open(NewColumnDialogComponent, {
       autoFocus: true,
       maxWidth: '90%',
@@ -700,7 +735,11 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((c: Column) => {
       if (c) {
-        this.columnWebSocketSave(c);
+        if (c.numberOrder === oldOrderColumn) {
+          this.columnWebSocketSaveNoChangeInOrder(c);
+        } else {
+          this.columnWebSocketSave(c);
+        }
       }
     });
   }

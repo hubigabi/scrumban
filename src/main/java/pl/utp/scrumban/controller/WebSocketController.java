@@ -101,6 +101,16 @@ public class WebSocketController {
         }
     }
 
+    @MessageMapping("/saveColumnNoChangeInOrder/{project_id}")
+    public void saveColumnNoChangeInOrder(@DestinationVariable Long project_id, Column column) {
+        column.setProject(projectService.getProject(project_id));
+
+        if (columnService.existsById(column.getId())) {
+            column = columnService.saveColumnNoChangeInOrder(column);
+            simpMessagingTemplate.convertAndSend("/columnNoChangeInOrder/" + project_id, column);
+        }
+    }
+
     @MessageMapping("/deleteColumn/{project_id}")
     public void deleteColumn(@DestinationVariable Long project_id, Column column) {
         try {
