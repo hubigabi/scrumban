@@ -47,6 +47,7 @@
   .board-bar {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 
@@ -54,16 +55,19 @@
 
     margin: 0;
     padding-top: 12px;
+    padding-bottom: 12px;
 
     .projects {
       font-size: 16px;
       //font-weight: bold;
       color: black;
-      padding: 0px 30px;
+      padding: 0px 15px;
     }
 
     .button-board-bar {
-      margin: 0px 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
       font-size: 16px;
     }
 
@@ -86,12 +90,12 @@
         flex-grow: 1;
         flex-basis: 0; // to force the columns to all be the same size, regardless of content
 
-        min-width: 200px;
+        min-width: 210px;
         max-width: 40%;
 
         min-height: 400px;
-        margin: 40px 14px;
-        padding: 20px 14px;
+        margin: 30px 12px 20px;
+        padding: 18px 12px;
 
         border-radius: 15px;
 

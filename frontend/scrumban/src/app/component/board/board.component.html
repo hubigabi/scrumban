@@ -44,7 +44,7 @@
     <div class="board-bar">
 
       <div class="projects">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" style="margin-bottom: -1.25em">
           <mat-label>Select project</mat-label>
           <mat-select [(ngModel)]="project" (selectionChange)="changeProject($event.value)">
             <mat-option *ngFor="let project of allUserProjects" [value]="project">
