@@ -151,10 +151,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
         this.taskWebSocketSave(event.container.data.tasks[event.currentIndex]);
       } else {
-        this.toastrService.error('Number of tasks in WIP is at maximum',
+        this.toastrService.error('Number of work in progress for this column is at maximum',
           'You can\'t move task to this column',
           {
-            timeOut: 3000,
+            timeOut: 4000,
             closeButton: true,
             progressBar: true,
             positionClass: 'toast-bottom-center'
@@ -198,7 +198,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.toastrService.success('',
               'The task: "' + newTask.name + '" has been added',
               {
-                timeOut: 3000,
+                timeOut: 4000,
                 closeButton: true,
                 progressBar: true,
                 positionClass: 'toast-bottom-center'
@@ -222,7 +222,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.toastrService.success('',
               'The task: "' + task.name + '" has been deleted',
               {
-                timeOut: 3000,
+                timeOut: 4000,
                 closeButton: true,
                 progressBar: true,
                 positionClass: 'toast-bottom-center'
@@ -268,7 +268,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.toastrService.success('',
             'The project: "' + updatedProject.name + '" has been edited',
             {
-              timeOut: 3000,
+              timeOut: 4000,
               closeButton: true,
               progressBar: true,
               positionClass: 'toast-bottom-center'
@@ -296,7 +296,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.toastrService.success('',
               'The project has been deleted',
               {
-                timeOut: 3000,
+                timeOut: 4000,
                 closeButton: true,
                 progressBar: true,
                 positionClass: 'toast-bottom-center'
@@ -338,7 +338,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.toastrService.success('',
             'The column: "' + updatedColumn.name + '" has been edited',
             {
-              timeOut: 3000,
+              timeOut: 4000,
               closeButton: true,
               progressBar: true,
               positionClass: 'toast-bottom-center'
@@ -356,7 +356,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.toastrService.success('',
             'The column: "' + updatedColumn.name + '" has been edited',
             {
-              timeOut: 3000,
+              timeOut: 4000,
               closeButton: true,
               progressBar: true,
               positionClass: 'toast-bottom-center'
@@ -371,7 +371,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.toastrService.success('',
               'The column: "' + column.name + '" has been deleted',
               {
-                timeOut: 3000,
+                timeOut: 4000,
                 closeButton: true,
                 progressBar: true,
                 positionClass: 'toast-bottom-center'
@@ -439,7 +439,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.toastrService.error('',
           'Could not load a project',
           {
-            timeOut: 3000,
+            timeOut: 4000,
             closeButton: true,
             progressBar: true,
             positionClass: 'toast-bottom-center'
@@ -712,7 +712,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.toastrService.error('Move all tasks to other columns',
         'Could not delete a selected column',
         {
-          timeOut: 3000,
+          timeOut: 4000,
           closeButton: true,
           progressBar: true,
           positionClass: 'toast-bottom-center'
