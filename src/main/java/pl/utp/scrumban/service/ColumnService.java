@@ -61,6 +61,7 @@ public class ColumnService {
         column = columnRepository.save(column);
         columnRepository.updateOrdersAfterCreatingColumn(column.getProject().getId(), column.getNumberOrder(), column.getId());
         checkColumnsOrderInProject(column.getProject().getId());
+        taskRepository.setFinishedDateToNullForAllTasksInProjectInNotLastColumn(column.getProject().getId());
         return column;
     }
 
@@ -77,10 +78,14 @@ public class ColumnService {
                 columnRepository.updateOrdersAfterUpdatingColumnIfNewOrderIsGreater(newColumn.getProject().getId(),
                         newColumnOrder, oldColumnOrder, newColumn.getId());
                 checkColumnsOrderInProject(newColumn.getProject().getId());
+                taskRepository.setFinishedDateToNullForAllTasksInProjectInNotLastColumn(newColumn.getProject().getId());
+                taskRepository.setFinishedDateToTodaylForAllTasksInProjectInLastColumn(newColumn.getProject().getId());
             } else if (newColumnOrder < oldColumnOrder) {
                 columnRepository.updateOrdersAfterUpdatingColumnIfNewOrderIsLess(newColumn.getProject().getId(),
                         newColumnOrder, oldColumnOrder, newColumn.getId());
                 checkColumnsOrderInProject(newColumn.getProject().getId());
+                taskRepository.setFinishedDateToNullForAllTasksInProjectInNotLastColumn(newColumn.getProject().getId());
+                taskRepository.setFinishedDateToTodaylForAllTasksInProjectInLastColumn(newColumn.getProject().getId());
             }
 
             return newColumn;
@@ -98,6 +103,7 @@ public class ColumnService {
                 columnRepository.deleteById(column.getId());
                 columnRepository.updateOrdersAfterDeletingColumn(column.getProject().getId(), column.getNumberOrder());
                 checkColumnsOrderInProject(column.getProject().getId());
+                taskRepository.setFinishedDateToTodaylForAllTasksInProjectInLastColumn(column.getProject().getId());
                 return true;
             }
         }
