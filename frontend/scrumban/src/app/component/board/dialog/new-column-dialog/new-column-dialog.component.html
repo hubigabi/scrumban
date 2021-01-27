@@ -28,7 +28,7 @@
 
     <div class="wip-container">
       <mat-form-field style="width: 50%; margin-right: 20px;">
-        <mat-label>Number of WIP</mat-label>
+        <mat-label>Work in progress</mat-label>
         <input matInput type="number" placeholder="Work in progress"
                [formControl]="numberWIPFormControl"
                min="{{minNumberWIP}}" max="{{maxNumberWIP}}" required>
@@ -39,7 +39,7 @@
 
       <mat-checkbox color="primary" style="width: 40%" [(ngModel)]="column.isWIP"
                     (ngModelChange)="changeIsWIP($event)">
-        Limit WIP
+        Limit
       </mat-checkbox>
     </div>
 

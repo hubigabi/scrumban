@@ -24,7 +24,7 @@ export class ProjectStatsDialogComponent implements OnInit {
   public finishedTasksDataSet = {data: [], label: 'Finished tasks', hidden: true};
   public throughputDataSet = {data: [], label: 'Avg. Throughput'};
   public leadTimeDataSet = {data: [], label: 'Avg. Lead time'};
-  public WIPDataSet = {data: [], label: 'Avg. WIP', hidden: true};
+  public WIPDataSet = {data: [], label: 'Avg. Work in progress', hidden: true};
 
   public chartDatasets: Array<any> = [
     this.startedTasksDataSet,
