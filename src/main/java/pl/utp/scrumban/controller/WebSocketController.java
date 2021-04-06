@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import pl.utp.scrumban.dto.CommentDto;
+import pl.utp.scrumban.dto.ProjectDto;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
@@ -60,7 +61,7 @@ public class WebSocketController {
 
     @MessageMapping("/saveProject/{project_id}")
     @SendTo("/project/{project_id}")
-    public Project saveProject(@DestinationVariable String project_id, Project project) {
+    public ProjectDto saveProject(@DestinationVariable String project_id, ProjectDto project) {
         return projectService.updateProject(project);
     }
 

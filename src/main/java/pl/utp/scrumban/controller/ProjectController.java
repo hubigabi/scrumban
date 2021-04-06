@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.dto.ProjectDto;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.service.ProjectService;
 
@@ -22,15 +23,15 @@ public class ProjectController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Project>> getAllProjects() {
-        List<Project> allProjects = projectService.getAllProjects();
+    public ResponseEntity<List<ProjectDto>> getAllProjects() {
+        List<ProjectDto> allProjects = projectService.getAllProjectsDto();
 
         return new ResponseEntity<>(allProjects, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProject(@PathVariable("id") long id) {
-        Project project = projectService.getProject(id);
+    public ResponseEntity<ProjectDto> getProject(@PathVariable("id") long id) {
+        ProjectDto project = projectService.getProjectDto(id);
 
         if (project != null) {
             return new ResponseEntity<>(project, HttpStatus.OK);
@@ -40,7 +41,7 @@ public class ProjectController {
     }
 
     @PostMapping()
-    public ResponseEntity<Project> createDefaultProject(@RequestBody Project project) {
+    public ResponseEntity<ProjectDto> createDefaultProject(@RequestBody ProjectDto project) {
         project = projectService.createDefaultProject(project);
 
         if (project != null) {
@@ -51,7 +52,7 @@ public class ProjectController {
     }
 
     @PutMapping()
-    public ResponseEntity<Project> updateProject(@RequestBody Project project) {
+    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto project) {
         project = projectService.updateProject(project);
 
         if (project != null) {
@@ -62,15 +63,15 @@ public class ProjectController {
     }
 
     @GetMapping("/allByLeaderUser/{id}")
-    public ResponseEntity<List<Project>> findAllProjectsByLeaderUser_Id(@PathVariable("id") long id) {
-        List<Project> projects = projectService.findAllByLeaderUser_Id(id);
+    public ResponseEntity<List<ProjectDto>> findAllProjectsByLeaderUser_Id(@PathVariable("id") long id) {
+        List<ProjectDto> projects = projectService.findAllByLeaderUser_Id(id);
 
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/allByUser/{id}")
-    public ResponseEntity<List<Project>> findAllProjectsByUser_Id(@PathVariable("id") long id) {
-        List<Project> projects = projectService.findAllByUser_Id(id);
+    public ResponseEntity<List<ProjectDto>> findAllProjectsByUser_Id(@PathVariable("id") long id) {
+        List<ProjectDto> projects = projectService.findAllByUser_Id(id);
 
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }

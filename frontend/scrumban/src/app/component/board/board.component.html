@@ -54,7 +54,7 @@
         </mat-form-field>
       </div>
 
-      <button mat-button *ngIf=" project?.leaderUser?.id === user?.id" (click)="openUpdateProjectDialog(project)">
+      <button mat-button *ngIf=" project?.leaderUserId === user?.id" (click)="openUpdateProjectDialog(project)">
         <mat-icon>edit</mat-icon>
       </button>
 
@@ -135,7 +135,7 @@
                 <!--                Comments-->
               </button>
 
-              <button mat-button *ngIf="task?.users?.length === 0 && user?.id === project?.leaderUser?.id"
+              <button mat-button *ngIf="task?.users?.length === 0 && user?.id === project?.leaderUserId"
                       (click)="deleteTask(task)">
                 <mat-icon>delete</mat-icon>
                 <!--                Delete-->

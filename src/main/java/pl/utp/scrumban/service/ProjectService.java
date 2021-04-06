@@ -3,57 +3,105 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.utp.scrumban.model.Column;
-import pl.utp.scrumban.model.Project;
+import pl.utp.scrumban.dto.ProjectDto;
+import pl.utp.scrumban.dto.UserDto;
+import pl.utp.scrumban.exception.NotExistsException;
+import pl.utp.scrumban.mapper.ProjectMapper;
+import pl.utp.scrumban.model.*;
 import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.ProjectRepository;
+import pl.utp.scrumban.repositiory.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
 
-    private ProjectRepository projectRepository;
-    private ColumnRepository columnRepository;
+    private final ProjectRepository projectRepository;
+    private final ColumnRepository columnRepository;
+    private final UserRepository userRepository;
+    private final ProjectMapper projectMapper;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository) {
+    public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository,
+                          UserRepository userRepository, ProjectMapper projectMapper) {
         this.projectRepository = projectRepository;
         this.columnRepository = columnRepository;
+        this.userRepository = userRepository;
+        this.projectMapper = projectMapper;
     }
 
     public List<Project> getAllProjects() {
         return projectRepository.findAll(Sort.by(Sort.Order.desc("id")));
     }
 
+    public List<ProjectDto> getAllProjectsDto() {
+        return projectRepository.findAll(Sort.by(Sort.Order.desc("id"))).stream()
+                .map(projectMapper::mapToProjectDto)
+                .collect(Collectors.toList());
+    }
+
     public Project getProject(long id) {
         return projectRepository.findById(id).orElse(null);
+    }
+
+    public ProjectDto getProjectDto(long id) {
+        Project project = projectRepository.findById(id).orElse(null);
+        return projectMapper.mapToProjectDto(project);
     }
 
     public Project createProject(Project project) {
         return projectRepository.save(project);
     }
 
-    public Project createDefaultProject(Project project) {
+    public ProjectDto createDefaultProject(ProjectDto projectDto) {
+        User leaderUser = userRepository.findById(projectDto.getLeaderUserId())
+                .orElseThrow(() -> new NotExistsException("Leader user does not exist"));
+        Set<User> users = userRepository.findByIdIn(projectDto.getUsers()
+                .stream()
+                .mapToLong(UserDto::getId)
+                .boxed()
+                .collect(Collectors.toSet())
+        );
+
+        Project project = projectMapper.mapToProject(projectDto, users, leaderUser);
         project = projectRepository.save(project);
+
         List<Column> columns = Column.getDefaultColumns(project);
         columnRepository.saveAll(columns);
 
-        return project;
+        return projectMapper.mapToProjectDto(project);
     }
 
-    public Project updateProject(Project project) {
-        return projectRepository.save(project);
+    public ProjectDto updateProject(ProjectDto projectDto) {
+        User leaderUser = userRepository.findById(projectDto.getLeaderUserId())
+                .orElseThrow(() -> new NotExistsException("Leader user does not exist"));
+        Set<User> users = userRepository.findByIdIn(projectDto.getUsers()
+                .stream()
+                .mapToLong(UserDto::getId)
+                .boxed()
+                .collect(Collectors.toSet())
+        );
+
+        Project project = projectMapper.mapToProject(projectDto, users, leaderUser);
+        project = projectRepository.save(project);
+
+        return projectMapper.mapToProjectDto(project);
     }
 
-    public List<Project> findAllByLeaderUser_Id(Long id) {
-        return projectRepository.findAllByLeaderUser_Id(id);
+    public List<ProjectDto> findAllByLeaderUser_Id(Long id) {
+        return projectRepository.findAllByLeaderUser_Id(id)
+                .stream()
+                .map(projectMapper::mapToProjectDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Project> findAllByUser_Id(Long id) {
-        return projectRepository.findAllByUsers_Id(id);
+    public List<ProjectDto> findAllByUser_Id(Long id) {
+        return projectRepository.findAllByUsers_Id(id)
+                .stream()
+                .map(projectMapper::mapToProjectDto)
+                .collect(Collectors.toList());
     }
 
     public void deleteById(Long id) {

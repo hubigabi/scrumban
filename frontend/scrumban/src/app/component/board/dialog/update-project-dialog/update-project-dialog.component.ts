@@ -48,7 +48,7 @@ export class UpdateProjectDialogComponent implements OnInit, AfterViewInit {
       description: this.data.project.description,
       startedLocalDate: this.data.project.startedLocalDate,
       finishedLocalDate: this.data.project.finishedLocalDate,
-      leaderUser: this.data.project.leaderUser,
+      leaderUserId: this.data.project.leaderUserId,
       users: this.data.project.users
     };
 

@@ -6,6 +6,6 @@ export interface Project {
   description: string;
   startedLocalDate: string;
   finishedLocalDate: string;
-  leaderUser: User;
+  leaderUserId: number;
   users: User[];
 }
