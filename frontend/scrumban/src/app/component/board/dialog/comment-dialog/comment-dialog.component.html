@@ -16,7 +16,7 @@
     <mat-card class="comment" *ngFor="let comment of allComments">
       <mat-card-header>
 
-        <mat-card-title style="word-break: break-word;">{{comment.user.name}}</mat-card-title>
+        <mat-card-title style="word-break: break-word;">{{comment.userName}}</mat-card-title>
 
         <mat-card-subtitle>
           {{comment.localDateTime | commentLocalDateTime}}

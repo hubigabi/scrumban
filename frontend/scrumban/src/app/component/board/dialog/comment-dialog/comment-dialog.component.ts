@@ -59,8 +59,9 @@ export class CommentDialogComponent implements OnInit {
       id: 0,
       commentText: this.commentText,
       localDateTime: '',
-      task: this.task,
-      user: this.user
+      taskId: this.task.id,
+      userId: this.user.id,
+      userName: this.user.name
     };
 
     this.commentWebSocketSave(comment);
@@ -84,7 +85,7 @@ export class CommentDialogComponent implements OnInit {
         this.allComments.unshift(comment);
 
         if (comment.commentText === this.linkify(this.commentText)
-          && comment.user.id === this.user.id) {
+          && comment.userId === this.user.id) {
           this.commentText = '';
         }
 

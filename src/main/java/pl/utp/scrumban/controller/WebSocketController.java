@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import pl.utp.scrumban.dto.CommentDto;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
@@ -84,8 +85,7 @@ public class WebSocketController {
 
     @MessageMapping("/saveComment/{task_id}")
     @SendTo("/comment/{task_id}")
-    public Comment saveComment(@DestinationVariable String task_id, Comment comment) {
-        comment.setLocalDateTime(LocalDateTime.now());
+    public CommentDto saveComment(@DestinationVariable String task_id, CommentDto comment) {
         return commentService.createComment(comment);
     }
 

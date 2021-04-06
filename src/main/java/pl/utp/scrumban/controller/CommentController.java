@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.dto.CommentDto;
 import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.service.CommentService;
 
@@ -22,15 +23,15 @@ public class CommentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Comment>> getAllComments() {
-        List<Comment> allComments = commentService.getAllComments();
+    public ResponseEntity<List<CommentDto>> getAllComments() {
+        List<CommentDto> allComments = commentService.getAllComments();
 
         return new ResponseEntity<>(allComments, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getComment(@PathVariable("id") long id) {
-        Comment comment = commentService.getComment(id);
+    public ResponseEntity<CommentDto> getComment(@PathVariable("id") long id) {
+        CommentDto comment = commentService.getComment(id);
 
         if (comment != null) {
             return new ResponseEntity<>(comment, HttpStatus.OK);
@@ -40,7 +41,7 @@ public class CommentController {
     }
 
     @PostMapping()
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
+    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto comment) {
         comment = commentService.createComment(comment);
 
         if (comment != null) {
@@ -51,7 +52,7 @@ public class CommentController {
     }
 
     @PutMapping()
-    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment) {
+    public ResponseEntity<CommentDto> updateComment(@RequestBody CommentDto comment) {
         comment = commentService.updateComment(comment);
 
         if (comment != null) {
@@ -62,8 +63,8 @@ public class CommentController {
     }
 
     @GetMapping("/allByTask/{id}")
-    public ResponseEntity<List<Comment>> findAllByTask_Id(@PathVariable("id") long id) {
-        List<Comment> comments = commentService.findAllByTask_Id(id);
+    public ResponseEntity<List<CommentDto>> findAllByTask_Id(@PathVariable("id") long id) {
+        List<CommentDto> comments = commentService.findAllByTask_Id(id);
 
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
