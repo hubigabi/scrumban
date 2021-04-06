@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.utp.scrumban.dto.UserDto;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.dto.request.EditProfileRequest;
 import pl.utp.scrumban.dto.request.PasswordChangeRequest;
@@ -29,15 +30,15 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> allUsers = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> allUsers = userService.getAllUsersDto();
 
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
-        User user = userService.getUser(id);
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
+        UserDto user = userService.getUser(id);
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -47,8 +48,8 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
-        User user = userService.getUserByEmail(email);
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email) {
+        UserDto user = userService.getUserByEmail(email);
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -57,62 +58,18 @@ public class UserController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        user.setRegistrationDate(LocalDate.now());
-
-        user = userService.createUser(user);
-
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping()
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User userToUpdate = userService.getUser(user.getId());
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setName(user.getName());
-        userToUpdate.setRegistrationDate(user.getRegistrationDate());
-
-        userToUpdate = userService.updateUser(userToUpdate);
-
-        if (userToUpdate != null) {
-            return new ResponseEntity<>(userToUpdate, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PutMapping("changePassword/{id}")
     public ResponseEntity<Boolean> changePassword(@PathVariable("id") long id,
                                                   @RequestBody @Validated PasswordChangeRequest passwordChangeRequest) {
-        User user = userService.getUser(id);
-
-        if (passwordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
-            userService.updateUser(user);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
+        Boolean isChanged = userService.changePassword(id, passwordChangeRequest);
+        return new ResponseEntity<>(isChanged, HttpStatus.OK);
     }
 
     @PutMapping("editProfile/{id}")
     public ResponseEntity<Boolean> editProfile(@PathVariable("id") long id,
                                                @RequestBody @Validated EditProfileRequest editProfileRequest) {
-        User user = userService.getUser(id);
-
-        if (passwordEncoder.matches(editProfileRequest.getConfirmPassword(), user.getPassword())) {
-            user.setName(editProfileRequest.getName());
-            user.setEmail(editProfileRequest.getEmail());
-            userService.updateUser(user);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
+        Boolean isEdited = userService.editProfile(id, editProfileRequest);
+        return new ResponseEntity<>(isEdited, HttpStatus.OK);
     }
 
 }
