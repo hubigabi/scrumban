@@ -66,10 +66,6 @@ public class ColumnService {
         columnRepository.deleteById(id);
     }
 
-    public boolean existsById(Long id) {
-        return columnRepository.existsById(id);
-    }
-
     @Transactional
     public Column createColumnModifyingOthers(Column column) {
         column = columnRepository.save(column);

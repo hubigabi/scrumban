@@ -17,7 +17,6 @@ import pl.utp.scrumban.service.CommentService;
 import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
 
-
 @RestController
 @CrossOrigin
 @Slf4j

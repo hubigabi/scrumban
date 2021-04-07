@@ -51,14 +51,6 @@ public class TaskService {
         return taskMapper.mapToTaskDto(task);
     }
 
-    public Task createTask(Task task) {
-        return taskRepository.save(task);
-    }
-
-    public Task updateTask(Task task) {
-        return taskRepository.save(task);
-    }
-
     public TaskDto createTask(TaskDto taskDto) {
         Project project = projectRepository.findById(taskDto.getProjectId())
                 .orElseThrow(() -> new NotExistsException("Project does not exist"));

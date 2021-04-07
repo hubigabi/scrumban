@@ -31,7 +31,6 @@ public class ProjectStatsService {
     public List<ProjectStats> getProjectStats(Long projectID) {
         Project project = projectService.getProject(projectID);
         List<Task> tasks = taskService.findAllByProject_Id(projectID);
-
         List<ProjectStats> projectStats = new ArrayList<>();
 
         LocalDate startedProject = project.getStartedLocalDate();
@@ -40,14 +39,12 @@ public class ProjectStatsService {
 //        if (finishedProject.isBefore(startedProject))
 //            finishedProject = startedProject;
         final Integer MAX_COLUMN_NUMBER_ORDER = columnService.getMaxColumnNumberOrder(projectID);
-
         double activeTasks = 0;
-
         double dayCounter = 0;
         int startedTaskCounter = 0;
-
         int finishedTaskCounter = 0;
         double finishedTaskDayCounter = 0;
+
         for (LocalDate date = startedProject; !date.isAfter(finishedProject); date = date.plusDays(1)) {
             final LocalDate currentDate = date;
 
@@ -67,7 +64,6 @@ public class ProjectStatsService {
             int finishedTaskTodayDayCounter = finishedTaskToday.stream()
                     .mapToInt(task -> (int) ChronoUnit.DAYS.between(task.getStartedLocalDate(), task.getFinishedLocalDate()))
                     .sum();
-
             finishedTaskDayCounter += finishedTaskTodayDayCounter;
 
             double throughput;
@@ -85,7 +81,6 @@ public class ProjectStatsService {
             }
 
             double WIP = throughput * leadTime;
-
             activeTasks = activeTasks + startedTaskToday - finishedTaskTodayCounter;
 
             projectStats.add(new ProjectStats(currentDate, startedTaskCounter, activeTasks, finishedTaskCounter, throughput, leadTime, WIP));
