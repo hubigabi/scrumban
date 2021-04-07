@@ -5,9 +5,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.utp.scrumban.dto.ColumnDto;
+import pl.utp.scrumban.exception.NotExistsException;
 import pl.utp.scrumban.mapper.ColumnMapper;
 import pl.utp.scrumban.model.Column;
+import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.repositiory.ColumnRepository;
+import pl.utp.scrumban.repositiory.ProjectRepository;
 import pl.utp.scrumban.repositiory.TaskRepository;
 
 import java.util.ArrayList;
@@ -20,13 +23,15 @@ public class ColumnService {
 
     private final ColumnRepository columnRepository;
     private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
     private final ColumnMapper columnMapper;
 
     @Autowired
     public ColumnService(ColumnRepository columnRepository, TaskRepository taskRepository,
-                         ColumnMapper columnMapper) {
+                         ProjectRepository projectRepository, ColumnMapper columnMapper) {
         this.columnRepository = columnRepository;
         this.taskRepository = taskRepository;
+        this.projectRepository = projectRepository;
         this.columnMapper = columnMapper;
     }
 
@@ -40,14 +45,6 @@ public class ColumnService {
     public ColumnDto getColumn(long id) {
         Column column = columnRepository.findById(id).orElse(null);
         return columnMapper.mapToColumnDto(column);
-    }
-
-    public Column createColumn(Column column) {
-        return columnRepository.save(column);
-    }
-
-    public Column updateColumn(Column column) {
-        return columnRepository.save(column);
     }
 
     public List<Column> findAllByProject_Id(Long id) {
@@ -112,26 +109,51 @@ public class ColumnService {
     }
 
     @Transactional
-    public Boolean deleteColumnModifyingOthers(Column column) {
-        if (columnRepository.existsById(column.getId())) {
+    public ColumnDto saveColumn(ColumnDto columnDto, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotExistsException("Project does not exist"));
+        Column column = columnMapper.mapToColumn(columnDto, project);
 
-            long taskNumberByColumn = taskRepository.countByColumn_Id(column.getId());
-            if (taskNumberByColumn == 0) {
-                columnRepository.deleteById(column.getId());
-                columnRepository.updateOrdersAfterDeletingColumn(column.getProject().getId(), column.getNumberOrder());
-                checkColumnsOrderInProject(column.getProject().getId());
-                taskRepository.setFinishedDateToTodaylForAllTasksInProjectInLastColumn(column.getProject().getId());
-                return true;
-            }
+        if (columnRepository.existsById(column.getId())) {
+            return columnMapper.mapToColumnDto(updateColumnModifyingOthers(column));
+        } else {
+            return columnMapper.mapToColumnDto(createColumnModifyingOthers(column));
         }
-        return false;
     }
 
     @Transactional
-    public Column saveColumnNoChangeInOrder(Column column) {
-        columnRepository.updateColumnNoChangeInOrder(column.getId(), column.getName(),
-                column.getDescription(), column.getIsWIP(), column.getNumberWIP());
-        return columnRepository.findById(column.getId()).orElse(null);
+    public ColumnDto saveColumnNoChangeInOrder(ColumnDto columnDto, Long projectId) {
+        if (columnRepository.existsById(columnDto.getId())) {
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new NotExistsException("Project does not exist"));
+            Column column = columnMapper.mapToColumn(columnDto, project);
+
+            columnRepository.updateColumnNoChangeInOrder(column.getId(), column.getName(),
+                    column.getDescription(), column.getIsWIP(), column.getNumberWIP());
+            column = columnRepository.findById(column.getId())
+                    .orElseThrow(() -> new NotExistsException("Column does not exist"));
+            return columnMapper.mapToColumnDto((column));
+        } else {
+            throw new NotExistsException("Column does not exist");
+        }
+    }
+
+    @Transactional
+    public Boolean deleteColumnModifyingOthers(ColumnDto columnDto) {
+        Column column = columnRepository.findById(columnDto.getId())
+                .orElseThrow(() -> new NotExistsException("Column does not exist"));
+
+        long taskNumberByColumn = taskRepository.countByColumn_Id(column.getId());
+        if (taskNumberByColumn == 0) {
+            columnRepository.deleteById(column.getId());
+            columnRepository.updateOrdersAfterDeletingColumn(column.getProject().getId(), column.getNumberOrder());
+            checkColumnsOrderInProject(column.getProject().getId());
+            taskRepository.setFinishedDateToTodaylForAllTasksInProjectInLastColumn(column.getProject().getId());
+            return true;
+        } else {
+            throw new RuntimeException("Column contains tasks! Move them to another column.");
+        }
+
     }
 
     public Integer getMaxColumnNumberOrder(Long projectID) {

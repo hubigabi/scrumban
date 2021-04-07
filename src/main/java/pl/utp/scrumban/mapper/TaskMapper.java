@@ -13,15 +13,15 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
-    @Mapping(target = "id", source = "task.id")
-    @Mapping(target = "name", source = "task.name")
-    @Mapping(target = "description", source = "task.description")
-    @Mapping(target = "startedLocalDate", source = "task.startedLocalDate")
-    @Mapping(target = "finishedLocalDate", source = "task.finishedLocalDate")
+    @Mapping(target = "id", source = "taskDto.id")
+    @Mapping(target = "name", source = "taskDto.name")
+    @Mapping(target = "description", source = "taskDto.description")
+    @Mapping(target = "startedLocalDate", source = "taskDto.startedLocalDate")
+    @Mapping(target = "finishedLocalDate", source = "taskDto.finishedLocalDate")
     @Mapping(target = "column", source = "column")
     @Mapping(target = "project", source = "project")
     @Mapping(target = "users", source = "users")
-    Task mapToTask(TaskDto task, Project project, Column column, Set<User> users);
+    Task mapToTask(TaskDto taskDto, Project project, Column column, Set<User> users);
 
 
     @Mapping(target = "columnId", source = "task.column.id")

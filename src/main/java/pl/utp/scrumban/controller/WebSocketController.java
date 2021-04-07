@@ -12,16 +12,11 @@ import pl.utp.scrumban.dto.ColumnDto;
 import pl.utp.scrumban.dto.CommentDto;
 import pl.utp.scrumban.dto.ProjectDto;
 import pl.utp.scrumban.dto.TaskDto;
-import pl.utp.scrumban.mapper.ColumnMapper;
-import pl.utp.scrumban.model.Column;
-import pl.utp.scrumban.model.Project;
-import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.service.ColumnService;
 import pl.utp.scrumban.service.CommentService;
 import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
 
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -32,17 +27,15 @@ public class WebSocketController {
     private final ColumnService columnService;
     private final ProjectService projectService;
     private final CommentService commentService;
-    private final ColumnMapper columnMapper;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     public WebSocketController(TaskService taskService, ColumnService columnService, ProjectService projectService,
-                               CommentService commentService, ColumnMapper columnMapper, SimpMessagingTemplate simpMessagingTemplate) {
+                               CommentService commentService, SimpMessagingTemplate simpMessagingTemplate) {
         this.taskService = taskService;
         this.columnService = columnService;
         this.projectService = projectService;
         this.commentService = commentService;
-        this.columnMapper = columnMapper;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -87,35 +80,20 @@ public class WebSocketController {
     @MessageMapping("/saveColumn/{project_id}")
     @SendTo("/column/{project_id}")
     public ColumnDto saveColumn(@DestinationVariable Long project_id, ColumnDto columnDto) {
-        Project project = projectService.getProject(project_id);
-        Column column = columnMapper.mapToColumn(columnDto, project);
-
-        if (columnService.existsById(column.getId())) {
-            return columnMapper.mapToColumnDto(columnService.updateColumnModifyingOthers(column));
-        } else {
-            return columnMapper.mapToColumnDto(columnService.createColumnModifyingOthers(column));
-        }
+        return columnService.saveColumn(columnDto, project_id);
     }
 
     @MessageMapping("/saveColumnNoChangeInOrder/{project_id}")
     public void saveColumnNoChangeInOrder(@DestinationVariable Long project_id, ColumnDto columnDto) {
-        Project project = projectService.getProject(project_id);
-        Column column = columnMapper.mapToColumn(columnDto, project);
-
-        if (columnService.existsById(column.getId())) {
-            column = columnService.saveColumnNoChangeInOrder(column);
-            simpMessagingTemplate.convertAndSend("/columnNoChangeInOrder/" + project_id, columnMapper.mapToColumnDto(column));
-        }
+        columnDto = columnService.saveColumnNoChangeInOrder(columnDto, project_id);
+        simpMessagingTemplate.convertAndSend("/columnNoChangeInOrder/" + project_id, columnDto);
     }
 
     @MessageMapping("/deleteColumn/{project_id}")
     public void deleteColumn(@DestinationVariable Long project_id, ColumnDto columnDto) {
         try {
-            Project project = projectService.getProject(project_id);
-            Column column = columnMapper.mapToColumn(columnDto, project);
-
-            if (columnService.deleteColumnModifyingOthers(column)) {
-                simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, columnMapper.mapToColumnDto(column));
+            if (columnService.deleteColumnModifyingOthers(columnDto)) {
+                simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, columnDto);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

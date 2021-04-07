@@ -10,8 +10,8 @@ import pl.utp.scrumban.model.User;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping(target = "id", source = "comment.id")
-    Comment mapToComment(CommentDto comment, User user, Task task);
+    @Mapping(target = "id", source = "commentDto.id")
+    Comment mapToComment(CommentDto commentDto, User user, Task task);
 
     @Mapping(target = "taskId", expression = "java(comment.getTask().getId())")
     @Mapping(target = "userId", expression = "java(comment.getUser().getId())")

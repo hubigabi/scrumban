@@ -10,10 +10,10 @@ import pl.utp.scrumban.model.Project;
 @Mapper(componentModel = "spring")
 public interface ColumnMapper {
 
-    @Mapping(target = "id", source = "column.id")
-    @Mapping(target = "name", source = "column.name")
-    @Mapping(target = "description", source = "column.description")
-    Column mapToColumn(ColumnDto column, Project project);
+    @Mapping(target = "id", source = "columnDto.id")
+    @Mapping(target = "name", source = "columnDto.name")
+    @Mapping(target = "description", source = "columnDto.description")
+    Column mapToColumn(ColumnDto columnDto, Project project);
     
     ColumnDto mapToColumnDto(Column column);
 }
