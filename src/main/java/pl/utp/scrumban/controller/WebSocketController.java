@@ -48,24 +48,24 @@ public class WebSocketController {
 
     @MessageMapping("/saveTask/{project_id}")
     @SendTo("/task/{project_id}")
-    public TaskDto saveTask(@DestinationVariable String project_id, TaskDto task) {
-        return taskService.updateTask(task);
+    public TaskDto saveTask(@DestinationVariable String project_id, TaskDto taskDto) {
+        return taskService.updateTask(taskDto);
     }
 
     @MessageMapping("/deleteTask/{project_id}")
-    public void deleteTask(@DestinationVariable String project_id, TaskDto task) {
+    public void deleteTask(@DestinationVariable String project_id, TaskDto taskDto) {
         try {
-            taskService.deleteById(task.getId());
-            simpMessagingTemplate.convertAndSend("/deletedTask/" + project_id, task);
+            taskService.deleteById(taskDto.getId());
+            simpMessagingTemplate.convertAndSend("/deletedTask/" + project_id, taskDto);
         } catch (Exception ex) {
-            log.info("Could not delete task: " + task.getName());
+            log.info("Could not delete task: " + taskDto.getName());
         }
     }
 
     @MessageMapping("/saveProject/{project_id}")
     @SendTo("/project/{project_id}")
-    public ProjectDto saveProject(@DestinationVariable String project_id, ProjectDto project) {
-        return projectService.updateProject(project);
+    public ProjectDto saveProject(@DestinationVariable String project_id, ProjectDto projectDto) {
+        return projectService.updateProject(projectDto);
     }
 
     @MessageMapping("/deleteProject/{project_id}")
@@ -89,8 +89,8 @@ public class WebSocketController {
 
     @MessageMapping("/saveComment/{task_id}")
     @SendTo("/comment/{task_id}")
-    public CommentDto saveComment(@DestinationVariable String task_id, CommentDto comment) {
-        return commentService.createComment(comment);
+    public CommentDto saveComment(@DestinationVariable String task_id, CommentDto commentDto) {
+        return commentService.createComment(commentDto);
     }
 
     @MessageMapping("/saveColumn/{project_id}")

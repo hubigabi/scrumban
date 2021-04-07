@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 public class ProjectStatsController {
 
-    private ProjectStatsService projectStatsService;
+    private final ProjectStatsService projectStatsService;
 
     @Autowired
     public ProjectStatsController(ProjectStatsService projectStatsService) {

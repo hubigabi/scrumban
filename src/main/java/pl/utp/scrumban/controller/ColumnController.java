@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 public class ColumnController {
 
-    private ColumnService columnService;
+    private final ColumnService columnService;
 
     @Autowired
     public ColumnController(ColumnService columnService) {

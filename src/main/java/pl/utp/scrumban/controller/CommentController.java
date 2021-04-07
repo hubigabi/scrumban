@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @Autowired
     public CommentController(CommentService commentService) {
@@ -41,22 +41,22 @@ public class CommentController {
     }
 
     @PostMapping()
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto comment) {
-        comment = commentService.createComment(comment);
+    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
+        commentDto = commentService.createComment(commentDto);
 
-        if (comment != null) {
-            return new ResponseEntity<>(comment, HttpStatus.CREATED);
+        if (commentDto != null) {
+            return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping()
-    public ResponseEntity<CommentDto> updateComment(@RequestBody CommentDto comment) {
-        comment = commentService.updateComment(comment);
+    public ResponseEntity<CommentDto> updateComment(@RequestBody CommentDto commentDto) {
+        commentDto = commentService.updateComment(commentDto);
 
-        if (comment != null) {
-            return new ResponseEntity<>(comment, HttpStatus.OK);
+        if (commentDto != null) {
+            return new ResponseEntity<>(commentDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

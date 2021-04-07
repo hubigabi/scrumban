@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectStatsService {
 
-    private ProjectService projectService;
-    private ColumnService columnService;
-    private TaskService taskService;
+    private final ProjectService projectService;
+    private final ColumnService columnService;
+    private final TaskService taskService;
 
     @Autowired
     public ProjectStatsService(ProjectService projectService, ColumnService columnService, TaskService taskService) {

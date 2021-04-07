@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 public class TaskController {
 
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @Autowired
     public TaskController(TaskService taskService) {
@@ -41,22 +41,22 @@ public class TaskController {
     }
 
     @PostMapping()
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) {
-        task = taskService.createTask(task);
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
+        taskDto = taskService.createTask(taskDto);
 
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.CREATED);
+        if (taskDto != null) {
+            return new ResponseEntity<>(taskDto, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping
-    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto task) {
-        task = taskService.updateTask(task);
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
+        taskDto = taskService.updateTask(taskDto);
 
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+        if (taskDto != null) {
+            return new ResponseEntity<>(taskDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -23,11 +23,11 @@ import java.time.LocalDate;
 @CrossOrigin
 public class AuthController {
 
-    private JwtService jwtService;
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
-    private OAuthService oauthService;
-    private PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final OAuthService oauthService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthController(JwtService jwtService, AuthenticationManager authenticationManager,

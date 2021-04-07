@@ -21,9 +21,9 @@ public class OAuthService {
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/tokeninfo?id_token=";
     private final String FACEBOOK_TOKEN_URL = "https://graph.facebook.com/me?fields=email,name&access_token=";
 
-    private UserService userService;
-    private JwtService jwtService;
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public OAuthService(UserService userService, JwtService jwtService,

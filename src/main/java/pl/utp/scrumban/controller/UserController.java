@@ -20,8 +20,8 @@ import java.util.List;
 @CrossOrigin
 public class UserController {
 
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder) {

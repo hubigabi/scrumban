@@ -20,12 +20,12 @@ import java.util.concurrent.ThreadLocalRandom;
 @Slf4j
 public class InitService {
 
-    private UserService userService;
-    private ProjectService projectService;
-    private ColumnService columnService;
-    private TaskService taskService;
-    private CommentService commentService;
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final ProjectService projectService;
+    private final ColumnService columnService;
+    private final TaskService taskService;
+    private final CommentService commentService;
+    private final PasswordEncoder passwordEncoder;
 
     private Lorem loremIpsum;
 

@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 public class ProjectController {
 
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     @Autowired
     public ProjectController(ProjectService projectService) {
@@ -41,22 +41,22 @@ public class ProjectController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProjectDto> createDefaultProject(@RequestBody ProjectDto project) {
-        project = projectService.createDefaultProject(project);
+    public ResponseEntity<ProjectDto> createDefaultProject(@RequestBody ProjectDto projectDto) {
+        projectDto = projectService.createDefaultProject(projectDto);
 
-        if (project != null) {
-            return new ResponseEntity<>(project, HttpStatus.CREATED);
+        if (projectDto != null) {
+            return new ResponseEntity<>(projectDto, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping()
-    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto project) {
-        project = projectService.updateProject(project);
+    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto projectDto) {
+        projectDto = projectService.updateProject(projectDto);
 
-        if (project != null) {
-            return new ResponseEntity<>(project, HttpStatus.OK);
+        if (projectDto != null) {
+            return new ResponseEntity<>(projectDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
