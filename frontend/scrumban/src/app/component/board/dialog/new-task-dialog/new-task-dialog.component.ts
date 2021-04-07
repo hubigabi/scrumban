@@ -15,7 +15,7 @@ export class NewTaskDialogComponent implements OnInit {
 
   task: Task;
   allPriority: Priority[];
-
+  firstColumn: Column;
   todayDate: Date = new Date();
 
   constructor(public dialogRef: MatDialogRef<NewTaskDialogComponent>,
@@ -23,6 +23,10 @@ export class NewTaskDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.firstColumn = this.data.allColumns.reduce((prev, curr) =>
+      prev.numberOrder < curr.numberOrder ? prev : curr
+    );
+
     this.task = {
       id: 0,
       name: '',
@@ -30,8 +34,10 @@ export class NewTaskDialogComponent implements OnInit {
       priority: 1,
       startedLocalDate: '',
       finishedLocalDate: '',
-      column: this.data.firstColumn,
-      project: this.data.currentProject,
+      columnId: this.firstColumn.id,
+      columnName: this.firstColumn.name,
+      projectId: this.data.currentProject.id,
+      projectName: this.data.currentProject.name,
       users: []
     };
     this.task.startedLocalDate = this.todayDate.toISOString().split('T')[0];
@@ -51,5 +57,5 @@ export class NewTaskDialogComponent implements OnInit {
 
 export interface DialogData {
   currentProject: Project;
-  firstColumn: Column;
+  allColumns: Column[];
 }

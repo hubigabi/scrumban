@@ -35,8 +35,10 @@ export class UpdateTaskDialogComponent implements OnInit, AfterViewInit {
       priority: this.data.task.priority,
       startedLocalDate: this.data.task.startedLocalDate,
       finishedLocalDate: this.data.task.finishedLocalDate,
-      column: this.data.task.column,
-      project: this.data.task.project,
+      columnId: this.data.task.columnId,
+      columnName: this.data.task.columnName,
+      projectId: this.data.task.projectId,
+      projectName: this.data.task.projectName,
       users: this.data.task.users
     };
 

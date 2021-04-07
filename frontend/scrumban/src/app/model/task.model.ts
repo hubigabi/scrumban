@@ -1,6 +1,4 @@
-import {Project} from './project.model';
 import {User} from './user.model';
-import {Column} from './column.model';
 
 export interface Task {
   id: number;
@@ -9,7 +7,9 @@ export interface Task {
   priority: number;
   startedLocalDate: string;
   finishedLocalDate: string;
-  column: Column;
-  project: Project;
+  columnId: number;
+  columnName: string;
+  projectId: number;
+  projectName: string;
   users: User[];
 }

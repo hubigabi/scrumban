@@ -131,10 +131,10 @@ export class BoardComponent implements OnInit, OnDestroy {
           event.previousIndex,
           event.currentIndex);
 
-        event.container.data.tasks[event.currentIndex].column.id = event.container.data.id;
+        event.container.data.tasks[event.currentIndex].columnId = event.container.data.id;
         const task = this.tasks.find(value =>
           value.id === event.container.data.tasks[event.currentIndex].id);
-        task.column.id = event.container.data.id;
+        task.columnId = event.container.data.id;
 
         const maxNumberOrderFromColumns = this.getMaxNumberOrderFromColumns();
         if (event.container.data.numberOrder === maxNumberOrderFromColumns) {
@@ -178,21 +178,21 @@ export class BoardComponent implements OnInit, OnDestroy {
 
           if (oldTask) {
             // Update task
-            const index: number = this.columns.find(column => column.id === oldTask.column.id).tasks.indexOf(oldTask);
+            const index: number = this.columns.find(column => column.id === oldTask.columnId).tasks.indexOf(oldTask);
             if (index !== -1) {
 
-              if (oldTask.column.id === newTask.column.id) {
-                this.columns.find(column => column.id === oldTask.column.id).tasks.splice(index, 1, newTask);
+              if (oldTask.columnId === newTask.columnId) {
+                this.columns.find(column => column.id === oldTask.columnId).tasks.splice(index, 1, newTask);
               } else {
-                this.columns.find(column => column.id === oldTask.column.id).tasks.splice(index, 1);
-                this.columns.find(column => column.id === newTask.column.id).tasks.push(newTask);
+                this.columns.find(column => column.id === oldTask.columnId).tasks.splice(index, 1);
+                this.columns.find(column => column.id === newTask.columnId).tasks.push(newTask);
               }
             }
 
             this.tasks[this.tasks.findIndex(value => value.id === oldTask.id)] = newTask;
           } else {
             // Insert new task
-            this.columns.find(column => column.id === newTask.column.id).tasks.push(newTask);
+            this.columns.find(column => column.id === newTask.columnId).tasks.push(newTask);
             this.tasks.push(newTask);
 
             this.toastrService.success('',
@@ -210,7 +210,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           const task: Task = JSON.parse(message.body);
 
           if (task) {
-            const tasksInColumn: Task[] = this.columns.find(column => column.id === task.column.id).tasks;
+            const tasksInColumn: Task[] = this.columns.find(column => column.id === task.columnId).tasks;
             const indexInColumn = tasksInColumn.findIndex(value => value.id === task.id);
             tasksInColumn.splice(indexInColumn, 1);
 
@@ -457,7 +457,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           column.tasks = [];
 
           this.tasks.forEach(value => {
-            if (value.column.id === column.id) {
+            if (value.columnId === column.id) {
               column.tasks.push(value);
             }
           });
@@ -490,12 +490,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   openNewTaskDialog(): void {
-    const column = this.getFirstColumn();
-
     const dialogRef = this.dialog.open(NewTaskDialogComponent, {
       autoFocus: true,
       data: {
-        firstColumn: column,
+        allColumns: this.columns,
         currentProject: this.project
       }
     });

@@ -43,10 +43,10 @@ export class UserTaskDialogComponent implements OnInit {
           taskRow.name = task.name || '-';
           taskRow.description = task.description || '-';
           taskRow.priority = this.getPriorityString(task.priority) || '-';
-          taskRow.columnName = task.column.name || '-';
+          taskRow.columnName = task.columnName || '-';
           taskRow.startedLocalDate = task.startedLocalDate || '-';
           taskRow.finishedLocalDate = task.finishedLocalDate || '-';
-          taskRow.project = task.project.name || '-';
+          taskRow.project = task.projectName || '-';
           taskRow.users = this.getUsersString(task.users) || '-';
 
           return taskRow;
