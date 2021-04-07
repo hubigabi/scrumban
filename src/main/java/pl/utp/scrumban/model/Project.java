@@ -33,9 +33,7 @@ public class Project {
     @JoinColumn(name = "leader_user_id")
     private User leaderUser;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany
     @JoinTable(
             name = "projects_users",
             joinColumns = @JoinColumn(name = "project_id"),

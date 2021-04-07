@@ -8,6 +8,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.utp.scrumban.model.*;
 
 import java.time.LocalDate;
@@ -41,6 +42,7 @@ public class InitService {
         loremIpsum = LoremIpsum.getInstance();
     }
 
+    @Transactional
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
         User u1 = new User("JohnSmith@gmail.com", "John Smith", passwordEncoder.encode("JohnSmith"), LocalDate.now().minusDays(17));
@@ -88,13 +90,7 @@ public class InitService {
         t14.addUser(u3);
         t15.addUser(u4);
         t16.addUser(u4);
-
-        t11 = taskService.createTask(t11);
-        t12 = taskService.createTask(t12);
-        t13 = taskService.createTask(t13);
-        t14 = taskService.createTask(t14);
-        t15 = taskService.createTask(t15);
-        t16 = taskService.createTask(t16);
+        taskService.saveAll(Arrays.asList(t11, t12, t13, t14, t15, t16));
 
         Task t21 = new Task("Backend", "Aenean at augue euismod, ultrices mi vitae, ultrices nisi.", 3, LocalDate.now().minusDays(12), null, columns2.get(0), p2);
         Task t22 = new Task("Frontend", "Aliquam sit amet neque non lorem imperdiet maximus a convallis mi.", 3, LocalDate.now().minusDays(12), null, columns2.get(0), p2);
@@ -109,14 +105,7 @@ public class InitService {
         t25.addUser(u4);
         t26.addUser(u4);
         t26.addUser(u5);
-
-        t21 = taskService.createTask(t21);
-        t22 = taskService.createTask(t22);
-        t23 = taskService.createTask(t23);
-        t24 = taskService.createTask(t24);
-        t25 = taskService.createTask(t25);
-        t26 = taskService.createTask(t26);
-
+        taskService.saveAll(Arrays.asList(t21, t22, t23, t24, t25, t26));
 
         List<User> allUsers = userService.getAllUsers();
         final int PROJECT_NUMBER = 4;
