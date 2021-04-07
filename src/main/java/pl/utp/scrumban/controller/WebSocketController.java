@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import pl.utp.scrumban.dto.CommentDto;
 import pl.utp.scrumban.dto.ProjectDto;
+import pl.utp.scrumban.dto.TaskDto;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
@@ -45,12 +46,12 @@ public class WebSocketController {
 
     @MessageMapping("/saveTask/{project_id}")
     @SendTo("/task/{project_id}")
-    public Task saveTask(@DestinationVariable String project_id, Task task) {
+    public TaskDto saveTask(@DestinationVariable String project_id, TaskDto task) {
         return taskService.updateTask(task);
     }
 
     @MessageMapping("/deleteTask/{project_id}")
-    public void deleteTask(@DestinationVariable String project_id, Task task) {
+    public void deleteTask(@DestinationVariable String project_id, TaskDto task) {
         try {
             taskService.deleteById(task.getId());
             simpMessagingTemplate.convertAndSend("/deletedTask/" + project_id, task);
