@@ -1,7 +1,5 @@
 package pl.utp.scrumban.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,15 +33,11 @@ public class Task {
     @Max(3)
     private Integer priority;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startedLocalDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishedLocalDate;
 
     @ManyToOne
     @JoinColumn(name = "column_id", nullable = false)
-    @JsonIgnoreProperties({"project"})
     private Column column;
 
     @ManyToOne

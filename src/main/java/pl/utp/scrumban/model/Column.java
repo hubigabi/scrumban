@@ -1,7 +1,5 @@
 package pl.utp.scrumban.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,6 @@ public class Column {
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
-    @JsonIgnore
     private Project project;
 
     public Column(@NotNull @Size(min = 1) String name, String description, Boolean isWIP,

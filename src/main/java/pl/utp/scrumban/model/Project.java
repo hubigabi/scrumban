@@ -1,6 +1,5 @@
 package pl.utp.scrumban.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "projects")
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +24,9 @@ public class Project {
     @NotNull
     @Size(min = 3)
     private String name;
+
     private String description;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startedLocalDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishedLocalDate;
 
     @ManyToOne

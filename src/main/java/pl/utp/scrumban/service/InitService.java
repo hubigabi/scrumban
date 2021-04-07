@@ -43,8 +43,6 @@ public class InitService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-
         User u1 = new User("JohnSmith@gmail.com", "John Smith", passwordEncoder.encode("JohnSmith"), LocalDate.now().minusDays(17));
         User u2 = new User("hubigabi19@gmail.com", "Hubert Gabryszewski", passwordEncoder.encode("hubigabi19"), LocalDate.now().minusDays(26));
         User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", passwordEncoder.encode("LaraBaxter"), LocalDate.now().minusDays(15));
