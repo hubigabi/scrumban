@@ -7,7 +7,6 @@ export interface Column {
   isWIP: boolean;
   numberWIP: number;
   numberOrder: number;
-
   tasks: Task[];
 }
 

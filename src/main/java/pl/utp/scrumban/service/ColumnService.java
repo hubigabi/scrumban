@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.utp.scrumban.dto.ColumnDto;
+import pl.utp.scrumban.mapper.ColumnMapper;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.TaskRepository;
@@ -11,25 +13,33 @@ import pl.utp.scrumban.repositiory.TaskRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ColumnService {
 
-    private ColumnRepository columnRepository;
-    private TaskRepository taskRepository;
+    private final ColumnRepository columnRepository;
+    private final TaskRepository taskRepository;
+    private final ColumnMapper columnMapper;
 
     @Autowired
-    public ColumnService(ColumnRepository columnRepository, TaskRepository taskRepository) {
+    public ColumnService(ColumnRepository columnRepository, TaskRepository taskRepository,
+                         ColumnMapper columnMapper) {
         this.columnRepository = columnRepository;
         this.taskRepository = taskRepository;
+        this.columnMapper = columnMapper;
     }
 
-    public List<Column> getAllColumns() {
-        return columnRepository.findAll(Sort.by(Sort.Order.desc("id")));
+    public List<ColumnDto> getAllColumns() {
+        return columnRepository.findAll(Sort.by(Sort.Order.desc("id")))
+                .stream()
+                .map(columnMapper::mapToColumnDto)
+                .collect(Collectors.toList());
     }
 
-    public Column getColumn(long id) {
-        return columnRepository.findById(id).orElse(null);
+    public ColumnDto getColumn(long id) {
+        Column column = columnRepository.findById(id).orElse(null);
+        return columnMapper.mapToColumnDto(column);
     }
 
     public Column createColumn(Column column) {
@@ -42,6 +52,13 @@ public class ColumnService {
 
     public List<Column> findAllByProject_Id(Long id) {
         return columnRepository.findAllByProject_IdOrderByNumberOrderAsc(id);
+    }
+
+    public List<ColumnDto> findAllDtoByProject_Id(Long id) {
+        return columnRepository.findAllByProject_IdOrderByNumberOrderAsc(id)
+                .stream()
+                .map(columnMapper::mapToColumnDto)
+                .collect(Collectors.toList());
     }
 
     public List<Column> saveAll(Iterable<Column> columns) {

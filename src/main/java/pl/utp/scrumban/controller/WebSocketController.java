@@ -8,11 +8,12 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import pl.utp.scrumban.dto.ColumnDto;
 import pl.utp.scrumban.dto.CommentDto;
 import pl.utp.scrumban.dto.ProjectDto;
 import pl.utp.scrumban.dto.TaskDto;
+import pl.utp.scrumban.mapper.ColumnMapper;
 import pl.utp.scrumban.model.Column;
-import pl.utp.scrumban.model.Comment;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.service.ColumnService;
@@ -20,7 +21,6 @@ import pl.utp.scrumban.service.CommentService;
 import pl.utp.scrumban.service.ProjectService;
 import pl.utp.scrumban.service.TaskService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,19 +28,21 @@ import java.util.List;
 @Slf4j
 public class WebSocketController {
 
-    private TaskService taskService;
-    private ColumnService columnService;
-    private ProjectService projectService;
-    private CommentService commentService;
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final TaskService taskService;
+    private final ColumnService columnService;
+    private final ProjectService projectService;
+    private final CommentService commentService;
+    private final ColumnMapper columnMapper;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     public WebSocketController(TaskService taskService, ColumnService columnService, ProjectService projectService,
-                               CommentService commentService, SimpMessagingTemplate simpMessagingTemplate) {
+                               CommentService commentService, ColumnMapper columnMapper, SimpMessagingTemplate simpMessagingTemplate) {
         this.taskService = taskService;
         this.columnService = columnService;
         this.projectService = projectService;
         this.commentService = commentService;
+        this.columnMapper = columnMapper;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -93,36 +95,40 @@ public class WebSocketController {
 
     @MessageMapping("/saveColumn/{project_id}")
     @SendTo("/column/{project_id}")
-    public Column saveColumn(@DestinationVariable Long project_id, Column column) {
-        column.setProject(projectService.getProject(project_id));
+    public ColumnDto saveColumn(@DestinationVariable Long project_id, ColumnDto columnDto) {
+        Project project = projectService.getProject(project_id);
+        Column column = columnMapper.mapToColumn(columnDto, project);
 
         if (columnService.existsById(column.getId())) {
-            return columnService.updateColumnModifyingOthers(column);
+            return columnMapper.mapToColumnDto(columnService.updateColumnModifyingOthers(column));
         } else {
-            return columnService.createColumnModifyingOthers(column);
+            return columnMapper.mapToColumnDto(columnService.createColumnModifyingOthers(column));
         }
     }
 
     @MessageMapping("/saveColumnNoChangeInOrder/{project_id}")
-    public void saveColumnNoChangeInOrder(@DestinationVariable Long project_id, Column column) {
-        column.setProject(projectService.getProject(project_id));
+    public void saveColumnNoChangeInOrder(@DestinationVariable Long project_id, ColumnDto columnDto) {
+        Project project = projectService.getProject(project_id);
+        Column column = columnMapper.mapToColumn(columnDto, project);
 
         if (columnService.existsById(column.getId())) {
             column = columnService.saveColumnNoChangeInOrder(column);
-            simpMessagingTemplate.convertAndSend("/columnNoChangeInOrder/" + project_id, column);
+            simpMessagingTemplate.convertAndSend("/columnNoChangeInOrder/" + project_id, columnMapper.mapToColumnDto(column));
         }
     }
 
     @MessageMapping("/deleteColumn/{project_id}")
-    public void deleteColumn(@DestinationVariable Long project_id, Column column) {
+    public void deleteColumn(@DestinationVariable Long project_id, ColumnDto columnDto) {
         try {
-            column.setProject(projectService.getProject(project_id));
+            Project project = projectService.getProject(project_id);
+            Column column = columnMapper.mapToColumn(columnDto, project);
+
             if (columnService.deleteColumnModifyingOthers(column)) {
-                simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, column);
+                simpMessagingTemplate.convertAndSend("/deletedColumn/" + project_id, columnMapper.mapToColumnDto(column));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            log.error("Could not delete column: " + column.getName());
+            log.error("Could not delete column: " + columnDto.getName());
         }
     }
 

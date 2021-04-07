@@ -90,7 +90,6 @@ public class TaskService {
         );
 
         Task task = taskMapper.mapToTask(taskDto, project, column, users);
-        System.out.println(task);
         task = taskRepository.save(task);
 
         return taskMapper.mapToTaskDto(task);

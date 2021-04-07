@@ -19,11 +19,4 @@ export class ColumnService {
     return this.httpClient.get<Column[]>(this.ALL_COLUMNS_BY_PROJECT_ID + '/' + id.toString());
   }
 
-  public createColumn(column: Column): Observable<Column> {
-    return this.httpClient.post<Column>(this.COLUMN_URL, column);
-  }
-
-  public updateColumn(column: Column): Observable<Column> {
-    return this.httpClient.put<Column>(this.COLUMN_URL, column);
-  }
 }
