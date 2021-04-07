@@ -71,16 +71,7 @@ public class WebSocketController {
     @MessageMapping("/deleteProject/{project_id}")
     public void deleteProject(@DestinationVariable String project_id) {
         try {
-            List<Task> projectTasks = taskService.findAllByProject_Id(Long.valueOf(project_id));
-            projectTasks.forEach(task ->
-                    taskService.deleteById(task.getId())
-            );
-            List<Column> projectColumns = columnService.findAllByProject_Id(Long.valueOf(project_id));
-            projectColumns.forEach(column ->
-                    columnService.deleteById(column.getId())
-            );
-
-            projectService.deleteById(Long.valueOf(project_id));
+            projectService.deleteProject(Long.parseLong(project_id));
             simpMessagingTemplate.convertAndSend("/deletedProject/" + project_id, Long.valueOf(project_id));
         } catch (Exception ex) {
             log.info("Could not delete project: " + project_id);

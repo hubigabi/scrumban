@@ -14,6 +14,8 @@ public interface ColumnRepository extends JpaRepository<Column, Long> {
 
     boolean existsById(Long id);
 
+    List<Column> findAllByProject_Id(Long id);
+
     List<Column> findAllByProject_IdOrderByNumberOrderAsc(Long id);
 
     List<Column> findAllByProject_IdOrderByNumberOrderDesc(Long id);

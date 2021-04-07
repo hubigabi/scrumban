@@ -38,10 +38,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
-        UserDto user = userService.getUser(id);
+        UserDto userDto = userService.getUser(id);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (userDto != null) {
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -49,10 +49,10 @@ public class UserController {
 
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email) {
-        UserDto user = userService.getUserByEmail(email);
+        UserDto userDto = userService.getUserByEmail(email);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (userDto != null) {
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

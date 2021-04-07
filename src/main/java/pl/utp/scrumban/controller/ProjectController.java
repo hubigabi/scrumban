@@ -31,10 +31,10 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDto> getProject(@PathVariable("id") long id) {
-        ProjectDto project = projectService.getProjectDto(id);
+        ProjectDto projectDto = projectService.getProjectDto(id);
 
-        if (project != null) {
-            return new ResponseEntity<>(project, HttpStatus.OK);
+        if (projectDto != null) {
+            return new ResponseEntity<>(projectDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

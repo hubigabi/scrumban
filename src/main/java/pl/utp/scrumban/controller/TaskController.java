@@ -31,10 +31,10 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> getTask(@PathVariable("id") long id) {
-        TaskDto task = taskService.getTask(id);
+        TaskDto taskDto = taskService.getTask(id);
 
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+        if (taskDto != null) {
+            return new ResponseEntity<>(taskDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

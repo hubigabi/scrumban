@@ -31,10 +31,10 @@ public class ColumnController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ColumnDto> getColumn(@PathVariable("id") long id) {
-        ColumnDto column = columnService.getColumn(id);
+        ColumnDto columnDto = columnService.getColumn(id);
 
-        if (column != null) {
-            return new ResponseEntity<>(column, HttpStatus.OK);
+        if (columnDto != null) {
+            return new ResponseEntity<>(columnDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

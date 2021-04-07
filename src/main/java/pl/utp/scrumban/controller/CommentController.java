@@ -31,10 +31,10 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CommentDto> getComment(@PathVariable("id") long id) {
-        CommentDto comment = commentService.getComment(id);
+        CommentDto commentDto = commentService.getComment(id);
 
-        if (comment != null) {
-            return new ResponseEntity<>(comment, HttpStatus.OK);
+        if (commentDto != null) {
+            return new ResponseEntity<>(commentDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

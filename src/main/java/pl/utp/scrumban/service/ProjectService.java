@@ -10,6 +10,7 @@ import pl.utp.scrumban.mapper.ProjectMapper;
 import pl.utp.scrumban.model.*;
 import pl.utp.scrumban.repositiory.ColumnRepository;
 import pl.utp.scrumban.repositiory.ProjectRepository;
+import pl.utp.scrumban.repositiory.TaskRepository;
 import pl.utp.scrumban.repositiory.UserRepository;
 
 import java.util.*;
@@ -20,14 +21,16 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ColumnRepository columnRepository;
+    private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository,
-                          UserRepository userRepository, ProjectMapper projectMapper) {
+                          TaskRepository taskRepository, UserRepository userRepository, ProjectMapper projectMapper) {
         this.projectRepository = projectRepository;
         this.columnRepository = columnRepository;
+        this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.projectMapper = projectMapper;
     }
@@ -104,15 +107,23 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteById(Long id) {
-        Optional<Project> projectOptional = projectRepository.findById(id);
 
-        if (projectOptional.isPresent()) {
-            Project project = projectOptional.get();
-            project.setUsers(new HashSet<>());
-            projectRepository.save(project);
-            projectRepository.deleteById(id);
-        }
+    public void deleteProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotExistsException("Project does not exist"));
+
+        List<Task> projectTasks = taskRepository.findAllByProject_Id(projectId);
+        projectTasks.forEach(column ->
+                taskRepository.deleteById(column.getId())
+        );
+
+        List<Column> projectColumns = columnRepository.findAllByProject_Id(projectId);
+        projectColumns.forEach(column ->
+                columnRepository.deleteById(column.getId())
+        );
+
+        projectRepository.deleteById(projectId);
     }
+
 
 }
