@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.dto.ColumnDto;
-import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.service.ColumnService;
 
 import java.util.List;

@@ -3,16 +3,13 @@ package pl.utp.scrumban.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.dto.UserDto;
-import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.dto.request.EditProfileRequest;
 import pl.utp.scrumban.dto.request.PasswordChangeRequest;
 import pl.utp.scrumban.service.UserService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

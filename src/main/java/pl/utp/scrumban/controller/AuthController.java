@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.dto.request.SignUpRequest;
 import pl.utp.scrumban.exception.InvalidCredentialsException;
 import pl.utp.scrumban.dto.request.AuthRequest;
-import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.service.JwtService;
 import pl.utp.scrumban.service.OAuthService;
 import pl.utp.scrumban.service.UserService;
 
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/auth")

@@ -15,7 +15,7 @@
     <description>Web application for project management with Scrumban</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>
 

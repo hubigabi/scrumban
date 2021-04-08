@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.scrumban.dto.TaskDto;
-import pl.utp.scrumban.model.Task;
 import pl.utp.scrumban.service.TaskService;
 
 import java.util.List;
