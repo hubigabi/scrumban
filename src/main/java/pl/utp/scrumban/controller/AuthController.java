@@ -53,15 +53,9 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Boolean> signUp(@RequestBody @Validated SignUpRequest signUpRequest) {
-        User user = new User();
-        user.setEmail(signUpRequest.getEmail());
-        user.setName(signUpRequest.getName());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setRegistrationDate(LocalDate.now());
+        Boolean isSignedUp = userService.signUp(signUpRequest);
 
-        user = userService.createUser(user);
-
-        if (user != null) {
+        if (isSignedUp) {
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import pl.utp.scrumban.dto.UserDto;
 import pl.utp.scrumban.dto.request.EditProfileRequest;
 import pl.utp.scrumban.dto.request.PasswordChangeRequest;
+import pl.utp.scrumban.dto.request.SignUpRequest;
 import pl.utp.scrumban.mapper.UserMapper;
 import pl.utp.scrumban.model.User;
 import pl.utp.scrumban.repositiory.UserRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +61,22 @@ public class UserService {
 
     public User createUser(User user) {
         return userRepository.save(user);
+    }
+
+    public Boolean signUp(SignUpRequest signUpRequest) {
+        try {
+            User user = new User();
+            user.setEmail(signUpRequest.getEmail());
+            user.setName(signUpRequest.getName());
+            user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+            user.setRegistrationDate(LocalDate.now());
+
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Boolean changePassword(long id, PasswordChangeRequest passwordChangeRequest) {
