@@ -24,14 +24,14 @@ public class CommentController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CommentDto>> getAllComments() {
-        List<CommentDto> allComments = commentService.getAllComments();
+        List<CommentDto> allComments = commentService.getAllCommentsDto();
 
         return new ResponseEntity<>(allComments, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommentDto> getComment(@PathVariable("id") long id) {
-        CommentDto commentDto = commentService.getComment(id);
+        CommentDto commentDto = commentService.getCommentDto(id);
 
         if (commentDto != null) {
             return new ResponseEntity<>(commentDto, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class CommentController {
 
     @GetMapping("/allByTask/{id}")
     public ResponseEntity<List<CommentDto>> findAllByTask_Id(@PathVariable("id") long id) {
-        List<CommentDto> comments = commentService.findAllByTask_Id(id);
+        List<CommentDto> comments = commentService.findAllDtoByTask_Id(id);
 
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }

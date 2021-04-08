@@ -45,10 +45,10 @@ public class AuthController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
+            return jwtService.generateToken(authRequest.getEmail());
         } catch (Exception ex) {
             throw new InvalidCredentialsException("Invalid credential", ex);
         }
-        return jwtService.generateToken(authRequest.getEmail());
     }
 
     @PostMapping("/signup")

@@ -24,14 +24,14 @@ public class TaskController {
 
     @GetMapping("/all")
     public ResponseEntity<List<TaskDto>> getAllTasks() {
-        List<TaskDto> allTasks = taskService.getAllTasks();
+        List<TaskDto> allTasks = taskService.getAllTasksDto();
 
         return new ResponseEntity<>(allTasks, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> getTask(@PathVariable("id") long id) {
-        TaskDto taskDto = taskService.getTask(id);
+        TaskDto taskDto = taskService.getTaskDto(id);
 
         if (taskDto != null) {
             return new ResponseEntity<>(taskDto, HttpStatus.OK);
@@ -65,7 +65,7 @@ public class TaskController {
 
     @GetMapping("/allByUser/{id}")
     public ResponseEntity<List<TaskDto>> findAllByUsers_Id(@PathVariable("id") long id) {
-        List<TaskDto> tasks = taskService.findAllByUsers_Id(id);
+        List<TaskDto> tasks = taskService.findAllDtoByUsers_Id(id);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
@@ -77,7 +77,7 @@ public class TaskController {
 
     @GetMapping("/allByProjectAndUser/{project_ID}/{user_ID}")
     public ResponseEntity<List<TaskDto>> findAllByProject_IdAndUsers_Id(@PathVariable("project_ID") long project_ID, @PathVariable("user_ID") long user_ID) {
-        List<TaskDto> tasks = taskService.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
+        List<TaskDto> tasks = taskService.findAllDtoByProject_IdAndUsers_Id(project_ID, user_ID);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 }

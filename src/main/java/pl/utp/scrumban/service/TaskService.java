@@ -39,16 +39,28 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    public List<TaskDto> getAllTasks() {
+    public List<Task> getAllTasks() {
+        return taskRepository.findAll(Sort.by(Sort.Order.desc("id")));
+    }
+
+    public List<TaskDto> getAllTasksDto() {
         return taskRepository.findAll(Sort.by(Sort.Order.desc("id")))
                 .stream()
                 .map(taskMapper::mapToTaskDto)
                 .collect(Collectors.toList());
     }
 
-    public TaskDto getTask(long id) {
+    public Task getTask(long id) {
+        return taskRepository.findById(id).orElse(null);
+    }
+
+    public TaskDto getTaskDto(long id) {
         Task task = taskRepository.findById(id).orElse(null);
         return taskMapper.mapToTaskDto(task);
+    }
+
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
     }
 
     public TaskDto createTask(TaskDto taskDto) {
@@ -87,7 +99,11 @@ public class TaskService {
         return taskMapper.mapToTaskDto(task);
     }
 
-    public List<TaskDto> findAllByUsers_Id(Long id) {
+    public List<Task> findAllByUsers_Id(Long id) {
+        return taskRepository.findAllByUsers_Id(id);
+    }
+
+    public List<TaskDto> findAllDtoByUsers_Id(Long id) {
         return taskRepository.findAllByUsers_Id(id)
                 .stream()
                 .map(taskMapper::mapToTaskDto)
@@ -105,7 +121,11 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public List<TaskDto> findAllByProject_IdAndUsers_Id(Long project_ID, Long user_ID) {
+    public List<Task> findAllByProject_IdAndUsers_Id(Long project_ID, Long user_ID) {
+        return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID);
+    }
+
+    public List<TaskDto> findAllDtoByProject_IdAndUsers_Id(Long project_ID, Long user_ID) {
         return taskRepository.findAllByProject_IdAndUsers_Id(project_ID, user_ID)
                 .stream()
                 .map(taskMapper::mapToTaskDto)

@@ -21,12 +21,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/all")
@@ -38,7 +36,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
-        UserDto userDto = userService.getUser(id);
+        UserDto userDto = userService.getUserDto(id);
 
         if (userDto != null) {
             return new ResponseEntity<>(userDto, HttpStatus.OK);
@@ -49,7 +47,7 @@ public class UserController {
 
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email) {
-        UserDto userDto = userService.getUserByEmail(email);
+        UserDto userDto = userService.getUserDtoByEmail(email);
 
         if (userDto != null) {
             return new ResponseEntity<>(userDto, HttpStatus.OK);

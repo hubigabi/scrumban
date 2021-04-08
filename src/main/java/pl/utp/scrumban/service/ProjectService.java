@@ -77,6 +77,10 @@ public class ProjectService {
         return projectMapper.mapToProjectDto(project);
     }
 
+    public Project updateProject(Project project) {
+        return projectRepository.save(project);
+    }
+
     public ProjectDto updateProject(ProjectDto projectDto) {
         User leaderUser = userRepository.findById(projectDto.getLeaderUserId())
                 .orElseThrow(() -> new NotExistsException("Leader user does not exist"));
@@ -93,14 +97,22 @@ public class ProjectService {
         return projectMapper.mapToProjectDto(project);
     }
 
-    public List<ProjectDto> findAllByLeaderUser_Id(Long id) {
+    public List<Project> findAllByLeaderUser_Id(Long id) {
+        return projectRepository.findAllByLeaderUser_Id(id);
+    }
+
+    public List<ProjectDto> findAllDtoByLeaderUser_Id(Long id) {
         return projectRepository.findAllByLeaderUser_Id(id)
                 .stream()
                 .map(projectMapper::mapToProjectDto)
                 .collect(Collectors.toList());
     }
 
-    public List<ProjectDto> findAllByUser_Id(Long id) {
+    public List<Project> findAllByUser_Id(Long id) {
+        return projectRepository.findAllByUsers_Id(id);
+    }
+
+    public List<ProjectDto> findAllDtoByUser_Id(Long id) {
         return projectRepository.findAllByUsers_Id(id)
                 .stream()
                 .map(projectMapper::mapToProjectDto)

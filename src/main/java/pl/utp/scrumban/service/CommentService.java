@@ -33,16 +33,28 @@ public class CommentService {
         this.commentMapper = commentMapper;
     }
 
-    public List<CommentDto> getAllComments() {
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll(Sort.by(Sort.Order.desc("id")));
+    }
+
+    public List<CommentDto> getAllCommentsDto() {
         return commentRepository.findAll(Sort.by(Sort.Order.desc("id")))
                 .stream()
                 .map(commentMapper::mapToCommentDto)
                 .collect(Collectors.toList());
     }
 
-    public CommentDto getComment(long id) {
+    public Comment getComment(long id) {
+        return commentRepository.findById(id).orElse(null);
+    }
+
+    public CommentDto getCommentDto(long id) {
         Comment comment = commentRepository.findById(id).orElse(null);
         return commentMapper.mapToCommentDto(comment);
+    }
+
+    public Comment createComment(Comment comment) {
+        return commentRepository.save(comment);
     }
 
     public CommentDto createComment(CommentDto commentDto) {
@@ -58,6 +70,10 @@ public class CommentService {
         return commentMapper.mapToCommentDto(comment);
     }
 
+    public Comment updateComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
+
     public CommentDto updateComment(CommentDto commentDto) {
         Comment comment = commentRepository.findById(commentDto.getId())
                 .orElseThrow(() -> new NotExistsException("Comment does not exist"));
@@ -69,8 +85,11 @@ public class CommentService {
         return commentMapper.mapToCommentDto(comment);
     }
 
+    public List<Comment> findAllByTask_Id(Long id) {
+        return commentRepository.findAllByTask_IdOrderByLocalDateTimeDesc(id);
+    }
 
-    public List<CommentDto> findAllByTask_Id(Long id) {
+    public List<CommentDto> findAllDtoByTask_Id(Long id) {
         return commentRepository.findAllByTask_IdOrderByLocalDateTimeDesc(id)
                 .stream()
                 .map(commentMapper::mapToCommentDto)

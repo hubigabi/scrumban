@@ -39,12 +39,20 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDto getUser(long id) {
+    public User getUser(long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public UserDto getUserDto(long id) {
         User user = userRepository.findById(id).orElse(null);
         return userMapper.mapToUserDto(user);
     }
 
-    public UserDto getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public UserDto getUserDtoByEmail(String email) {
         User user = userRepository.findByEmail(email);
         return userMapper.mapToUserDto(user);
     }
