@@ -1,6 +1,8 @@
 package pl.utp.scrumban.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.dto.ProjectStatsDto;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProjectStatsService {
 
     private final ProjectService projectService;
@@ -88,6 +91,11 @@ public class ProjectStatsService {
         }
 
         return projectStatsDtoList;
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void generateProjectStats() {
+        log.info("Finished generating statistics for projects");
     }
 
 }

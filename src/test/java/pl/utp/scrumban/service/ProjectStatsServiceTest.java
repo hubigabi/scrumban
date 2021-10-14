@@ -145,7 +145,7 @@ class ProjectStatsServiceTest {
     void wipTest() {
         double[] wipArrayActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .mapToDouble(ProjectStatsDto::getWIP)
+                .mapToDouble(ProjectStatsDto::getWip)
                 .toArray();
 
         double[] wipArrayExpected = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.55, 0.5, 0.45, 0.41, 0.38, 0.35, 0.33};

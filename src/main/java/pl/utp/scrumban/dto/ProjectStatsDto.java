@@ -20,5 +20,5 @@ public class ProjectStatsDto {
     private double finishedTasks;
     private double throughput;
     private double leadTime;
-    private double WIP;
+    private double wip;
 }
