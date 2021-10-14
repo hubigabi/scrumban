@@ -15,9 +15,9 @@ public class ProjectStatsDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
 
-    private double startedTasks;
-    private double activeTasks;
-    private double finishedTasks;
+    private int startedTasks;
+    private int activeTasks;
+    private int finishedTasks;
     private double throughput;
     private double leadTime;
     private double wip;

@@ -27,13 +27,13 @@ public class ProjectStats {
     private LocalDate localDate;
 
     @Min(0)
-    private double startedTasks;
+    private int startedTasks;
 
     @Min(0)
-    private double activeTasks;
+    private int activeTasks;
 
     @Min(0)
-    private double finishedTasks;
+    private int finishedTasks;
 
     @Min(0)
     private double throughput;

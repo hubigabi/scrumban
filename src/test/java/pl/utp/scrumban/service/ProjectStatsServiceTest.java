@@ -80,7 +80,7 @@ class ProjectStatsServiceTest {
     void startedTasksTest() {
         List<Integer> startedTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStatsDto -> (int) projectStatsDto.getStartedTasks())
+                .map(ProjectStatsDto::getStartedTasks)
                 .collect(Collectors.toList());
 
         List<Integer> startedTasksListExpected = Arrays.asList(0, 1, 2, 2, 3, 3, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6);
@@ -93,7 +93,7 @@ class ProjectStatsServiceTest {
     void activeTasksTest() {
         List<Integer> activeTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStatsDto -> (int) projectStatsDto.getActiveTasks())
+                .map(ProjectStatsDto::getActiveTasks)
                 .collect(Collectors.toList());
 
         List<Integer> activeTasksListExpected = Arrays.asList(0, 1, 2, 2, 3, 3, 4, 5, 6, 5, 5, 5, 5, 5, 5, 5);
@@ -106,7 +106,7 @@ class ProjectStatsServiceTest {
     void finishedTasksTest() {
         List<Integer> finishedTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStatsDto -> (int) projectStatsDto.getFinishedTasks())
+                .map(ProjectStatsDto::getFinishedTasks)
                 .collect(Collectors.toList());
 
         List<Integer> finishedTasksListExpected = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1);
