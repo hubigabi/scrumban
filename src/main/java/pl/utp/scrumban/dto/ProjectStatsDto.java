@@ -1,4 +1,4 @@
-package pl.utp.scrumban.model;
+package pl.utp.scrumban.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectStats {
+public class ProjectStatsDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;

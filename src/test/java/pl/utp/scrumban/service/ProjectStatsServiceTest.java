@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.utp.scrumban.dto.ProjectStatsDto;
 import pl.utp.scrumban.model.*;
 
 import java.time.LocalDate;
@@ -59,9 +60,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void localDateTest() {
-        List<LocalDate> localDateListActual = projectStatsService.getProjectStats(1L)
+        List<LocalDate> localDateListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(ProjectStats::getLocalDate)
+                .map(ProjectStatsDto::getLocalDate)
                 .collect(Collectors.toList());
 
         LocalDate startDate = LocalDate.now().minusDays(15);
@@ -77,9 +78,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void startedTasksTest() {
-        List<Integer> startedTasksListActual = projectStatsService.getProjectStats(1L)
+        List<Integer> startedTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStats -> (int) projectStats.getStartedTasks())
+                .map(projectStatsDto -> (int) projectStatsDto.getStartedTasks())
                 .collect(Collectors.toList());
 
         List<Integer> startedTasksListExpected = Arrays.asList(0, 1, 2, 2, 3, 3, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6);
@@ -90,9 +91,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void activeTasksTest() {
-        List<Integer> activeTasksListActual = projectStatsService.getProjectStats(1L)
+        List<Integer> activeTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStats -> (int) projectStats.getActiveTasks())
+                .map(projectStatsDto -> (int) projectStatsDto.getActiveTasks())
                 .collect(Collectors.toList());
 
         List<Integer> activeTasksListExpected = Arrays.asList(0, 1, 2, 2, 3, 3, 4, 5, 6, 5, 5, 5, 5, 5, 5, 5);
@@ -103,9 +104,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void finishedTasksTest() {
-        List<Integer> finishedTasksListActual = projectStatsService.getProjectStats(1L)
+        List<Integer> finishedTasksListActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .map(projectStats -> (int) projectStats.getFinishedTasks())
+                .map(projectStatsDto -> (int) projectStatsDto.getFinishedTasks())
                 .collect(Collectors.toList());
 
         List<Integer> finishedTasksListExpected = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1);
@@ -116,9 +117,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void throughputTest() {
-        double[] throughputArrayActual = projectStatsService.getProjectStats(1L)
+        double[] throughputArrayActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .mapToDouble(ProjectStats::getThroughput)
+                .mapToDouble(ProjectStatsDto::getThroughput)
                 .toArray();
 
         double[] throughputArrayExpected = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.11, 0.1, 0.09, 0.083, 0.07, 0.07, 0.06};
@@ -129,9 +130,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void leadTimeTest() {
-        double[] leadTimeArrayActual = projectStatsService.getProjectStats(1L)
+        double[] leadTimeArrayActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .mapToDouble(ProjectStats::getLeadTime)
+                .mapToDouble(ProjectStatsDto::getLeadTime)
                 .toArray();
 
         double[] leadTimeArrayExpected = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0};
@@ -142,9 +143,9 @@ class ProjectStatsServiceTest {
 
     @Test
     void wipTest() {
-        double[] wipArrayActual = projectStatsService.getProjectStats(1L)
+        double[] wipArrayActual = projectStatsService.getProjectStatsDtoList(1L)
                 .stream()
-                .mapToDouble(ProjectStats::getWIP)
+                .mapToDouble(ProjectStatsDto::getWIP)
                 .toArray();
 
         double[] wipArrayExpected = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.55, 0.5, 0.45, 0.41, 0.38, 0.35, 0.33};

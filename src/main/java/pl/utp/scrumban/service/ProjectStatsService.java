@@ -3,7 +3,7 @@ package pl.utp.scrumban.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.utp.scrumban.model.Project;
-import pl.utp.scrumban.model.ProjectStats;
+import pl.utp.scrumban.dto.ProjectStatsDto;
 import pl.utp.scrumban.model.Task;
 
 import java.time.LocalDate;
@@ -28,10 +28,10 @@ public class ProjectStatsService {
 
     //    Little's law
 //    https://kanbanzone.com/littles-law/
-    public List<ProjectStats> getProjectStats(Long projectID) {
+    public List<ProjectStatsDto> getProjectStatsDtoList(Long projectID) {
         Project project = projectService.getProject(projectID);
         List<Task> tasks = taskService.findAllByProject_Id(projectID);
-        List<ProjectStats> projectStats = new ArrayList<>();
+        List<ProjectStatsDto> projectStatsDtoList = new ArrayList<>();
 
         LocalDate startedProject = project.getStartedLocalDate();
         LocalDate finishedProject = project.getFinishedLocalDate() != null ? project.getFinishedLocalDate() : LocalDate.now();
@@ -83,10 +83,11 @@ public class ProjectStatsService {
             double WIP = throughput * leadTime;
             activeTasks = activeTasks + startedTaskToday - finishedTaskTodayCounter;
 
-            projectStats.add(new ProjectStats(currentDate, startedTaskCounter, activeTasks, finishedTaskCounter, throughput, leadTime, WIP));
+            projectStatsDtoList.add(new ProjectStatsDto(currentDate, startedTaskCounter, activeTasks, finishedTaskCounter, throughput, leadTime, WIP));
             dayCounter++;
         }
 
-        return projectStats;
+        return projectStatsDtoList;
     }
+
 }
