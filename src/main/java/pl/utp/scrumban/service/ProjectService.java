@@ -8,10 +8,7 @@ import pl.utp.scrumban.dto.UserDto;
 import pl.utp.scrumban.exception.NotExistsException;
 import pl.utp.scrumban.mapper.ProjectMapper;
 import pl.utp.scrumban.model.*;
-import pl.utp.scrumban.repositiory.ColumnRepository;
-import pl.utp.scrumban.repositiory.ProjectRepository;
-import pl.utp.scrumban.repositiory.TaskRepository;
-import pl.utp.scrumban.repositiory.UserRepository;
+import pl.utp.scrumban.repositiory.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,15 +19,17 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ColumnRepository columnRepository;
     private final TaskRepository taskRepository;
+    private final ProjectStatsRepository projectStatsRepository;
     private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository,
-                          TaskRepository taskRepository, UserRepository userRepository, ProjectMapper projectMapper) {
+    public ProjectService(ProjectRepository projectRepository, ColumnRepository columnRepository, TaskRepository taskRepository,
+                          ProjectStatsRepository projectStatsRepository, UserRepository userRepository, ProjectMapper projectMapper) {
         this.projectRepository = projectRepository;
         this.columnRepository = columnRepository;
         this.taskRepository = taskRepository;
+        this.projectStatsRepository = projectStatsRepository;
         this.userRepository = userRepository;
         this.projectMapper = projectMapper;
     }
@@ -123,6 +122,11 @@ public class ProjectService {
     public void deleteProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotExistsException("Project does not exist"));
+
+        List<ProjectStats> projectStatsList = projectStatsRepository.findAllByProject_Id(projectId);
+        projectStatsList.forEach(projectStats ->
+                projectStatsRepository.deleteById(projectStats.getId())
+        );
 
         List<Task> projectTasks = taskRepository.findAllByProject_Id(projectId);
         projectTasks.forEach(column ->
