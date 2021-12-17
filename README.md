@@ -85,14 +85,10 @@ $ ng serve -o
 The application will be working on: http://localhost:4200
 
 ### Docker
-Run backend and frontend with Docker (Angular and PostgreSQL installations are not required):
+Run application with Docker:
 ```shell
-# Clone docker branch of a repository
-$ git clone -b docker https://github.com/hubigabi/scrumban.git
+$ git clone https://github.com/hubigabi/scrumban.git
 $ cd scrumban
-
-# Create a JAR file
-$ mvn clean install -DskipTests 
 
 # Run application
 $ docker-compose up

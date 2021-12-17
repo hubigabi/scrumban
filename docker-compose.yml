@@ -2,7 +2,7 @@ version: '3'
 services:                             
   app:  
     container_name: app                        
-    build: .
+    image: hubigabi/scrumban:1.0
     restart: always
     ports:
       - "8080:8080"
