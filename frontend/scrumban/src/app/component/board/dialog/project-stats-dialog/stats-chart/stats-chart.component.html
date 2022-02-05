@@ -1,0 +1,20 @@
+<div class="chart">
+  <canvas mdbChart id="canvas-chart"
+          [chartType]="chartType"
+          [datasets]="chartDatasets"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          [colors]="chartColors"
+          [legend]="true">
+  </canvas>
+</div>
+
+<div class="buttons-container">
+  <button mat-raised-button color="primary" class="button" (click)="exportCSV()">
+    Export to CSV
+  </button>
+
+  <button mat-raised-button color="primary" class="button" (click)="exportPNG()">
+    Export to PNG
+  </button>
+</div>

@@ -61,8 +61,8 @@
     </div>
 
     <div class="user-table" *ngIf="this.task.users.length > 0">
-      <div style="margin-bottom: 15px;">
-        <mat-label>Users</mat-label>
+      <div style="margin-bottom: 15px; text-align: center; font-weight: 500;">
+        <mat-label>Assigned users</mat-label>
       </div>
       <table mat-table [dataSource]="this.dataSource" matSort style="width: 100%">
 

@@ -1,5 +1,5 @@
 .container {
-  padding: 10px 10px;
+  padding: 5px 5px;
   height: 100%;
   width: 100%;
 }
@@ -8,9 +8,11 @@
   display: inline-block;
   max-height: calc(90vh - 280px);
   width: 100%;
+  margin: 0;
+  padding: 0 15px 0 0;
 
   .comment {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     border: 2px solid lightgray;
     border-radius: 10px;
     width: 100%;
@@ -27,7 +29,9 @@
 }
 
 .close-button {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .field-textarea {

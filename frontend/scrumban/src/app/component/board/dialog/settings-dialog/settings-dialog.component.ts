@@ -4,9 +4,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserService} from '../../../../service/user.service';
 import {ToastrService} from 'ngx-toastr';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PasswordChangeRequest} from '../../../../model/password-change-request.model';
+import {PasswordChangeRequest} from '../../../../model/request/password-change-request.model';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {EditProfileRequest} from '../../../../model/edit-profile-request.model';
+import {EditProfileRequest} from '../../../../model/request/edit-profile-request.model';
 
 @Component({
   selector: 'app-settings-dialog',

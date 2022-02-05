@@ -1,21 +1,28 @@
 .container {
-  padding: 10px 10px;
   width: 70vw;
   max-height: 90vh;
-  overflow-y: auto
+  overflow-y: auto;
+}
+
+.header-title {
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .close-button {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .chart {
   display: block;
   width: 100%;
+  margin-top: 15px;
 }
 
 .buttons-container {
-  padding-top: 20px;
+  margin-top: 15px;
 }
 
 .button {

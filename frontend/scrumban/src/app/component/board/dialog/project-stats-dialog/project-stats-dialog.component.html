@@ -1,30 +1,20 @@
 <div class="container">
 
+  <h1 mat-dialog-title class="header-title">{{project.name}}</h1>
+
+  <mat-tab-group mat-align-tabs="center" dynamicHeight>
+    <mat-tab label="Statistics">
+      <app-stats-chart [project]="project">
+      </app-stats-chart>
+    </mat-tab>
+    <mat-tab label="Cumulative flow diagram">
+      <app-stats-cumulative [project]="project">
+      </app-stats-cumulative>
+    </mat-tab>
+  </mat-tab-group>
+
   <button mat-icon-button class="close-button" (click)="closeDialog()">
     <mat-icon aria-label="Close statistics dialog">close</mat-icon>
   </button>
-
-  <h1 mat-dialog-title>Statistics: {{project.name}}</h1>
-
-  <div class="chart">
-    <canvas mdbChart id="canvas-chart"
-            [chartType]="chartType"
-            [datasets]="chartDatasets"
-            [labels]="chartLabels"
-            [options]="chartOptions"
-            [colors]="chartColors"
-            [legend]="true">
-    </canvas>
-  </div>
-
-  <div class="buttons-container">
-    <button mat-raised-button color="primary" class="button" (click)="exportCSV()">
-      Export to CSV
-    </button>
-
-    <button mat-raised-button color="primary" class="button" (click)="exportPNG()">
-      Export to PNG
-    </button>
-  </div>
 
 </div>

@@ -149,7 +149,6 @@ public class ColumnService {
         } else {
             throw new RuntimeException("Column contains tasks! Move them to another column.");
         }
-
     }
 
     public Integer getMaxColumnNumberOrder(Long projectID) {

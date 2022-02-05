@@ -3,6 +3,8 @@ package pl.utp.scrumban.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -38,6 +40,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "column_id", nullable = false)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Column column;
 
     @ManyToOne

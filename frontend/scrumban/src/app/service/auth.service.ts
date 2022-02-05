@@ -2,11 +2,10 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs' ;
-import {AuthRequest} from '../model/auth-request.model';
+import {AuthRequest} from '../model/request/auth-request.model';
 import {CookieService} from 'ngx-cookie-service';
-import {User} from '../model/user.model';
 import {Router} from '@angular/router';
-import {SignUpRequest} from '../model/sign-up-request.model';
+import {SignUpRequest} from '../model/request/sign-up-request.model';
 
 @Injectable({
   providedIn: 'root'

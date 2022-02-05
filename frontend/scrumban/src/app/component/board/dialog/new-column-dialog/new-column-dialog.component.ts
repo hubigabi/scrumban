@@ -46,7 +46,7 @@ export class NewColumnDialogComponent implements OnInit {
         name: '',
         description: '',
         numberOrder: this.maxColumnOrder,
-        isWIP: true,
+        isWIP: false,
         numberWIP: 0,
         tasks: [],
       };

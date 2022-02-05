@@ -1,4 +1,4 @@
-export interface ProjectStats {
+export interface ChartStats {
   localDate: string;
 
   startedTasks: number;

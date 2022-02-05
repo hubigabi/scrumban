@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../service/auth.service';
-import {AuthRequest} from '../../model/auth-request.model';
+import {AuthRequest} from '../../model/request/auth-request.model';
 import {Router} from '@angular/router';
 import {SocialAuthService} from 'angularx-social-login';
 import {FacebookLoginProvider, GoogleLoginProvider} from 'angularx-social-login';

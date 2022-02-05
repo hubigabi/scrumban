@@ -3,6 +3,7 @@ package pl.utp.scrumban.repositiory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.utp.scrumban.model.Task;
@@ -10,7 +11,7 @@ import pl.utp.scrumban.model.Task;
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long>, RevisionRepository<Task, Long, Long> {
 
     List<Task> findAllByUsers_Id(Long id);
 

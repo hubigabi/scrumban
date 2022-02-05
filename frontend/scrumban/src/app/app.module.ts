@@ -50,6 +50,8 @@ import {
 } from 'angularx-social-login';
 import {NewColumnDialogComponent} from './component/board/dialog/new-column-dialog/new-column-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { StatsChartComponent } from './component/board/dialog/project-stats-dialog/stats-chart/stats-chart.component';
+import { StatsCumulativeComponent } from './component/board/dialog/project-stats-dialog/stats-cumulative/stats-cumulative.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     SignupComponent,
     UserTaskDialogComponent,
     SettingsDialogComponent,
-    NewColumnDialogComponent
+    NewColumnDialogComponent,
+    StatsChartComponent,
+    StatsCumulativeComponent
   ],
   imports: [
     BrowserModule,
