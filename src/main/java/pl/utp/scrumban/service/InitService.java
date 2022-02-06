@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import pl.utp.scrumban.model.*;
@@ -19,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -62,8 +60,6 @@ public class InitService {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-
-
                 User u1 = new User("JohnSmith@gmail.com", "John Smith", passwordEncoder.encode("JohnSmith"), LocalDate.now().minusDays(17));
                 User u2 = new User("hubigabi19@gmail.com", "Hubert Gabryszewski", passwordEncoder.encode("hubigabi19"), LocalDate.now().minusDays(26));
                 User u3 = new User("LaraBaxter@gmail.com", "Lara Baxter", passwordEncoder.encode("LaraBaxter"), LocalDate.now().minusDays(15));
@@ -273,7 +269,8 @@ public class InitService {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.createNativeQuery("UPDATE REVINFO SET REVTSTMP = REVTSTMP - random() * 1000 * 60 * 60 * 24 * :days")
+        em.createNativeQuery("UPDATE REVINFO SET REVTSTMP = REVTSTMP - :random * 1000 * 60 * 60 * 24 * :days")
+                .setParameter("random", new Random().nextDouble())
                 .setParameter("days", 14)
                 .executeUpdate();
         transaction.commit();

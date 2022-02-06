@@ -5,8 +5,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.utp.scrumban.config.JpaEnversConfiguration;
 import pl.utp.scrumban.model.Column;
 import pl.utp.scrumban.model.Project;
 import pl.utp.scrumban.model.Task;
@@ -24,6 +26,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureTestDatabase(replace = NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Import(JpaEnversConfiguration.class)
 class TaskRepositoryTest {
 
     @Autowired

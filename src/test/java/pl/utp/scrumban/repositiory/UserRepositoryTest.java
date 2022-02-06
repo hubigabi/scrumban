@@ -37,7 +37,6 @@ class UserRepositoryTest {
     @BeforeAll
     public void init() {
         users = new ArrayList<>();
-
         User u1 = new User("JohnSmith@gmail.com", "John Smith", "JohnSmith", LocalDate.now().minusDays(17));
         User u2 = new User("RileyTaylor@gmail.com", "Riley Taylor", "RileyTaylor", LocalDate.now().minusDays(26));
 
